@@ -46,19 +46,6 @@ void    put_env(t_env **env, char **env_list)
     
 }
 
-//void    found_tilde(char *line,int tilde_place)
-//{
-//    int     len;
-//    char    *expend;
-//    char    *before;
-//    char    *after;
-//
-//    len = ft_strlen(line);
-//    before = ft_substr(line, 0, tilde_place - 1);
-//    expend = getenv("HOME");
-//    after = ft_substr(line, tilde_place + 1, );
-//    
-//}
 char    *found_dollar(char *line, int dollar_place)
 {
     char    *expend;
@@ -67,6 +54,8 @@ char    *found_dollar(char *line, int dollar_place)
     char    *result;
     int     len;
 
+    if(line[dollar_place + 1] == '?')
+        handle_exit_status();
     len = 0;
     before = ft_substr(line, 0, dollar_place);
     while(line[dollar_place + len] != '\0' && (ft_isalnum(dollar_place + len) == 1))
@@ -75,6 +64,28 @@ char    *found_dollar(char *line, int dollar_place)
     after = ft_substr(line, dollar_place + len, ft_strlen(line) - (dollar_place + len));
     result = ft_strjoin(ft_strjoin(before, expend), after);
     return(result);
+}
+
+char    is_char_quote(char value, char quote_type)
+{
+    if(value == '\'' || value == '"')
+    {
+        if(value == '\'')
+        {
+            if (quote_type == '\0')
+                quote_type = '\'';
+            else if(quote_type == '\'')
+                quote_type = '\0';
+        }
+        else
+        {
+            if(quote_type == '\0')
+                quote_type = '"';
+            else if(quote_type == '"')
+                quote_type = '\0';
+        }
+    }
+    return(quote_type);
 }
 
 void check_for_expansion(t_card **cards)
@@ -88,14 +99,21 @@ void check_for_expansion(t_card **cards)
     node = (*cards);
     while (node != NULL)
     {
+        i = 0;
         while ((node->value)[i])
         {
-            open_quote = is_char_quote((node->value)[i]);
+            open_quote = is_char_quote((node->value)[i], open_quote);
             if(open_quote != '\'' && (node->value)[i] == '$')
                 found_dollar((node->value), i);
-            if()
+            i++;
         }
+        node = node->next;
     }
+    
+}
+
+void    args_type(t_card **card)
+{
     
 }
 
@@ -103,5 +121,4 @@ void    expender(t_card **card, t_env **env, char **env_list)
 {
     put_env(env, env_list);
     check_for_expansion(card);
-
 }
