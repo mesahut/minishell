@@ -119,6 +119,7 @@ void	operator_searcher(t_card **card)
 		i++;
 	}
 }
+
 void	put_title(t_card **card)
 {
 	t_card	*current;

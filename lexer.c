@@ -20,6 +20,11 @@ void    create_card(t_card **head_card, char *card)
     }
 }
 
+int is_space(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n');
+}
+
 int quote_checker(char *words)
 {
     int i;
@@ -39,27 +44,49 @@ int quote_checker(char *words)
     return (open_quote = '\0');
 }
 
-int pass_letter(char *line, int *place, char *status)
+int	is_operator(char c, char next)
 {
-    int     i;
-    char    quote;
-    int     len;
+	if ((c == '<' && next == '<') || (c == '>' && next == '>'))
+        return (2);
+	if (c == '|' || c == '<' || c == '>')
+		return (1);
+	return (0);
+}
 
-    i = *place;
-    len = 0;
-    quote = *status;
-    while(line[i] && (line[i] != ' ' || (quote == 34 || quote == 39)))
-    {
-        if(quote == '\0' && (line[i] == 34 || line[i] == 39))
-            quote = line[i];
-        else if(line[i] == quote)
-            quote = '\0';
-        i++;
-        len++;
-    }
-    *place = i;
-    *status = quote; 
-    return(len);
+int	pass_letter(char *line, int *place, char *status)
+{
+	int		i;
+	char	quote;
+	int		len;
+
+	i = *place;
+	len = 0;
+	quote = *status;
+	while (line[i] && (quote != '\0' || !is_space(line[i])))
+	{
+		if (quote == '\0')
+		{
+			if (is_operator(line[i], line[i + 1]))
+				break;
+			if (line[i] == '\'' || line[i] == '\"')
+				quote = line[i];
+		}
+		else if (line[i] == quote)
+			quote = '\0';
+		i++;
+		len++;
+	}
+	*place = i;
+	*status = quote;
+	return (len);
+}
+int special_case(char c, char next, int *place)
+{
+    int len;
+
+    len = is_operator(c, next);
+    (*place) = (*place) + len;
+	return (len);
 }
 
 void    split_line(char *line, t_card **card)
@@ -76,13 +103,14 @@ void    split_line(char *line, t_card **card)
     quote = '\0';
     while (line[i])
     {
-        while ( line[i] && (line[i] == ' ' && quote == '\0'))
+        while ( line[i] && (is_space(line[i]) && quote == '\0'))
             i++;
-        if(line[i] != ' ' && line[i])
-        {
+        if(line[i] && !is_space(line[i]))
             start = i;
-        }
-        end = pass_letter(line, &i, &quote);
+        if (line[i] && is_operator(line[i], line[i + 1]))
+            end = special_case(line[i], line[i + 1], &i);
+        else
+            end = pass_letter(line, &i, &quote);
         str = ft_substr(line, start, end);
         create_card(card, str);
     }

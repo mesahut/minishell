@@ -20,20 +20,21 @@
 
     }
     
-}*/
-void free_list(t_list *list)
-{
-    t_list *current;
-
-    while (list)
-    {
-        current = list;
-        list = list->next;
-        free(current->value);
-        free(current);
-    }
-}
-
+    }*/
+   void free_list(t_card *list)
+   {
+       t_card *current;
+       
+       while (list)
+       {
+           current = list;
+           list = list->next;
+           free(current->value);
+           free(current);
+        }
+   }
+           
+           /*
 void free_all(t_all *all)
 {
     free_list(t_all->collector);
@@ -41,29 +42,29 @@ void free_all(t_all *all)
     free_list(t_all->env);
     return (1);
 }
+*/
 
 int main(int argc, char **argv, char **env_list)
 {
     t_card  *card;
     char    *line;
-    t_env   *env;
+    //t_env   *env;
     t_card  *node = NULL;
 
     card = NULL;
-    env = NULL;
-    put_env(&env, env_list);
+    //env = NULL;
+    //put_env(&env, env_list);
     while (1)
     {
         line = readline("minishell>>");
         add_history(line);
         lexer(line, &card);
-        expander(&card);
-        //node = card;
-        //while(node != NULL)
-        //{
-        //    printf("%s\n", node->value);
-        //    node = node->next;
-        //}
+        //expander(&card);
+        while(card != NULL)
+        {
+            printf("%s\n", card->value);
+            card = card->next;
+        }
     }
     return 0;
 }
