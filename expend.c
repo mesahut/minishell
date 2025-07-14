@@ -12,113 +12,127 @@
 
 #include "lexer.h"
 
-void    create_env(char **env_line, t_env **env)
+char	*found_dollar(char *line, int dollar_place)
 {
-    t_env   *new_env;
-    t_env   *current;
+	char	*before;
+	char	*after;
+	char	*env;
+	int		len;
 
-    new_env = (t_env *)malloc(sizeof(t_env));
-
-    new_env->key = env_line[0];
-    new_env->value = env_line[1];
-    new_env->next = NULL;
-    if(*env == NULL)
-        *env = new_env;
-    else
-    {
-        current = *env;
-        while (current->next != NULL)
-            current = current->next;
-        current->next = new_env;
-    }
+    //  if(line[dollar_place + 1] == '?')
+    //     handle_exit_status();
+	len = 0;
+	before = ft_substr(line, 0, dollar_place); // freelenecek
+	while(line[dollar_place + len + 1] != '\0' && (ft_isalnum(line[dollar_place + len + 1]) == 1))
+		len++;
+	env = ft_substr(line, dollar_place + 1, len); // freelenecek
+	env = getenv(env);
+	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line) - (dollar_place + len + 1)); //
+	before = ft_strjoin(before, env);
+	after = ft_strjoin(before, after);
+	return(after);
 }
 
-void    put_env(t_env **env, char **env_list)
+char	is_char_quote(char value, char quote_type)
 {
-    int i;
-
-    i = 0;
-    while (env_list[i])
-    {
-        create_env(ft_split(env_list[i], '='), env);
-        i++;
-    }
-    
+	if (value == '\'' || value == '"')
+	{
+		if(value == '\'')
+		{
+			if (quote_type == '\0')
+				quote_type = '\'';
+			else if(quote_type == '\'')
+				quote_type = '\0';
+		}
+		else
+		{
+			if(quote_type == '\0')
+				quote_type = '"';
+			else if(quote_type == '"')
+				quote_type = '\0';
+		}
+	}
+	return(quote_type);
 }
 
-char    *found_dollar(char *line, int dollar_place)
+void	check_for_expansion(t_card **cards)
 {
-    char    *expend;
-    char    *before;
-    char    *after;
-    char    *result;
-    int     len;
+	int		i;
+	t_card	*node;
+	char	open_quote;
 
-    if(line[dollar_place + 1] == '?')
-        handle_exit_status();
-    len = 0;
-    before = ft_substr(line, 0, dollar_place);
-    while(line[dollar_place + len] != '\0' && (ft_isalnum(dollar_place + len) == 1))
-        len++;
-    expend = getenv(ft_substr(line, dollar_place + 1, len));
-    after = ft_substr(line, dollar_place + len, ft_strlen(line) - (dollar_place + len));
-    result = ft_strjoin(ft_strjoin(before, expend), after);
-    return(result);
+	i = 0;
+	open_quote = '\0';
+	node = (*cards);
+	while (node != NULL)
+	{
+		i = 0;
+		while ((node->value)[i])
+		{
+			open_quote = is_char_quote((node->value)[i], open_quote);
+			if(open_quote != '\'' && (node->value)[i] == '$')
+			{
+				node->value = found_dollar((node->value), i);
+			}
+			i++;
+		}
+		node = node->next;
+	}
 }
 
-char    is_char_quote(char value, char quote_type)
+void    tokenize_operator(t_card **card,int o_place, int type)
 {
-    if(value == '\'' || value == '"')
-    {
-        if(value == '\'')
-        {
-            if (quote_type == '\0')
-                quote_type = '\'';
-            else if(quote_type == '\'')
-                quote_type = '\0';
-        }
-        else
-        {
-            if(quote_type == '\0')
-                quote_type = '"';
-            else if(quote_type == '"')
-                quote_type = '\0';
-        }
-    }
-    return(quote_type);
+	char	*after;
+	char	*operator;
+
+	if(type == R_APPEND || type == HEREDOC)
+	{
+		after = ft_substr((*card)->value, o_place + 2, ft_strlen((*card)->value) - (o_place + 2));
+		operator = ft_substr((*card)->value, o_place, 2);
+	}
+	else
+	{
+		after = ft_substr((*card)->value, o_place + 1, ft_strlen((*card)->value) - (o_place + 1));
+		operator = ft_substr((*card)->value, o_place, 1);
+	}
+	
+	mid_card();
 }
 
-void check_for_expansion(t_card **cards)
+void	operator_searcher(t_card **card)
 {
-    int i;
-    t_card  *node;
-    char    open_quote;
+	int	i;
 
-    i = 0;
-    open_quote = '\0';
-    node = (*cards);
-    while (node != NULL)
-    {
-        i = 0;
-        while ((node->value)[i])
-        {
-            open_quote = is_char_quote((node->value)[i], open_quote);
-            if(open_quote != '\'' && (node->value)[i] == '$')
-                found_dollar((node->value), i);
-            i++;
-        }
-        node = node->next;
-    }
-    
+	i = 0;
+	while((*card)->value[i])
+	{
+		if ((*card)->value[i] == "|")
+			tokenize_operator(card, i, PIPE);
+		else if ((*card)->value[i] == "<" && (*card)->value[i + 1] == "<")
+			tokenize_operator(card, i, HEREDOC);
+		else if ((*card)->value[i] == "<")
+			tokenize_operator(card, i, R_IN);
+		else if ((*card)->value[i] == ">" && (*card)->value[i + 1] == ">>")
+			tokenize_operator(card, i, R_APPEND);
+		else if ((*card)->value[i] == ">")
+			tokenize_operator(R_OUT);
+		i++;
+	}
+}
+void	put_title(t_card **card)
+{
+	t_card	*current;
+
+	current = (*card);
+	while (current)
+	{
+		operator_searcher(current);
+		current = current->next;
+	}
 }
 
-void    args_type(t_card **card)
+void	expander(t_card **card)
 {
-    
-}
-
-void    expender(t_card **card, t_env **env, char **env_list)
-{
-    put_env(env, env_list);
-    check_for_expansion(card);
+	check_for_expansion(card);
+	put_title(card);
 }
