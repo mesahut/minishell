@@ -1,3 +1,10 @@
 {
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "stdio.h": "c",
+        "lexer.h": "c",
+        "unistd.h": "c",
+        "libft.h": "c",
+        "stdlib.h": "c"
+    }
 }

@@ -1,65 +1,43 @@
 #include "lexer.h"
 
-/*void    is_quoted(char *arg)
+char    *collector_dup(t_collector *collector, char *line)
 {
+    char    *str;
     int     i;
-    char    open_quote;
 
     i = 0;
-    open_quote = '\0';
-    while (arg[i])
+    str = (char *)safe_malloc(collector, ft_strlen(line) + 1);
+    while(line[i])
     {
-        if (arg[i] == 39 || arg[i] == 34)
-            open_quote = arg[i];
-        if(open_quote == 34)
-            i = quote_ignore(arg, &open_quote);
-        else if(open_quote == 39)
-            i = quote_ignore(arg, &open_quote);
-        else
-            i++;
-
+        str[i] = line[i];
+        i++;
     }
-    
-    }*/
-   void free_list(t_card *list)
-   {
-       t_card *current;
-       
-       while (list)
-       {
-           current = list;
-           list = list->next;
-           free(current->value);
-           free(current);
-        }
-   }
-           
-           /*
-void free_all(t_all *all)
-{
-    free_list(t_all->collector);
-    free_list(t_all->card);
-    free_list(t_all->env);
-    return (1);
+    str[i] = '\0';
+    free(line);
+    return (str);
 }
-*/
 
 int main(int argc, char **argv, char **env_list)
 {
-    t_card  *card;
+    t_all   *all;
     char    *line;
-    //t_env   *env;
-    t_card  *node = NULL;
+    t_card  *card = NULL;
+    char    *input;
 
-    card = NULL;
-    //env = NULL;
-    //put_env(&env, env_list);
+    all = (t_all *)malloc(sizeof(t_all));
+    if (!all)
+        return 1;
+    all->exit_status = 0;
+    put_env(&(all->env) , env_list);
     while (1)
     {
         line = readline("minishell>>");
         add_history(line);
-        lexer(line, &card);
-        //expander(&card);
+        line = collector_dup(all->collector, line);
+        input = line;
+        lexer(input, all);
+        expander(all);
+        card = all->card;
         while(card != NULL)
         {
             printf("%s\n", card->value);

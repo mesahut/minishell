@@ -1,7 +1,7 @@
 
 #ifndef LEXER_H
 
-#define LEXER_h
+#define LEXER_H
 
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -17,11 +17,11 @@
 #define R_IN 4
 #define WORD 5
 
-typedef struct s_list
+typedef struct s_collector
 {
     void *value;
-    struct s_list *next;
-} t_list;
+    struct s_collector *next;
+} t_collector;
 
 
 typedef struct s_card 
@@ -35,13 +35,24 @@ typedef struct s_env
 {
     char *key;
     char *value;
-    struct s_card *s_env;
+    struct s_env *next;
 } t_env;
 
-void    create_card(t_card **head_card, char *card);
-void    mid_card(t_card **current_node, char *str, int type);
-void    expander(t_card **card);
-void    lexer(char *line, t_card **card);
+
+
+typedef struct s_all
+{
+    t_collector *collector;
+    t_card      *card;
+    t_env       *env;
+    int         exit_status;
+} t_all;
+
+void    create_card(t_all *all, char *card);
+void	expander(t_all *all);
+void    lexer(char *line, t_all *all);
 void    put_env(t_env **env, char **env_list);
+void    *safe_malloc(t_collector *gc_head, int size);
+char    *collector_dup(t_collector *collector, char *line);
 
 #endif

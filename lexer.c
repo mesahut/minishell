@@ -1,25 +1,5 @@
 #include "lexer.h"
 
-void    create_card(t_card **head_card, char *card)
-{
-    t_card  *new_card;
-    t_card  *current;
-
-    new_card = (t_card *) malloc(sizeof(t_card));
-    new_card->value = card;
-    new_card->type = -1;
-    new_card->next = NULL;
-    if(*head_card == NULL)
-        *head_card = new_card;
-    else
-    {
-        current = *head_card;
-        while (current->next != NULL)
-            current = current->next;
-        current->next = new_card;
-    }
-}
-
 int is_space(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
@@ -89,7 +69,7 @@ int special_case(char c, char next, int *place)
 	return (len);
 }
 
-void    split_line(char *line, t_card **card)
+void    split_line(char *line, t_all *all)
 {
     int     i;
     int     start;
@@ -112,12 +92,12 @@ void    split_line(char *line, t_card **card)
         else
             end = pass_letter(line, &i, &quote);
         str = ft_substr(line, start, end);
-        create_card(card, str);
+        create_card(all, str);
     }
 }   
 
-void    lexer(char *line, t_card **card)
+void    lexer(char *line, t_all *all)
 {
     quote_checker(line);
-    split_line(line, card);
+    split_line(line, all);
 }

@@ -31,5 +31,4 @@ void    put_env(t_env **env, char **env_list)
         create_env(ft_split(env_list[i], '='), env);
         i++;
     }
-    
 }

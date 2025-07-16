@@ -1,37 +1,49 @@
 #include "lexer.h"
 
-void    create_card(t_card **head_card, char *card)
+void    create_card(t_all *all, char *card)
 {
     t_card  *new_card;
     t_card  *current;
 
-    new_card = (t_card *) malloc(sizeof(t_card));
+    new_card = (t_card *) safe_malloc(all->collector ,sizeof(t_card));
     new_card->value = card;
     new_card->type = -1;
     new_card->next = NULL;
-    if(*head_card == NULL)
-        *head_card = new_card;
+    if(all->card == NULL)
+        all->card = new_card;
     else
     {
-        current = *head_card;
+        current = all->card;
         while (current->next != NULL)
             current = current->next;
         current->next = new_card;
     }
 }
-void    mid_card(t_card **current_node, char *str, int type)
-{
-    t_card* new_node;
-    t_card* original_next;
 
-    new_node = (t_card *)malloc(sizeof(t_card));
-    if (new_node == NULL)
-        return (NULL);
-    new_node->data = str;
-    new_node->type = type;
-    new_node->next = NULL;
-    original_next = current_node->next;
-    current_node->next = new_node;
-    new_node->next = original_next;
-    return (new_node);
-} 
+void    create_collector(t_collector *head_card, void *address)
+{
+    t_collector  *new_card;
+    t_collector  *current;
+
+    new_card = (t_collector *) malloc(sizeof(t_collector));
+    new_card->value = address;
+    new_card->next = NULL;
+    if(head_card == NULL)
+        head_card = new_card;
+    else
+    {
+        current = head_card;
+        while (current->next != NULL)
+            current = current->next;
+        current->next = new_card;
+    }
+}
+
+void    *safe_malloc(t_collector *gc_head, int size)
+{
+    char    *str;
+
+    str = malloc(size);
+    create_collector(gc_head, str);
+    return (str);
+}
