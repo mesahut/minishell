@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include <stdlib.h>
+#include <string.h>
 
 char	*found_dollar(char *line, int dollar_place, t_collector *collector)
 {
@@ -62,23 +64,27 @@ void	check_for_expansion(t_all *all)
 {
 	int		i;
 	t_card	*node;
+	t_card	*prev_node;
 	char	open_quote;
 
 	i = 0;
 	open_quote = '\0';
 	node = all->card;
+	prev_node = node;
+	prev_node->type = -1;
 	while (node != NULL)
 	{
 		i = 0;
 		while ((node->value)[i])
 		{
 			open_quote = is_char_quote((node->value)[i], open_quote);
-			if(open_quote != '\'' && (node->value)[i] == '$')
+			if(open_quote != '\'' && prev_node->type != HEREDOC && (node->value)[i] == '$')
 			{
 				node->value = found_dollar((node->value), i, all->collector);
 			}
 			i++;
 		}
+		prev_node = node;
 		node = node->next;
 	}
 }
@@ -105,9 +111,85 @@ void	put_title(t_all *all)
 		current = current->next;
 	}
 }
+void	quote_select(char *str)
+{
+	    while (str[i])
+    {
+        if ((str[i] == '\'' && open_quote != '"') ||
+            (str[i] == '"' && open_quote != '\''))
+        {
+            if (open_quote == '\0')
+                open_quote = str[i];
+            else if (open_quote == str[i])
+                open_quote = '\0';
+            count++;
+        }
+        i++;
+    }
+}
+
+int quote_count(char *str)
+{
+    int i = 0;
+    int count = 0;
+    char open_quote = '\0';
+    while (str[i])
+    {
+        if ((str[i] == '\'' && open_quote != '"') ||
+            (str[i] == '"' && open_quote != '\''))
+        {
+            if (open_quote == '\0')
+                open_quote = str[i];
+            else if (open_quote == str[i])
+                open_quote = '\0';
+            count++;
+        }
+        i++;
+    }
+    return count;
+}
+
+char *quote_ignore(char *str)
+{
+    int len = strlen(str);
+    int quotes = quote_count(str);
+    char *result = (char *)malloc(len - quotes + 1);
+    int i = 0, j = 0;
+    char open_quote = '\0';
+    while (str[i])
+    {
+        if ((str[i] == '\'' && open_quote != '"') ||
+            (str[i] == '"' && open_quote != '\''))
+        {
+            if (open_quote == '\0')
+                open_quote = str[i];
+            else if (open_quote == str[i])
+                open_quote = '\0';
+            // Tırnak karakterini atla
+            i++;
+            continue;
+        }
+        result[j++] = str[i++];
+    }
+    result[j] = '\0';
+    return result;
+}
+
+void	quote_ingnore(t_all *all)
+{
+	t_card	*current;
+
+	current = all->card;
+	while (current)
+	{
+		current->value = quote_ignore(current->value);
+		current = current->next;
+	}
+}
 
 void	expander(t_all *all)
 {
-	check_for_expansion(all);
 	put_title(all);
+	check_for_expansion(all);
+	quote_ingnore(all);
 }

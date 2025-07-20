@@ -37,6 +37,8 @@ int main(int argc, char **argv, char **env_list)
         input = line;
         lexer(input, all);
         expander(all);
+        parser(all);
+        exec(all);
         card = all->card;
         while(card != NULL)
         {

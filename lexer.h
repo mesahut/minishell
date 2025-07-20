@@ -23,7 +23,6 @@ typedef struct s_collector
     struct s_collector *next;
 } t_collector;
 
-
 typedef struct s_card 
 {
     int     type;
@@ -38,7 +37,10 @@ typedef struct s_env
     struct s_env *next;
 } t_env;
 
-
+typedef struct s_redirect
+{
+    
+} t_redirect;
 
 typedef struct s_all
 {
