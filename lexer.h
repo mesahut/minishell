@@ -39,8 +39,23 @@ typedef struct s_env
 
 typedef struct s_redirect
 {
-    
+    int     type;
+    char    *filename;
+    char    *value;
+    int     fd;
+    struct s_redirect *next;
 } t_redirect;
+
+typedef struct s_cmd
+{
+    char **args;
+    int fd_in;
+    int fd_out;
+    int redirect_count;
+    t_redirect *redirects;
+    struct s_cmd *next;
+    struct s_cmd *prev;
+} t_cmd;
 
 typedef struct s_all
 {
