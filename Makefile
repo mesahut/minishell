@@ -1,18 +1,40 @@
-CC=gcc
-CFLAGS= -Wall -lreadline
-SRCS=	card_list.c \
-		expend.c \
-		lexer.c \
-		main.c \
-		environment.c
+NAME = minishell
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+LDFLAGS = -lreadline
+INCLUDE = -I. -I./libft
+LIBFT = libft/libft.a
 
-OBJS=$(SRCS:.c=.o)
-TARGET=minishell.exe
+SRCS = main.c \
+	card_list.c \
+	environment.c \
+	expend.c \
+	lexer.c \
+	parser.c \
+	exec.c \
+	builtin.c 
 
-all: $(TARGET)
+OBJS = $(SRCS:.c=.o)
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) libft.a -o $@ $^
+all: $(LIBFT) $(NAME)
+
+$(LIBFT):
+	$(MAKE) -C ./libft
+
+$(NAME): $(OBJS)
+	$(CC) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 clean:
-	del /Q *.o *.exe
+	$(MAKE) -C ./libft clean
+	rm -f $(OBJS)
+
+fclean: clean
+	$(MAKE) -C ./libft fclean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

@@ -111,22 +111,6 @@ void	put_title(t_all *all)
 		current = current->next;
 	}
 }
-void	quote_select(char *str)
-{
-	    while (str[i])
-    {
-        if ((str[i] == '\'' && open_quote != '"') ||
-            (str[i] == '"' && open_quote != '\''))
-        {
-            if (open_quote == '\0')
-                open_quote = str[i];
-            else if (open_quote == str[i])
-                open_quote = '\0';
-            count++;
-        }
-        i++;
-    }
-}
 
 int quote_count(char *str)
 {

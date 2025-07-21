@@ -19,9 +19,10 @@ char    *collector_dup(t_collector *collector, char *line)
 
 int main(int argc, char **argv, char **env_list)
 {
+    (void)argc;
+    (void)argv; 
     t_all   *all;
     char    *line;
-    t_card  *card = NULL;
     char    *input;
 
     all = (t_all *)malloc(sizeof(t_all));
@@ -39,12 +40,6 @@ int main(int argc, char **argv, char **env_list)
         expander(all);
         parser(all);
         exec(all);
-        card = all->card;
-        while(card != NULL)
-        {
-            printf("%s\n", card->value);
-            card = card->next;
-        }
     }
     return 0;
 }

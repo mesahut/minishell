@@ -1,4 +1,3 @@
-
 #ifndef LEXER_H
 
 #define LEXER_H
@@ -51,6 +50,7 @@ typedef struct s_cmd
     char **args;
     int fd_in;
     int fd_out;
+    int args_count;
     int redirect_count;
     t_redirect *redirects;
     struct s_cmd *next;
@@ -61,15 +61,29 @@ typedef struct s_all
 {
     t_collector *collector;
     t_card      *card;
+    t_cmd       *cmd;
     t_env       *env;
     int         exit_status;
 } t_all;
 
+typedef int (*t_builtin_func)(t_all *all, t_cmd *cmd);
+
+typedef struct s_builtin
+{
+    char *name;
+    t_builtin_func func;
+} t_builtin;
+
+void    set_cmd(t_all *all, t_cmd *cmd);
+void    parser(t_all *all);
+void    exec(t_all *all);
 void    create_card(t_all *all, char *card);
 void	expander(t_all *all);
 void    lexer(char *line, t_all *all);
 void    put_env(t_env **env, char **env_list);
 void    *safe_malloc(t_collector *gc_head, int size);
 char    *collector_dup(t_collector *collector, char *line);
+int     exec_builtin(t_all *all, t_cmd *cmd);
+int     is_builtin(char *cmd);
 
 #endif
