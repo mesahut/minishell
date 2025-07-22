@@ -28,7 +28,6 @@ int ft_echo(t_all *all, t_cmd *cmd)
             printf(" ");
         i++;
     }
-    printf("\n");
     if (newline)
         printf("\n");
     return (0);
@@ -58,11 +57,24 @@ int ft_pwd(t_all *all, t_cmd *cmd)
     return (1);
 }
 
+int ft_exit(t_all *all, t_cmd *cmd)
+{
+    (void)all; // Suppress unused parameter warning
+    if (cmd->args[1])
+    {
+        int status = atoi(cmd->args[1]);
+        exit(status);
+    }
+    printf("%s\n", "exit");
+    exit(all->exit_status);
+}
+
 // Built-in komut tablosu - static so it's only visible in this file
 static t_builtin builtins[] = {
     {"echo", ft_echo},
     {"cd", ft_cd},
     {"pwd", ft_pwd},
+    {"exit", ft_exit},
     {NULL, NULL}
 };
 

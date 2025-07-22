@@ -90,29 +90,22 @@ void    put_node(t_cmd **head_cmd, t_cmd *new_cmd)
     }
 }
 
-void    set_cmd(t_all *all, t_cmd *current_cmd)
+void set_cmd(t_all *all, t_cmd *current_cmd)
 {
     t_card *current_card;
-    int i;
-    int redirect_index;
+    int     i;
 
     if (!all || !all->card || !current_cmd)
-    {
         return;
-    }
 
     current_card = all->card;
     i = 0;
-    redirect_index = 0;
 
-    t_card *temp = current_card;
-    while (temp && temp->type != PIPE)
-    {
-        temp = temp->next;
-    }    
     while (current_card != NULL && current_card->type != PIPE)
     {
-        if (current_card->type == WORD || current_card->type == -1)
+        // Argüman ekleme
+        if ((current_card->type == WORD || current_card->type == -1)
+            && current_card->value && current_card->value[0] != '\0')
         {
             if (i < current_cmd->args_count)
             {
@@ -120,22 +113,40 @@ void    set_cmd(t_all *all, t_cmd *current_cmd)
                 i++;
             }
         }
+        // Redirect ekleme
         else if (current_card->type == R_APPEND || current_card->type == R_OUT || 
                  current_card->type == HEREDOC || current_card->type == R_IN)
         {
-            if (redirect_index < current_cmd->redirect_count && current_card->next)
+            if (current_card->next && current_card->next->value)
             {
-                current_cmd->redirects[redirect_index].type = current_card->type;
-                current_cmd->redirects[redirect_index].filename = current_card->next->value;
-                redirect_index++;
+                // Yeni bir redirect node oluştur
+                t_redirect *redir = safe_malloc(all->collector, sizeof(t_redirect));
+                redir->type = current_card->type;
+                redir->filename = current_card->next->value;
+                redir->fd = -1;
+                redir->next = NULL;
+
+                // Listeye ekle
+                if (!current_cmd->redirects)
+                    current_cmd->redirects = redir;
+                else
+                {
+                    t_redirect *tmp = current_cmd->redirects;
+                    while (tmp->next)
+                        tmp = tmp->next;
+                    tmp->next = redir;
+                }
+
                 current_card = current_card->next;
             }
         }
+
         current_card = current_card->next;
     }
-    
+
     current_cmd->args[i] = NULL;
 }
+
 
 void parser(t_all *all)
 {
@@ -163,6 +174,5 @@ void parser(t_all *all)
         
         all->card = current_card;
     }
-    // Add this line to link commands to all structure
     all->cmd = head_cmd;
 }

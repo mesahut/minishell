@@ -64,6 +64,7 @@ typedef struct s_all
     t_cmd       *cmd;
     t_env       *env;
     int         exit_status;
+    char        **envp;
 } t_all;
 
 typedef int (*t_builtin_func)(t_all *all, t_cmd *cmd);

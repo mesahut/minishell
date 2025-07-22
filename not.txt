@@ -1,0 +1,14 @@
+mkdir -p a/b/c
+cd a/b/c
+c dizinine girmiyor
+
+cd
+home dizinine girmiyor
+
+cd ..
+bir arka dizine girmiyor
+
+pwd
+export
+exit
+sinyaller
