@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/22 13:35:18 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/07/22 15:51:58 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,35 @@ char *path_find(char *cmd)
         return (ft_strjoin("/usr/bin/", cmd));
 }
 
-void exec_external_cmd(char *path, char **args, char **envp)
+char **list_to_envp(t_env *env)
 {
-    execve(path, args, envp);
+    t_env *current = env;
+    int count = 0;
+    while (current)
+    {
+        count++;
+        current = current->next;
+    }
+
+    char **envp = malloc(sizeof(char *) * (count + 1));
+    if (!envp)
+        return NULL;
+
+    current = env;
+    for (int i = 0; i < count; i++)
+    {
+        envp[i] = ft_strjoin(current->key, "=");
+        envp[i] = ft_strjoin(envp[i], current->value);
+        current = current->next;
+    }
+    envp[count] = NULL;
+
+    return envp;
+}
+
+void exec_external_cmd(char *path, char **args, t_env *envp)
+{
+    execve(path, args, list_to_envp(envp));
     perror("execve failed");
     exit(1);
 }
@@ -120,7 +146,10 @@ void exec(t_all *all)
             if (is_builtin(cmd->args[0]))
                 exit(exec_builtin(all, cmd));
             else
-                exec_external_cmd(path_find(cmd->args[0]), cmd->args, all->envp);
+            {
+                exec_external_cmd(path_find(cmd->args[0]), cmd->args, all->env);
+            }
+                
 
             // exec_external_cmd başarısız olursa buraya gelir
             exit(1);

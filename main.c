@@ -29,7 +29,6 @@ int main(int argc, char **argv, char **env_list)
     if (!all)
         return 1;
     all->exit_status = 0;
-    all->envp = env_list;
     put_env(&(all->env) , env_list);
     while (1)
     {
@@ -42,6 +41,7 @@ int main(int argc, char **argv, char **env_list)
         expander(all);
         parser(all);
         exec(all);
+       // print_env(all->env);
     }
     return 0;
 }

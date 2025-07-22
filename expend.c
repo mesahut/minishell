@@ -14,7 +14,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-char	*found_dollar(char *line, int dollar_place, t_collector *collector)
+char	*ft_getenv(t_env *env, char *key)
+{
+	t_env *current;
+
+	current = env;
+	while (current)
+	{
+		if (strcmp(current->key, key) == 0)
+			return current->value;
+		current = current->next;
+	}
+	return (NULL);
+}
+
+char	*found_dollar(char *line, int dollar_place, t_all *all)
 {
 	char	*before;
 	char	*after;
@@ -29,12 +43,12 @@ char	*found_dollar(char *line, int dollar_place, t_collector *collector)
 		while(line[dollar_place + len + 1] != '\0' && (ft_isalnum(line[dollar_place + len + 1]) == 1))
 			len++;
 	after = ft_substr(line, dollar_place + 1, len);
-	env = getenv(after);
+	env = ft_getenv(all->env, after);
 	free(after);
 	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line) - (dollar_place + len + 1));
 	before = ft_strjoin(before, env);
 	after = ft_strjoin(before, after);
-	after = collector_dup(collector, after);
+	after = collector_dup(all->collector, after);
 	return(after);
 }
 
@@ -80,7 +94,7 @@ void	check_for_expansion(t_all *all)
 			open_quote = is_char_quote((node->value)[i], open_quote);
 			if(open_quote != '\'' && prev_node->type != HEREDOC && (node->value)[i] == '$')
 			{
-				node->value = found_dollar((node->value), i, all->collector);
+				node->value = found_dollar((node->value), i, all);
 			}
 			i++;
 		}

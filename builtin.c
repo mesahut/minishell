@@ -5,6 +5,19 @@
 // Forward declare builtins array
 static t_builtin builtins[];
 
+
+void    print_env(t_env *env)
+{
+    t_env *current = env;
+
+    while (current)
+    {
+        if (current->value) // env sadece value'su olanları gösterir
+            printf("%s=%s\n", current->key, current->value);
+        current = current->next;
+    }
+}
+
 // echo komutu
 int ft_echo(t_all *all, t_cmd *cmd)
 {
@@ -68,12 +81,106 @@ int ft_exit(t_all *all, t_cmd *cmd)
     printf("%s\n", "exit");
     exit(all->exit_status);
 }
+void add_or_update_env(t_all *all, const char *key, const char *value)
+{
+    t_env *current = all->env;
+    while (current)
+    {
+        if (strcmp(current->key, key) == 0)
+        {
+            free(current->value);
+            current->value = strdup(value);
+            return;
+        }
+        current = current->next;
+    }
+    current = all->env;
+    while (current->next)
+        current = current->next;
+    t_env *new_node = malloc(sizeof(t_env));
+    new_node->key = strdup(key);
+    new_node->value = strdup(value);
+    new_node->next = NULL;
+    current->next = new_node;
+    print_env(all->env);
+}
+
+int ft_export(t_all *all, t_cmd *cmd)
+{
+    int i = 1; // cmd->args[0] = "export"
+
+    while (cmd->args[i])
+    {
+        char *equal_sign = strchr(cmd->args[i], '=');
+        if (equal_sign)
+        {
+            *equal_sign = '\0'; // key'nin sonunu işaretle
+            char *key = cmd->args[i];
+            char *value = equal_sign + 1;
+            add_or_update_env(all, key, value);
+            *equal_sign = '='; // Geri düzelt
+        }
+        else
+        {
+            fprintf(stderr, "export: `%s`: not a valid identifier\n", cmd->args[i]);
+        }
+        i++;
+    }
+    return 0;
+}
+
+int ft_unset(t_all *all, t_cmd *cmd)
+{
+    int i = 1; // cmd->args[0] = "unset"
+
+    while (cmd->args[i])
+    {
+        t_env *prev = NULL;
+        t_env *curr = all->env;
+
+        while (curr)
+        {
+            if (strcmp(curr->key, cmd->args[i]) == 0)
+            {
+                if (prev)
+                    prev->next = curr->next;
+                else
+                    all->env = curr->next;
+                free(curr->key);
+                free(curr->value);
+                free(curr);
+                break;
+            }
+            prev = curr;
+            curr = curr->next;
+        }
+        i++;
+    }
+    return 0;
+}
+int ft_env(t_all *all, t_cmd *cmd)
+{
+    (void)cmd;
+    t_env *current = all->env;
+
+    while (current)
+    {
+        if (current->value) // env sadece value'su olanları gösterir
+            printf("%s=%s\n", current->key, current->value);
+        current = current->next;
+    }
+    return 0;
+}
+
 
 // Built-in komut tablosu - static so it's only visible in this file
 static t_builtin builtins[] = {
     {"echo", ft_echo},
     {"cd", ft_cd},
     {"pwd", ft_pwd},
+    {"export", ft_export},
+    {"unset", ft_unset},
+    {"env", ft_env},
     {"exit", ft_exit},
     {NULL, NULL}
 };

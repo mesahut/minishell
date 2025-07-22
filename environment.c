@@ -30,5 +30,6 @@ void    put_env(t_env **env, char **env_list)
     {
         create_env(ft_split(env_list[i], '='), env);
         i++;
+        //printf("Added env: %s=%s\n", env->key, env->value);
     }
 }
