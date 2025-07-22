@@ -22,7 +22,7 @@ int main(int argc, char **argv, char **env_list)
     (void)argc;
     (void)argv; 
     t_all   *all;
-    char    *line;
+    char    *line = NULL;
     char    *input;
 
     all = (t_all *)malloc(sizeof(t_all));
@@ -32,6 +32,7 @@ int main(int argc, char **argv, char **env_list)
     put_env(&(all->env) , env_list);
     while (1)
     {
+        free(line);
         line = readline("minishell>>");
         add_history(line);
         line = collector_dup(all->collector, line);
