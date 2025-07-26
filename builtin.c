@@ -5,6 +5,92 @@
 // Forward declare builtins array
 static t_builtin builtins[];
 
+int cmp_env(const void *a, const void *b)
+{
+    const char *s1 = *(const char **)a;
+    const char *s2 = *(const char **)b;
+    return strcmp(s1, s2);
+}
+int env_list_size(t_env *env)
+{
+    int count = 0;
+    while (env)
+    {
+        count++;
+        env = env->next;
+    }
+    return count;
+}
+
+char **env_to_array(t_env *env_list)
+{
+    int     size = env_list_size(env_list);
+    char    **arr = malloc(sizeof(char *) * (size + 1));
+    int     i = 0;
+    char    *tmp;
+
+    if (!arr)
+        return NULL;
+    while (env_list)
+    {
+        if (env_list->value)
+        {
+            tmp = malloc(strlen(env_list->key) + strlen(env_list->value) + 2);
+            sprintf(tmp, "%s=%s", env_list->key, env_list->value);
+        }
+        else
+        {
+            tmp = strdup(env_list->key);
+        }
+        arr[i++] = tmp;
+        env_list = env_list->next;
+    }
+    arr[i] = NULL;
+    return arr;
+}
+void print_sorted_env(t_env *env_list)
+{
+    int size = env_list_size(env_list);
+    char **keys = malloc(sizeof(char *) * (size + 1));
+    t_env *current = env_list;
+    int i = 0;
+
+    if (!keys)
+        return;
+
+    // Sadece key'leri kopyala
+    while (current)
+    {
+        keys[i++] = strdup(current->key);
+        current = current->next;
+    }
+    keys[i] = NULL;
+
+    // Alfabetik sırala
+    qsort(keys, size, sizeof(char *), cmp_env);
+
+    // Sıralı olarak yazdır
+    for (int j = 0; j < size; j++)
+    {
+        t_env *node = env_list;
+        while (node)
+        {
+            if (strcmp(node->key, keys[j]) == 0)
+            {
+                if (node->value)
+                    printf("declare -x %s=\"%s\"\n", node->key, node->value);
+                else
+                    printf("declare -x %s\n", node->key);
+                break;
+            }
+            node = node->next;
+        }
+        free(keys[j]);
+    }
+    free(keys);
+}
+
+
 
 void print_env(t_all *all)
 {
@@ -15,7 +101,6 @@ void print_env(t_all *all)
         current = current->next;
     }
 }
-
 
 int flag_check(char *arg)
 {
@@ -134,6 +219,13 @@ void add_or_update_env(t_all *all, const char *key, const char *value)
 int ft_export(t_all *all, t_cmd *cmd)
 {
     int i = 1;
+
+    if (cmd->args[1] == NULL)
+    {
+        print_sorted_env(all->env);
+        return 0;
+    }
+
     while (cmd->args[i])
     {
         char *equal_sign = strchr(cmd->args[i], '=');
@@ -158,6 +250,7 @@ int ft_export(t_all *all, t_cmd *cmd)
     }
     return 0;
 }
+
 
 
 int ft_unset(t_all *all, t_cmd *cmd)
