@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/26 14:56:02 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/07/26 22:40:34 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,17 @@
 
 char *path_find(char *cmd)
 {
-    if (cmd[0] == '.' && cmd[1] == '/')
-    {
-        return (cmd);
-    }
-    else
-        return (ft_strjoin("/usr/bin/", cmd));
+    if (!cmd)
+        return NULL;
+
+    // Eğer zaten bir absolute path ise
+    if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+        return (ft_strdup(cmd));  // ft_strdup ile bellekte kopya oluştur
+
+    // Değilse /usr/bin/ prefix ekle
+    return (ft_strjoin("/usr/bin/", cmd));
 }
+
 
 char **list_to_envp(t_env *env)
 {
@@ -60,6 +64,7 @@ void exec_external_cmd(char *path, char **args, t_env *envp)
     perror("execve failed");
     exit(1);
 }
+
 
 void handle_redirections(t_cmd *cmd)
 {
@@ -118,15 +123,9 @@ void exec(t_all *all)
             exit(1);
         }
 
-        pid = fork();
-        if (pid == -1)
+        if (is_builtin(cmd->args[0]) && cmd->next == NULL)
         {
-            perror("fork");
-            exit(1);
-        }
-        else if (pid == 0)
-        {
-            // Child process
+            // Built-in ve pipeline'da değilse fork açma, direkt shell içinde çalıştır
             if (prev_fd != -1)
             {
                 dup2(prev_fd, STDIN_FILENO);
@@ -136,44 +135,72 @@ void exec(t_all *all)
             if (cmd->redirects)
                 handle_redirections(cmd);
 
-            if (cmd->next)
-            {
-                close(pipefd[0]);
-                dup2(pipefd[1], STDOUT_FILENO);
-                close(pipefd[1]);
-            }
+            all->exit_status = exec_builtin(all, cmd);
+            
+            // Redirect'leri geri almayı unutma, eğer handle_redirections değişiklik yaptıysa
+            // Bu kısmı da koduna göre eklemelisin
 
-            if (is_builtin(cmd->args[0]))
-            {
-                exit(exec_builtin(all, cmd));
-            }
-            else
-            {
-                exec_external_cmd(path_find(cmd->args[0]), cmd->args, all->env);
-            }
-                
-
-            // exec_external_cmd başarısız olursa buraya gelir
-            exit(1);
+            break; // pipeline yoksa loop'u kır
         }
         else
         {
-            // Parent process
-            if (prev_fd != -1)
-                close(prev_fd);
-
-            if (cmd->next)
+            // Fork aç ve child içinde çalıştır (built-in ya da external)
+            pid = fork();
+            if (pid == -1)
             {
-                close(pipefd[1]);
-                prev_fd = pipefd[0];
+                perror("fork");
+                exit(1);
             }
-            else if (cmd->next == NULL && prev_fd != -1)
+            else if (pid == 0)
             {
-                close(prev_fd);
-            }
+                // Child process
+                if (prev_fd != -1)
+                {
+                    dup2(prev_fd, STDIN_FILENO);
+                    close(prev_fd);
+                }
 
-            waitpid(pid, &all->exit_status, 0);
-            cmd = cmd->next;
+                if (cmd->redirects)
+                    handle_redirections(cmd);
+
+                if (cmd->next)
+                {
+                    close(pipefd[0]);
+                    dup2(pipefd[1], STDOUT_FILENO);
+                    close(pipefd[1]);
+                }
+
+                if (is_builtin(cmd->args[0]))
+                {
+                    exit(exec_builtin(all, cmd));
+                }
+                else
+                {
+                    exec_external_cmd(path_find(cmd->args[0]), cmd->args, all->env);
+                }
+
+                exit(1); // exec başarısızsa child burada ölür
+            }
+            else
+            {
+                // Parent process
+                if (prev_fd != -1)
+                    close(prev_fd);
+
+                if (cmd->next)
+                {
+                    close(pipefd[1]);
+                    prev_fd = pipefd[0];
+                }
+                else if (cmd->next == NULL && prev_fd != -1)
+                {
+                    close(prev_fd);
+                }
+
+                waitpid(pid, &all->exit_status, 0);
+                cmd = cmd->next;
+            }
         }
     }
 }
+

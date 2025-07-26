@@ -86,6 +86,6 @@ void    *safe_malloc(t_collector *gc_head, int size);
 char    *collector_dup(t_collector *collector, char *line);
 int     exec_builtin(t_all *all, t_cmd *cmd);
 int     is_builtin(char *cmd);
-void print_env(t_env *env);
+void print_env(t_all *env);
 int flag_check(char *arg);
 #endif

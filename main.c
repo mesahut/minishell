@@ -21,10 +21,7 @@ void    print_card(t_card *card)
 {
     t_card *current = card;
     while (current)
-    {
-        printf("Card Type: %d, Value: %s\n", current->type, current->value);
         current = current->next;
-    }
 }
 
 int main(int argc, char **argv, char **env_list)

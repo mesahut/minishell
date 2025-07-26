@@ -6,17 +6,16 @@
 static t_builtin builtins[];
 
 
-void    print_env(t_env *env)
+void print_env(t_all *all)
 {
-    t_env *current = env;
-
+    t_env *current = all->env;
     while (current)
     {
-        if (current->value) // env sadece value'su olanları gösterir
-            printf("%s=%s\n", current->key, current->value);
+        printf("%s=%s\n", current->key, current->value);
         current = current->next;
     }
 }
+
 
 int flag_check(char *arg)
 {
@@ -112,29 +111,44 @@ void add_or_update_env(t_all *all, const char *key, const char *value)
         }
         current = current->next;
     }
-    current = all->env;
-    while (current->next)
-        current = current->next;
-    t_env *new_node = safe_malloc(all->collector ,sizeof(t_env));
+
+    t_env *new_node = safe_malloc(all->collector, sizeof(t_env));
     new_node->key = strdup(key);
     new_node->value = strdup(value);
     new_node->next = NULL;
+
+    if (!all->env)
+    {
+        all->env = new_node;
+        return;
+    }
+
+    // 4. Değilse sona ekle
+    current = all->env;
+    while (current->next)
+        current = current->next;
     current->next = new_node;
 }
 
+
 int ft_export(t_all *all, t_cmd *cmd)
 {
-    int i = 1; // cmd->args[0] = "export"
+    int i = 1;
     while (cmd->args[i])
     {
         char *equal_sign = strchr(cmd->args[i], '=');
-        if (equal_sign)
+        if (equal_sign && equal_sign != cmd->args[i])
         {
-            *equal_sign = '\0'; // key'nin sonunu işaretle
-            char *key = cmd->args[i];
-            char *value = equal_sign + 1;
+            char *arg_copy = ft_strdup(cmd->args[i]);
+            if (!arg_copy)
+                return 1; // malloc hatası
+
+            char *equal_pos = strchr(arg_copy, '=');
+            *equal_pos = '\0';
+            char *key = arg_copy;
+            char *value = equal_pos + 1;
             add_or_update_env(all, key, value);
-            *equal_sign = '='; // Geri düzelt
+            free(arg_copy);
         }
         else
         {
@@ -144,6 +158,7 @@ int ft_export(t_all *all, t_cmd *cmd)
     }
     return 0;
 }
+
 
 int ft_unset(t_all *all, t_cmd *cmd)
 {
