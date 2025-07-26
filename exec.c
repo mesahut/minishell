@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/22 15:51:58 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/07/26 14:56:02 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void handle_redirections(t_cmd *cmd)
         }
 
         if (redir->fd >= 0)
-            close(redir->fd); // Açık dosya descriptor'ları kapat
+             close(redir->fd); // Açık dosya descriptor'ları kapat
         redir = redir->next;
     }
 }
@@ -144,7 +144,9 @@ void exec(t_all *all)
             }
 
             if (is_builtin(cmd->args[0]))
+            {
                 exit(exec_builtin(all, cmd));
+            }
             else
             {
                 exec_external_cmd(path_find(cmd->args[0]), cmd->args, all->env);

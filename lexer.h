@@ -25,6 +25,7 @@ typedef struct s_collector
 typedef struct s_card 
 {
     int     type;
+    int     here_flag;
     char    *value;
     struct s_card *next;
 } t_card;
@@ -80,10 +81,11 @@ void    exec(t_all *all);
 void    create_card(t_all *all, char *card);
 void	expander(t_all *all);
 void    lexer(char *line, t_all *all);
-void    put_env(t_env **env, char **env_list);
+void    put_env(t_all *all, char **env_list);
 void    *safe_malloc(t_collector *gc_head, int size);
 char    *collector_dup(t_collector *collector, char *line);
 int     exec_builtin(t_all *all, t_cmd *cmd);
 int     is_builtin(char *cmd);
 void print_env(t_env *env);
+int flag_check(char *arg);
 #endif

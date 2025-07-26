@@ -28,6 +28,49 @@ char	*ft_getenv(t_env *env, char *key)
 	return (NULL);
 }
 
+void insert_node_at(t_all *all, t_card **pos, char *str)
+{
+	t_card *tmp;
+	t_card *new_node = (t_card *)safe_malloc(all->collector, sizeof(t_card));
+	if (!new_node)
+		return;
+	new_node->value = str;
+	new_node->type = WORD;
+	new_node->here_flag = 0;
+	tmp = (*pos)->next;
+	(*pos)->next = new_node;
+	new_node->next = tmp;
+}
+
+void	delim_node(t_all *all, t_card *node)
+{
+	char	*str;
+	char	**temp;
+	int		i;
+
+	i = 1;
+	str = NULL;
+	temp = ft_split(node->value, ' ');
+	free(node->value);
+	node->value = temp[0];
+	if(temp[i] && flag_check(temp[i]))
+	{
+		insert_node_at(all, &node, ft_strdup(temp[i]));
+		node = node->next;
+	}
+	else if(temp[i])
+		str = temp[i];
+	i++;
+	while (temp[i])
+	{
+		str = ft_strjoin(str, " ");
+		str = ft_strjoin(str, temp[i]);
+		i++;
+	}
+	if (str)
+		insert_node_at(all, &node, ft_strdup(str));
+}
+
 char	*found_dollar(char *line, int dollar_place, t_all *all)
 {
 	char	*before;
@@ -85,7 +128,7 @@ void	check_for_expansion(t_all *all)
 	open_quote = '\0';
 	node = all->card;
 	prev_node = node;
-	prev_node->type = -1;
+	prev_node->type = WORD;
 	while (node != NULL)
 	{
 		i = 0;
@@ -95,6 +138,7 @@ void	check_for_expansion(t_all *all)
 			if(open_quote != '\'' && prev_node->type != HEREDOC && (node->value)[i] == '$')
 			{
 				node->value = found_dollar((node->value), i, all);
+				delim_node(all, node);
 			}
 			i++;
 		}
@@ -147,11 +191,11 @@ int quote_count(char *str)
     return count;
 }
 
-char *quote_ignore(char *str)
+char *quote_ignore(t_all *all, char *str)
 {
     int len = strlen(str);
     int quotes = quote_count(str);
-    char *result = (char *)malloc(len - quotes + 1);
+    char *result = (char *)safe_malloc(all->collector ,len - quotes + 1);
     int i = 0, j = 0;
     char open_quote = '\0';
     while (str[i])
@@ -180,7 +224,9 @@ void	quote_ingnore(t_all *all)
 	current = all->card;
 	while (current)
 	{
-		current->value = quote_ignore(current->value);
+		if(current->type == HEREDOC && current->next)
+			current->here_flag = 1;
+		current->value = quote_ignore(all, current->value);
 		current = current->next;
 	}
 }

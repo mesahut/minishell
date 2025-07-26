@@ -113,7 +113,6 @@ void set_cmd(t_all *all, t_cmd *current_cmd)
                 i++;
             }
         }
-        // Redirect ekleme
         else if (current_card->type == R_APPEND || current_card->type == R_OUT || 
                  current_card->type == HEREDOC || current_card->type == R_IN)
         {
@@ -143,7 +142,6 @@ void set_cmd(t_all *all, t_cmd *current_cmd)
 
         current_card = current_card->next;
     }
-
     current_cmd->args[i] = NULL;
 }
 
@@ -156,16 +154,13 @@ void parser(t_all *all)
 
     head_cmd = NULL;
     current_card = all->card;
-
     while (current_card != NULL)
     {
         current_cmd = init_cmd(head_cmd, all);
         if (!current_cmd)
             return;
-
         put_node(&head_cmd, current_cmd);
         set_cmd(all, current_cmd);
-
         while (current_card && current_card->type != PIPE)
             current_card = current_card->next;
         

@@ -8,6 +8,7 @@ void    create_card(t_all *all, char *card)
     new_card = (t_card *) safe_malloc(all->collector ,sizeof(t_card));
     new_card->value = card;
     new_card->type = -1;
+    new_card->here_flag = 0;
     new_card->next = NULL;
     if(all->card == NULL)
         all->card = new_card;
@@ -25,7 +26,7 @@ void    create_collector(t_collector *head_card, void *address)
     t_collector  *new_card;
     t_collector  *current;
 
-    new_card = (t_collector *) malloc(sizeof(t_collector));
+    new_card = (t_collector *) ft_calloc(sizeof(t_collector), 1);
     new_card->value = address;
     new_card->next = NULL;
     if(head_card == NULL)
@@ -43,7 +44,7 @@ void    *safe_malloc(t_collector *gc_head, int size)
 {
     char    *str;
 
-    str = malloc(size);
+    str = ft_calloc(size, 1);
     create_collector(gc_head, str);
     return (str);
 }

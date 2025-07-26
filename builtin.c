@@ -18,6 +18,22 @@ void    print_env(t_env *env)
     }
 }
 
+int flag_check(char *arg)
+{
+    int i;
+
+    i = 1;
+    if(arg[0] != '-')
+        return (0);
+    while (arg[i])
+    {
+        if (arg[i] != 'n')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 // echo komutu
 int ft_echo(t_all *all, t_cmd *cmd)
 {
@@ -28,7 +44,7 @@ int ft_echo(t_all *all, t_cmd *cmd)
     i = 1;
     newline = 1;
     
-    if (cmd->args[1] && !strcmp(cmd->args[1], "-n"))
+    if (cmd->args[1] && flag_check(cmd->args[1]))
     {
         newline = 0;
         i++;
@@ -38,7 +54,9 @@ int ft_echo(t_all *all, t_cmd *cmd)
     {
         printf("%s", cmd->args[i]);
         if (cmd->args[i + 1])
+        {
             printf(" ");
+        }
         i++;
     }
     if (newline)
@@ -97,18 +115,16 @@ void add_or_update_env(t_all *all, const char *key, const char *value)
     current = all->env;
     while (current->next)
         current = current->next;
-    t_env *new_node = malloc(sizeof(t_env));
+    t_env *new_node = safe_malloc(all->collector ,sizeof(t_env));
     new_node->key = strdup(key);
     new_node->value = strdup(value);
     new_node->next = NULL;
     current->next = new_node;
-    print_env(all->env);
 }
 
 int ft_export(t_all *all, t_cmd *cmd)
 {
     int i = 1; // cmd->args[0] = "export"
-
     while (cmd->args[i])
     {
         char *equal_sign = strchr(cmd->args[i], '=');
@@ -189,7 +205,6 @@ static t_builtin builtins[] = {
 int is_builtin(char *cmd)
 {
     int i;
-
     i = 0;
     while (builtins[i].name)
     {
