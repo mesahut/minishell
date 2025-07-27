@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "../../include/minishell.h"
 #include <unistd.h>
 #include <string.h>
 
@@ -126,27 +126,27 @@ int ft_echo(t_all *all, t_cmd *cmd)
     if (!cmd->args || !cmd->args[0])
         return (printf("\n"), 0);
 
-    // NULL kontrolü eklendi:
-    if (!cmd->args[1])
-        return (printf("\n"), 0);
-
+    // Handle -n flag if present
     if (cmd->args[i] && strcmp(cmd->args[i], "-n") == 0)
     {
         newline = 0;
         i++;
     }
 
+    // If no arguments after command name (and possible -n flag), just print newline or nothing
+    if (!cmd->args[i])
+    {
+        if (newline)
+            printf("\n");
+        return 0;
+    }
+
+    // Print arguments
     while (cmd->args[i])
     {
-        // Redirect token'larını görmezden gel (güvenli yaklaşım)
-        if (strcmp(cmd->args[i], "<") == 0 || strcmp(cmd->args[i], ">") == 0)
-            break;
-
         printf("%s", cmd->args[i]);
 
-        if (cmd->args[i + 1] &&
-            strcmp(cmd->args[i + 1], "<") != 0 &&
-            strcmp(cmd->args[i + 1], ">") != 0)
+        if (cmd->args[i + 1])
             printf(" ");
 
         i++;

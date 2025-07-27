@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "libft/libft.h"
+#include "../../include/minishell.h"
+#include "../../libft/libft.h"
 #include <unistd.h>     // fork, execve
 #include <sys/wait.h>   // waitpid, WIFEXITED
 #include <stdlib.h>     // exit
@@ -75,34 +75,55 @@ void handle_redirections(t_cmd *cmd)
         {
             redir->fd = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (redir->fd < 0)
-                perror("redirect >");
+            {
+                perror(redir->filename);
+                return;
+            }
             else
-                dup2(redir->fd, STDOUT_FILENO);
+            {
+                if (dup2(redir->fd, STDOUT_FILENO) == -1)
+                {
+                    perror("dup2 for output");
+                    close(redir->fd);
+                    return;
+                }
+            }
         }
         else if (redir->type == R_APPEND)
         {
             redir->fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
             if (redir->fd < 0)
-                perror("redirect >>");
+            {
+                perror(redir->filename);
+                return;
+            }
             else
-                dup2(redir->fd, STDOUT_FILENO);
+            {
+                if (dup2(redir->fd, STDOUT_FILENO) == -1)
+                {
+                    perror("dup2 for append");
+                    close(redir->fd);
+                    return;
+                }
+            }
         }
         else if (redir->type == R_IN)
         {  
-        redir->fd = open(redir->filename, O_RDONLY);
-        if (redir->fd < 0)
-        {
-            perror("redirect <");
-            return ;
-        }
-        else
-        {
-            if (dup2(redir->fd, STDIN_FILENO) == -1)
+            redir->fd = open(redir->filename, O_RDONLY);
+            if (redir->fd < 0)
             {
-                perror("dup2 for input");
-                return ;
+                perror(redir->filename);
+                return;
             }
-        }
+            else
+            {
+                if (dup2(redir->fd, STDIN_FILENO) == -1)
+                {
+                    perror("dup2 for input");
+                    close(redir->fd);
+                    return;
+                }
+            }
         }
         else if (redir->type == HEREDOC)
         {
@@ -111,7 +132,7 @@ void handle_redirections(t_cmd *cmd)
         }
 
         if (redir->fd >= 0 && redir->fd != STDIN_FILENO && redir->fd != STDOUT_FILENO)
-             close(redir->fd); // Açık dosya descriptor'ları kapat
+            close(redir->fd); // Açık dosya descriptor'ları kapat
         redir = redir->next;
     }
 }
@@ -122,6 +143,8 @@ void exec(t_all *all)
     int pipefd[2];
     int prev_fd = -1;
     pid_t pid;
+    int saved_stdin = -1;
+    int saved_stdout = -1;
 
     while (cmd)
     {
@@ -138,9 +161,28 @@ void exec(t_all *all)
                 dup2(prev_fd, STDIN_FILENO);
                 close(prev_fd);
             }
+            
+            // Save original file descriptors before redirections
             if (cmd->redirects)
+            {
+                saved_stdin = dup(STDIN_FILENO);
+                saved_stdout = dup(STDOUT_FILENO);
                 handle_redirections(cmd);
+            }
+            
             all->exit_status = exec_builtin(all, cmd);
+            
+            // Restore original file descriptors after builtin execution
+            if (saved_stdin != -1)
+            {
+                dup2(saved_stdin, STDIN_FILENO);
+                close(saved_stdin);
+            }
+            if (saved_stdout != -1)
+            {
+                dup2(saved_stdout, STDOUT_FILENO);
+                close(saved_stdout);
+            }
             break;
         }
         else

@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "../../include/minishell.h"
 
 void    create_card(t_all *all, char *card)
 {

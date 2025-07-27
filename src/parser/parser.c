@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "../../include/minishell.h"
 
 int redir_counter(t_all *all)
 {
@@ -29,6 +29,13 @@ int args_counter(t_all *all)
     {
         if (current_card->type == WORD || current_card->type == -1)
             count++;
+        else if (current_card->type == R_APPEND || current_card->type == R_OUT || 
+                 current_card->type == HEREDOC || current_card->type == R_IN)
+        {
+            // Skip the redirection operator and its filename
+            if (current_card->next)
+                current_card = current_card->next;
+        }
         current_card = current_card->next;
     }
     return (count);
@@ -103,29 +110,21 @@ void set_cmd(t_all *all, t_cmd *current_cmd)
 
     while (current_card != NULL && current_card->type != PIPE)
     {
-        // Argüman ekleme
-        if ((current_card->type == WORD || current_card->type == -1)
-            && current_card->value && current_card->value[0] != '\0')
-        {
-            if (i < current_cmd->args_count)
-            {
-                current_cmd->args[i] = current_card->value;
-                i++;
-            }
-        }
-        else if (current_card->type == R_APPEND || current_card->type == R_OUT || 
-                 current_card->type == HEREDOC || current_card->type == R_IN)
+        // Handle redirections first
+        if (current_card->type == R_APPEND || current_card->type == R_OUT || 
+            current_card->type == HEREDOC || current_card->type == R_IN)
         {
             if (current_card->next && current_card->next->value)
             {
-                // Yeni bir redirect node oluştur
+                // Create new redirect node
                 t_redirect *redir = safe_malloc(all->collector, sizeof(t_redirect));
                 redir->type = current_card->type;
                 redir->filename = current_card->next->value;
+                redir->value = NULL;
                 redir->fd = -1;
                 redir->next = NULL;
 
-                // Listeye ekle
+                // Add to redirect list
                 if (!current_cmd->redirects)
                     current_cmd->redirects = redir;
                 else
@@ -136,7 +135,18 @@ void set_cmd(t_all *all, t_cmd *current_cmd)
                     tmp->next = redir;
                 }
 
+                // Skip the filename token too
                 current_card = current_card->next;
+            }
+        }
+        // Add regular arguments (not redirections or their filenames)
+        else if ((current_card->type == WORD || current_card->type == -1)
+                && current_card->value && current_card->value[0] != '\0')
+        {
+            if (i < current_cmd->args_count)
+            {
+                current_cmd->args[i] = current_card->value;
+                i++;
             }
         }
 

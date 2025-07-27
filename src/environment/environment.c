@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "../../include/minishell.h"
 
 void create_env(char **env_line, t_all *all)
 {

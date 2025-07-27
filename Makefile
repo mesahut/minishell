@@ -5,14 +5,14 @@ LDFLAGS = -lreadline
 INCLUDE = -I. -I./libft
 LIBFT = libft/libft.a
 
-SRCS = main.c \
-	card_list.c \
-	environment.c \
-	expend.c \
-	lexer.c \
-	parser.c \
-	exec.c \
-	builtin.c 
+SRCS = src/main.c \
+	src/utils/card_list.c \
+	src/environment/environment.c \
+	src/expansion/expend.c \
+	src/lexer/lexer.c \
+	src/parser/parser.c \
+	src/executor/exec.c \
+	src/builtins/builtin.c 
 
 OBJS = $(SRCS:.c=.o)
 
