@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/26 22:40:34 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/07/27 14:30:05 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void exec_external_cmd(char *path, char **args, t_env *envp)
 void handle_redirections(t_cmd *cmd)
 {
     t_redirect *redir = cmd->redirects;
-
     while (redir)
     {
         if (redir->type == R_OUT)
@@ -89,12 +88,21 @@ void handle_redirections(t_cmd *cmd)
                 dup2(redir->fd, STDOUT_FILENO);
         }
         else if (redir->type == R_IN)
+        {  
+        redir->fd = open(redir->filename, O_RDONLY);
+        if (redir->fd < 0)
         {
-            redir->fd = open(redir->filename, O_RDONLY);
-            if (redir->fd < 0)
-                perror("redirect <");
-            else
-                dup2(redir->fd, STDIN_FILENO);
+            perror("redirect <");
+            return ;
+        }
+        else
+        {
+            if (dup2(redir->fd, STDIN_FILENO) == -1)
+            {
+                perror("dup2 for input");
+                return ;
+            }
+        }
         }
         else if (redir->type == HEREDOC)
         {
@@ -102,7 +110,7 @@ void handle_redirections(t_cmd *cmd)
             // Bu daha karmaşık bir işlem, istersen ayrıca açıklayabilirim
         }
 
-        if (redir->fd >= 0)
+        if (redir->fd >= 0 && redir->fd != STDIN_FILENO && redir->fd != STDOUT_FILENO)
              close(redir->fd); // Açık dosya descriptor'ları kapat
         redir = redir->next;
     }
@@ -122,7 +130,6 @@ void exec(t_all *all)
             perror("pipe");
             exit(1);
         }
-
         if (is_builtin(cmd->args[0]) && cmd->next == NULL)
         {
             // Built-in ve pipeline'da değilse fork açma, direkt shell içinde çalıştır
@@ -131,16 +138,10 @@ void exec(t_all *all)
                 dup2(prev_fd, STDIN_FILENO);
                 close(prev_fd);
             }
-
             if (cmd->redirects)
                 handle_redirections(cmd);
-
             all->exit_status = exec_builtin(all, cmd);
-            
-            // Redirect'leri geri almayı unutma, eğer handle_redirections değişiklik yaptıysa
-            // Bu kısmı da koduna göre eklemelisin
-
-            break; // pipeline yoksa loop'u kır
+            break;
         }
         else
         {

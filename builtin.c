@@ -117,36 +117,48 @@ int flag_check(char *arg)
     }
     return (1);
 }
-
-// echo komutu
 int ft_echo(t_all *all, t_cmd *cmd)
 {
-    int i;
-    int newline;
-    (void)all; // Suppress unused parameter warning
+    (void)all;
+    int i = 1;
+    int newline = 1;
 
-    i = 1;
-    newline = 1;
-    
-    if (cmd->args[1] && flag_check(cmd->args[1]))
+    if (!cmd->args || !cmd->args[0])
+        return (printf("\n"), 0);
+
+    // NULL kontrolü eklendi:
+    if (!cmd->args[1])
+        return (printf("\n"), 0);
+
+    if (cmd->args[i] && strcmp(cmd->args[i], "-n") == 0)
     {
         newline = 0;
         i++;
     }
-    
+
     while (cmd->args[i])
     {
+        // Redirect token'larını görmezden gel (güvenli yaklaşım)
+        if (strcmp(cmd->args[i], "<") == 0 || strcmp(cmd->args[i], ">") == 0)
+            break;
+
         printf("%s", cmd->args[i]);
-        if (cmd->args[i + 1])
-        {
+
+        if (cmd->args[i + 1] &&
+            strcmp(cmd->args[i + 1], "<") != 0 &&
+            strcmp(cmd->args[i + 1], ">") != 0)
             printf(" ");
-        }
+
         i++;
     }
+
     if (newline)
         printf("\n");
-    return (0);
+
+    return 0;
 }
+
+
 
 // cd komutu
 int ft_cd(t_all *all, t_cmd *cmd)
