@@ -41,6 +41,21 @@ void insert_node_at(t_all *all, t_card **pos, char *str)
 	(*pos)->next = new_node;
 	new_node->next = tmp;
 }
+int flag_check(char *arg)
+{
+    int i;
+
+    i = 1;
+    if(arg[0] != '-')
+        return (0);
+    while (arg[i])
+    {
+        if (arg[i] != 'n')
+            return (0);
+        i++;
+    }
+    return (1);
+}
 
 void	delim_node(t_all *all, t_card *node)
 {

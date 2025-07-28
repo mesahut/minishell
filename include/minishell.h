@@ -67,13 +67,6 @@ typedef struct s_all
     int         exit_status;
 } t_all;
 
-typedef int (*t_builtin_func)(t_all *all, t_cmd *cmd);
-
-typedef struct s_builtin
-{
-    char *name;
-    t_builtin_func func;
-} t_builtin;
 
 void    set_cmd(t_all *all, t_cmd *cmd);
 void    parser(t_all *all);
@@ -88,4 +81,23 @@ int     exec_builtin(t_all *all, t_cmd *cmd);
 int     is_builtin(char *cmd);
 void print_env(t_all *env);
 int flag_check(char *arg);
+
+
+
+
+
+
+
+
+
+int ft_pwd(t_all *all, t_cmd *cmd);
+int ft_cd(t_all *all, t_cmd *cmd);
+int ft_echo(t_all *all, t_cmd *cmd);
+int ft_export(t_all *all, t_cmd *cmd);
+int ft_unset(t_all *all, t_cmd *cmd);
+int ft_env(t_all *all, t_cmd *cmd);
+void print_sorted_env(t_env *env_list);
+int	ft_exit(t_all *all, t_cmd *cmd);
+t_env	*find_env_by_key(t_env *env_list, const char *key);
+void	add_or_update_env(t_all *all, const char *key, const char *value);
 #endif
