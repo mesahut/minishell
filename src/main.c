@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
+/*   Updated: 2025/07/28 13:30:34 by asezgin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 char    *collector_dup(t_collector *collector, char *line)
 {
@@ -27,20 +41,32 @@ void    print_card(t_card *card)
 int main(int argc, char **argv, char **env_list)
 {
     (void)argc;
-    (void)argv; 
+    (void)argv;
+
     t_all   *all;
     char    *line = NULL;
     char    *input;
+
+    sig_init();
+
+    signal(SIGINT, sig_int);
+    signal(SIGQUIT, sig_quit);
 
     all = (t_all *)ft_calloc(sizeof(t_all), 1);
     if (!all)
         return 1;
     all->exit_status = 0;
-    put_env(all , env_list);
+    put_env(all, env_list);
+
     while (1)
     {
         free(line);
         line = readline("minishell>>");
+
+        // Eğer readline boşsa (ör. Ctrl+D), döngüden çık
+        if (!line)
+            break;
+
         add_history(line);
         line = collector_dup(all->collector, line);
         input = line;
@@ -49,8 +75,11 @@ int main(int argc, char **argv, char **env_list)
         print_card(all->card);
         parser(all);
         exec(all);
-       // print_env(all->env);
+        // print_env(all->env);
     }
+
+    free(line);
+    // Burada temizleme işlemlerini yapabilirsin (all, collector vs.)
+
     return 0;
 }
-

@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/27 14:30:05 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/07/28 13:11:05 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,8 @@ char *path_find(char *cmd)
 {
     if (!cmd)
         return NULL;
-
-    // Eğer zaten bir absolute path ise
     if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
-        return (ft_strdup(cmd));  // ft_strdup ile bellekte kopya oluştur
-
-    // Değilse /usr/bin/ prefix ekle
+        return (ft_strdup(cmd));
     return (ft_strjoin("/usr/bin/", cmd));
 }
 

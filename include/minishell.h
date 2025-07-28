@@ -2,12 +2,18 @@
 
 #define LEXER_H
 
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include "../libft/libft.h"
+# include "../libft/libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <string.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <sys/wait.h>
+# include <limits.h>
+# include <errno.h>
+# include <signal.h>
+
 
 #define PIPE 0
 #define R_APPEND 1
@@ -15,6 +21,11 @@
 #define HEREDOC 3
 #define R_IN 4
 #define WORD 5
+
+# define STDIN 0
+# define STDOUT 1
+# define STDERR 2
+
 
 typedef struct s_collector
 {
@@ -67,6 +78,13 @@ typedef struct s_all
     int         exit_status;
 } t_all;
 
+typedef struct	s_sig
+{
+	int				sigint;
+	int				sigquit;
+	int				exit_status;
+	pid_t			pid;
+}				t_sig;
 
 void    set_cmd(t_all *all, t_cmd *cmd);
 void    parser(t_all *all);
@@ -100,4 +118,13 @@ void print_sorted_env(t_env *env_list);
 int	ft_exit(t_all *all, t_cmd *cmd);
 t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
+
+
+
+void			sig_int(int code);
+void			sig_quit(int code);
+void			sig_init(void);
+
+extern t_sig g_sig;
+
 #endif

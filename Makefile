@@ -21,6 +21,8 @@ SRCS = src/main.c \
 	src/builtins/unset.c \
 	src/builtins/export.c \
 	src/builtins/exit.c \
+	src/signal/signal.c \
+
 
 OBJS = $(SRCS:.c=.o)
 
