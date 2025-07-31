@@ -166,11 +166,13 @@ void	check_tilde(t_all *all, t_card *node)
 void	check_for_expansion(t_all *all)
 {
 	int		i;
+	int		flag;
 	t_card	*node;
 	t_card	*prev_node;
 	char	open_quote;
 
 	i = 0;
+	flag = 0;
 	open_quote = '\0';
 	node = all->card;
 	prev_node = node;
@@ -185,13 +187,17 @@ void	check_for_expansion(t_all *all)
 			if(open_quote != '\'' && prev_node->type != HEREDOC && (node->value)[i] == '$' && node->value[i + 1] != '\0')
 			{
 				node->value = found_dollar((node->value), i, all);
+				flag = 1;
 			}
 			i++;
 		}
 		if(node->value[0] == '\0')
 			check_node(node, prev_node);
-		else
+		else if(flag == 1)
+		{
 			delim_node(all, node);
+			flag = 0;
+		}
 		prev_node = node;
 		node = node->next;
 	}
