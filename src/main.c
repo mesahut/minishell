@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/28 13:30:34 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/07/30 17:07:48 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ void    print_card(t_card *card)
 {
     t_card *current = card;
     while (current)
+    {
+        printf("Card Type: %d, Value: %s\n", current->type, current->value);
         current = current->next;
+    }
 }
 
 int main(int argc, char **argv, char **env_list)
@@ -46,12 +49,13 @@ int main(int argc, char **argv, char **env_list)
     t_all   *all;
     char    *line = NULL;
     char    *input;
-
+    
+    /*
     sig_init();
 
     signal(SIGINT, sig_int);
     signal(SIGQUIT, sig_quit);
-
+    */
     all = (t_all *)ft_calloc(sizeof(t_all), 1);
     if (!all)
         return 1;
@@ -72,7 +76,6 @@ int main(int argc, char **argv, char **env_list)
         input = line;
         lexer(input, all);
         expander(all);
-        print_card(all->card);
         parser(all);
         exec(all);
         // print_env(all->env);

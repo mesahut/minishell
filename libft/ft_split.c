@@ -6,11 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 13:11:07 by omadali           #+#    #+#             */
-/*   Updated: 2024/10/29 02:07:02 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:07:29 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 static void	free_malloc(char **f, int k)
 {
@@ -82,7 +83,7 @@ char	**ft_split(char const *s, char c)
 	int		a;
 	int		i;
 
-	if (!s)
+	if (!s[0])
 		return (NULL);
 	i = 0;
 	f = (char **)malloc(sizeof(char *) * (word_count(s, c) + 1));

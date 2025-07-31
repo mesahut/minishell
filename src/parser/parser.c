@@ -141,7 +141,7 @@ void set_cmd(t_all *all, t_cmd *current_cmd)
         }
         // Add regular arguments (not redirections or their filenames)
         else if ((current_card->type == WORD || current_card->type == -1)
-                && current_card->value && current_card->value[0] != '\0')
+                && current_card->value)
         {
             if (i < current_cmd->args_count)
             {

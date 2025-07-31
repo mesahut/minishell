@@ -97,13 +97,10 @@ void    *safe_malloc(t_collector *gc_head, int size);
 char    *collector_dup(t_collector *collector, char *line);
 int     exec_builtin(t_all *all, t_cmd *cmd);
 int     is_builtin(char *cmd);
-void print_env(t_all *env);
-int flag_check(char *arg);
-
-
-
-
-
+char	*expend_join(char const *s1, char const *s2);
+void    print_env(t_all *env);
+int     flag_check(char *arg);
+void    print_card(t_card *card);
 
 
 
@@ -121,10 +118,12 @@ void	add_or_update_env(t_all *all, const char *key, const char *value);
 
 
 
+
+/*
 void			sig_int(int code);
 void			sig_quit(int code);
 void			sig_init(void);
 
 extern t_sig g_sig;
-
+*/
 #endif

@@ -28,6 +28,18 @@ char	*ft_getenv(t_env *env, char *key)
 	return (NULL);
 }
 
+void	check_node(t_card *card, t_card *prev)
+{
+	t_card *tmp;
+	if(card->value[0] != '\0')
+		return;
+	tmp = card;
+	prev->next = card->next;
+	card = prev;
+	free(tmp);
+	return;
+}
+
 void insert_node_at(t_all *all, t_card **pos, char *str)
 {
 	t_card *tmp;
@@ -74,7 +86,7 @@ void	delim_node(t_all *all, t_card *node)
 		node = node->next;
 	}
 	else if(temp[i])
-		str = temp[i];
+	str = temp[i];
 	i++;
 	while (temp[i])
 	{
@@ -92,20 +104,20 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 	char	*after;
 	char	*env;
 	int		len;
-
+	
 	len = 0;
 	before = ft_substr(line, 0, dollar_place);
 	if(line[dollar_place + 1] == '?')
-		len = 2;
+	len = 2;
 	else
-		while(line[dollar_place + len + 1] != '\0' && (ft_isalnum(line[dollar_place + len + 1]) == 1))
-			len++;
+	while(line[dollar_place + len + 1] != '\0' && (ft_isalnum(line[dollar_place + len + 1]) == 1))
+	len++;
 	after = ft_substr(line, dollar_place + 1, len);
 	env = ft_getenv(all->env, after);
 	free(after);
 	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line) - (dollar_place + len + 1));
-	before = ft_strjoin(before, env);
-	after = ft_strjoin(before, after);
+	before = expend_join(before, env);
+	after = expend_join(before, after);
 	after = collector_dup(all->collector, after);
 	return(after);
 }
@@ -132,6 +144,25 @@ char	is_char_quote(char value, char quote_type)
 	return(quote_type);
 }
 
+void	check_tilde(t_all *all, t_card *node)
+{
+	t_card *current;
+	char *home;
+
+	home = NULL;
+	current = node;
+	while (current)
+	{
+		if (current->value[0] == '~' && current->value[1] == '\0')
+		{
+			ft_getenv(all->env, "HOME");
+			free(current->value);
+			current->value =  collector_dup(all->collector, home);
+		}
+		current = current->next;
+	}
+}
+
 void	check_for_expansion(t_all *all)
 {
 	int		i;
@@ -144,19 +175,23 @@ void	check_for_expansion(t_all *all)
 	node = all->card;
 	prev_node = node;
 	prev_node->type = WORD;
+
 	while (node != NULL)
 	{
 		i = 0;
 		while ((node->value)[i])
 		{
 			open_quote = is_char_quote((node->value)[i], open_quote);
-			if(open_quote != '\'' && prev_node->type != HEREDOC && (node->value)[i] == '$')
+			if(open_quote != '\'' && prev_node->type != HEREDOC && (node->value)[i] == '$' && node->value[i + 1] != '\0')
 			{
 				node->value = found_dollar((node->value), i, all);
-				delim_node(all, node);
 			}
 			i++;
 		}
+		if(node->value[0] == '\0')
+			check_node(node, prev_node);
+		else
+			delim_node(all, node);
 		prev_node = node;
 		node = node->next;
 	}
@@ -249,6 +284,7 @@ void	quote_ingnore(t_all *all)
 void	expander(t_all *all)
 {
 	put_title(all);
+	check_tilde(all, all->card);
 	check_for_expansion(all);
 	quote_ingnore(all);
 }

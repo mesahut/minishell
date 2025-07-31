@@ -95,10 +95,11 @@ void    split_line(char *line, t_all *all)
         if(str && str[0] != '\0')
         create_card(all, str);
     }
-}   
+}  
 
 void    lexer(char *line, t_all *all)
 {
+    //line_checker(line);
     quote_checker(line);
     split_line(line, all);
 }
