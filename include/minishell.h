@@ -91,7 +91,7 @@ void    parser(t_all *all);
 void    exec(t_all *all);
 void    create_card(t_all *all, char *card);
 void	expander(t_all *all);
-void    lexer(char *line, t_all *all);
+int     lexer(char *line, t_all *all);
 void    put_env(t_all *all, char **env_list);
 void    *safe_malloc(t_collector *gc_head, int size);
 char    *collector_dup(t_collector *collector, char *line);

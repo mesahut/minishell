@@ -1,6 +1,0 @@
-echo $                                                        // fixlendi
-echo $Home                                                    // fixlendi
-> asd execve field hatası alıyor dosya açması gerekli
->> asd execve field hatası alıyor dosya açması gerekli
-export a="echo a" yazıldığında not valid hatası alıyoruz
-terminaldeyken entere bastığımızda core dump hatası alıyoruz

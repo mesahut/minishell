@@ -1,0 +1,12 @@
+# FİXED
+- [x] echo $                                                      
+- [x] echo $Home                                                  
+- [x] export a="echo a" yazıldığında not valid hatası alıyoruz    
+- [x] terminaldeyken entere bastığımızda core dump hatası alıyoruz
+- [ ] > asd execve field hatası alıyor dosya açması gerekli
+- [ ] >> asd execve field hatası alıyor dosya açması gerekli
+- [ ] export 1a="123" tanımlama hatası alıyor ama export as2="123" tanımlanabiliyor       (export kısmında bunu fixledim şu anda yorum satırında kontrol edip yorum satırından çıkarabilir)
+- [ ] env komutunun ardından herhangi birşey yazılırsa hata kodu verdirecez
+- [ ] cat < testfile
+- [ ] echo $? yok
+- [ ] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek

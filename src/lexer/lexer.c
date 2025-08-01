@@ -97,25 +97,27 @@ void    split_line(char *line, t_all *all)
     }
 }
 
-void    line_checker(char *line)
+int    line_checker(char *line)
 {
     int i;
 
     if (!line || line[0] == '\0')
-        exit(0); // exit yerine yeni readlinea geçmeli
+        return (0); // exit yerine yeni readlinea geçmeli
     i = 0;
     while (line[i])
     {
         if(!is_space(line[i]))
-            return;
+            return (1);
         i++;
     }
-    exit(0); // exit yerine yeni readlinea geçmeli
+    return (0); // exit yerine yeni readlinea geçmeli
 }
 
-void    lexer(char *line, t_all *all)
+int    lexer(char *line, t_all *all)
 {
-    line_checker(line);
+    if (line_checker(line) == 0)
+        return (0);
     quote_checker(line);
     split_line(line, all);
+    return (1);
 }

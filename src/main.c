@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/31 13:22:22 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:00:58 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,11 @@ int main(int argc, char **argv, char **env_list)
         line = readline("minishell>>");
 
         // Eğer readline boşsa (ör. Ctrl+D), döngüden çık
-        if (!line)
-            break;
-
         add_history(line);
         line = collector_dup(all->collector, line);
         input = line;
-        lexer(input, all);
+        if (lexer(input, all) == 0)
+            continue; // Eğer lexer başarısızsa, yeni bir satır oku
         expander(all);
         parser(all);
         exec(all);

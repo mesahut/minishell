@@ -98,6 +98,8 @@ void	delim_node(t_all *all, t_card *node)
 		insert_node_at(all, &node, ft_strdup(str));
 }
 
+
+
 char	*found_dollar(char *line, int dollar_place, t_all *all)
 {
 	char	*before;
@@ -108,10 +110,10 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 	len = 0;
 	before = ft_substr(line, 0, dollar_place);
 	if(line[dollar_place + 1] == '?')
-	len = 2;
+		len = 1;
 	else
-	while(line[dollar_place + len + 1] != '\0' && (ft_isalnum(line[dollar_place + len + 1]) == 1))
-	len++;
+		while(line[dollar_place + len + 1] != '\0' && (ft_isalnum(line[dollar_place + len + 1]) == 1))
+			len++;
 	after = ft_substr(line, dollar_place + 1, len);
 	env = ft_getenv(all->env, after);
 	free(after);
