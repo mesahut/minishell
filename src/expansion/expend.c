@@ -178,7 +178,7 @@ void	check_for_expansion(t_all *all)
 	open_quote = '\0';
 	node = all->card;
 	prev_node = node;
-	prev_node->type = WORD;
+	prev_node->type = node->type;
 
 	while (node != NULL)
 	{
@@ -192,7 +192,7 @@ void	check_for_expansion(t_all *all)
 				flag = 1;
 			}
 			i++;
-		}
+		} 
 		if(node->value[0] == '\0')
 			check_node(node, prev_node);
 		else if(flag == 1)
@@ -204,6 +204,8 @@ void	check_for_expansion(t_all *all)
 		node = node->next;
 	}
 }
+
+
 
 void	put_title(t_all *all)
 {
@@ -249,10 +251,10 @@ int quote_count(char *str)
     return count;
 }
 
-char *quote_ignore(t_all *all, char *str)
+char *quote_ignore(t_all *all, char *str, int quotes)
 {
     int len = strlen(str);
-    int quotes = quote_count(str);
+    quotes = quote_count(str);
     char *result = (char *)safe_malloc(all->collector ,len - quotes + 1);
     int i = 0, j = 0;
     char open_quote = '\0';
@@ -278,13 +280,15 @@ char *quote_ignore(t_all *all, char *str)
 void	quote_ingnore(t_all *all)
 {
 	t_card	*current;
+	int		quotes;
 
 	current = all->card;
 	while (current)
 	{
-		if(current->type == HEREDOC && current->next)
-			current->here_flag = 1;
-		current->value = quote_ignore(all, current->value);
+		quotes = 0;
+		current->value = quote_ignore(all, current->value, quotes);
+		if(current->type == HEREDOC && current->next && quotes != 0)
+			current->next->here_flag = 1;
 		current = current->next;
 	}
 }

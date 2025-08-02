@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:46:46 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/28 10:57:02 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/02 13:12:55 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,20 @@ int	ft_env(t_all *all, t_cmd *cmd)
 {
 	t_env	*current;
 
-	(void)cmd;
 	current = all->env;
-	while (current)
+	if (cmd->args && !cmd->args[1])
 	{
-		if (current->value)
-			printf("%s=%s\n", current->key, current->value);
-		current = current->next;
+		while (current)
+		{
+			if (current->value)
+				printf("%s=%s\n", current->key, current->value);
+			current = current->next;
+		}
+	}
+	else
+	{
+		fprintf(stderr, "env: `%s`: No such file or directory\n", cmd->args[1]);
+		return (1);
 	}
 	return (0);
 }

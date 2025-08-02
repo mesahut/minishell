@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/01 19:18:57 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:04:52 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,11 @@ static int	parse_export_arg(t_all *all, const char *arg)
 	char		*arg_copy;
 	char		*equal_pos;
 
-	/*
 	if (arg && ft_isdigit(arg[0]))
 	{
 		fprintf(stderr, "export: `%s`: not a valid identifier\n", arg);
 		return (1);
 	}
-	*/
 	equal_sign = strchr(arg, '=');
 	if (!equal_sign || equal_sign == arg)
 	{

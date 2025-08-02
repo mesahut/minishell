@@ -117,6 +117,9 @@ t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
 
 
+void	check_for_expansion(t_all *all);
+char	*found_dollar(char *line, int dollar_place, t_all *all);
+char	is_char_quote(char value, char quote_type);
 
 
 /*

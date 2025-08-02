@@ -21,7 +21,12 @@ int quote_checker(char *words)
         i++;
 
     }
-    return (open_quote = '\0');
+    if (open_quote != '\0')
+    {
+        fprintf(stderr, "syntax error: unclosed quote\n");
+        return (0);
+    }
+    return (1);
 }
 
 int	is_operator(char c, char next)
@@ -117,7 +122,8 @@ int    lexer(char *line, t_all *all)
 {
     if (line_checker(line) == 0)
         return (0);
-    quote_checker(line);
+    if (quote_checker(line) == 0)
+        return (0);
     split_line(line, all);
     return (1);
 }

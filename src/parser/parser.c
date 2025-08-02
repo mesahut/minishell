@@ -158,26 +158,30 @@ void set_cmd(t_all *all, t_cmd *current_cmd)
 
 void parser(t_all *all)
 {
-    t_cmd *head_cmd;
+    t_cmd *head_cmd = NULL;
     t_cmd *current_cmd;
-    t_card *current_card;
+    t_card *cursor = all->card;  // all->card'ı değiştirme, sadece oku
 
-    head_cmd = NULL;
-    current_card = all->card;
-    while (current_card != NULL)
+    while (cursor != NULL)
     {
         current_cmd = init_cmd(head_cmd, all);
         if (!current_cmd)
             return;
+
         put_node(&head_cmd, current_cmd);
+
+        // geçici olarak all->card değişmiş gibi davranmak için pointer geç
+        t_card *old_card = all->card;
+        all->card = cursor;
         set_cmd(all, current_cmd);
-        while (current_card && current_card->type != PIPE)
-            current_card = current_card->next;
-        
-        if (current_card)
-            current_card = current_card->next;
-        
-        all->card = current_card;
+        all->card = old_card;
+
+        while (cursor && cursor->type != PIPE)
+            cursor = cursor->next;
+        if (cursor)
+            cursor = cursor->next;
     }
+
     all->cmd = head_cmd;
 }
+
