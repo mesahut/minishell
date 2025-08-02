@@ -48,3 +48,21 @@ void    *safe_malloc(t_collector *gc_head, int size)
     create_collector(gc_head, str);
     return (str);
 }
+
+void    clean_malloc(t_collector *head)
+{
+    t_collector *current = head;
+    t_collector *temp;
+
+    temp = NULL;
+    while (current)
+    {
+        temp = current;
+        current = current->next;
+        if (temp->value)
+            free(temp->value);
+        free(temp);
+    }
+    head = NULL; // Clear the head pointer
+}
+

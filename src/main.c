@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/02 16:24:20 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/02 19:13:54 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,8 @@ int main(int argc, char **argv, char **env_list)
         expander(all);
         parser(all);
         exec(all);
+        //clean_malloc(all->collector);
         // print_env(all->env);
     }
-
-    free(line);
-    // Burada temizleme işlemlerini yapabilirsin (all, collector vs.)
-
     return 0;
 }
