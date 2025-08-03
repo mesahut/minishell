@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/02 13:04:52 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/02 21:35:39 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	append_env_node(t_all *all, const char *key, const char *value)
 	t_env	*new_node;
 	t_env	*current;
 
-	new_node = safe_malloc(all->collector, sizeof(t_env));
+	new_node = safe_malloc(&all->collector, sizeof(t_env));
 	new_node->key = strdup(key);
 	new_node->value = strdup(value);
 	new_node->next = NULL;

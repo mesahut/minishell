@@ -43,7 +43,7 @@ void	check_node(t_card *card, t_card *prev)
 void insert_node_at(t_all *all, t_card **pos, char *str)
 {
 	t_card *tmp;
-	t_card *new_node = (t_card *)safe_malloc(all->collector, sizeof(t_card));
+	t_card *new_node = (t_card *)safe_malloc(&all->collector, sizeof(t_card));
 	if (!new_node)
 		return;
 	new_node->value = str;
@@ -120,7 +120,7 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line) - (dollar_place + len + 1));
 	before = expend_join(before, env);
 	after = expend_join(before, after);
-	after = collector_dup(all->collector, after);
+	after = collector_dup(&all->collector, after);
 	return(after);
 }
 
@@ -159,7 +159,7 @@ void	check_tilde(t_all *all, t_card *node)
 		{
 			ft_getenv(all->env, "HOME");
 			free(current->value);
-			current->value =  collector_dup(all->collector, home);
+			current->value =  collector_dup(&all->collector, home);
 		}
 		current = current->next;
 	}
@@ -255,7 +255,7 @@ char *quote_ignore(t_all *all, char *str, int quotes)
 {
     int len = strlen(str);
     quotes = quote_count(str);
-    char *result = (char *)safe_malloc(all->collector ,len - quotes + 1);
+    char *result = (char *)safe_malloc(&all->collector ,len - quotes + 1);
     int i = 0, j = 0;
     char open_quote = '\0';
     while (str[i])

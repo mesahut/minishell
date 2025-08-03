@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/02 16:36:56 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/02 21:29:09 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,13 @@ char **list_to_envp(t_env *env)
     return envp;
 }
 
-void exec_external_cmd(char *path, char **args, t_env *envp)
+void exec_external_cmd(char *path, char **args, t_all *all)
 {
-    execve(path, args, list_to_envp(envp));
-    exit(1);
+    execve(path, args, list_to_envp(all->env));
+    clean_malloc(all->collector);
+    //envleri sil dayı
+    rl_clear_history();
+    exit(1); // execve başarısız olursa çıkış yap
 }
 
 char    *here_expand(char *str, t_all *all)
@@ -267,7 +270,7 @@ void exec(t_all *all)
                 }
                 else
                 {                    
-                    exec_external_cmd(path_find(cmd->args[0]), cmd->args, all->env);
+                    exec_external_cmd(path_find(cmd->args[0]), cmd->args, all);
                 }
 
                 exit(1); // exec başarısızsa child burada ölür

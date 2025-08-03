@@ -50,7 +50,7 @@ t_cmd   *init_cmd(t_cmd *head_cmd, t_all *all)
         return NULL;
 
     arg_count = args_counter(all);
-    cmd = (t_cmd *)safe_malloc(all->collector, sizeof(t_cmd));
+    cmd = (t_cmd *)safe_malloc(&all->collector, sizeof(t_cmd));
     if (!cmd)
         return NULL;
 
@@ -62,7 +62,7 @@ t_cmd   *init_cmd(t_cmd *head_cmd, t_all *all)
     cmd->fd_out = 1;
     cmd->args_count = arg_count;
 
-    cmd->args = (char **)safe_malloc(all->collector, sizeof(char *) * (arg_count + 1));
+    cmd->args = (char **)safe_malloc(&all->collector, sizeof(char *) * (arg_count + 1));
     if (!cmd->args)
         return NULL;
 
@@ -72,7 +72,7 @@ t_cmd   *init_cmd(t_cmd *head_cmd, t_all *all)
     cmd->redirect_count = redir_counter(all);
     if (cmd->redirect_count > 0)
     {
-        cmd->redirects = (t_redirect *)safe_malloc(all->collector, 
+        cmd->redirects = (t_redirect *)safe_malloc(&all->collector, 
                                                  sizeof(t_redirect) * cmd->redirect_count);
         if (!cmd->redirects)
             return NULL;
@@ -117,7 +117,7 @@ void set_cmd(t_all *all, t_cmd *current_cmd)
             if (current_card->next && current_card->next->value)
             {
                 // Create new redirect node
-                t_redirect *redir = safe_malloc(all->collector, sizeof(t_redirect));
+                t_redirect *redir = safe_malloc(&all->collector, sizeof(t_redirect));
                 redir->type = current_card->type;
                 redir->filename = current_card->next->value;
                 redir->value = NULL;

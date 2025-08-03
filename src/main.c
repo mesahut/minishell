@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/02 19:13:54 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/03 13:40:57 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-char    *collector_dup(t_collector *collector, char *line)
+char    *collector_dup(t_collector **collector, char *line)
 {
     char    *str;
     int     i;
@@ -41,12 +41,24 @@ void    print_card(t_card *card)
     }
 }
 
+void reset_all(t_all *all)
+{
+    if (all->collector)
+    {
+        clean_malloc(all->collector);
+        all->collector = NULL;
+    }
+    all->card = NULL;
+    all->cmd = NULL;
+}
+
+
 int main(int argc, char **argv, char **env_list)
 {
     (void)argc;
     (void)argv;
 
-    t_all   *all;
+    t_all   all;
     char    *line = NULL;
     char    *input;
     
@@ -56,28 +68,22 @@ int main(int argc, char **argv, char **env_list)
     signal(SIGINT, sig_int);
     signal(SIGQUIT, sig_quit);
     */
-    all = (t_all *)ft_calloc(sizeof(t_all), 1);
-    if (!all)
-        return 1;
-    all->exit_status = 0;
-    put_env(all, env_list);
-
-    while (1)
-    {
-        free(line);
-        line = readline("minishell>>");
-
-        // Eğer readline boşsa (ör. Ctrl+D), döngüden çık
-        add_history(line);
-        line = collector_dup(all->collector, line);
-        input = line;
-        if (lexer(input, all) == 0)
+   all = (t_all){0};
+   put_env(&all, env_list);
+   while (1)
+   {
+       line = readline("minishell>>");    
+       // Eğer readline boşsa (ör. Ctrl+D), döngüden çık
+       add_history(line);
+       input = collector_dup(&all.collector, line);
+        if (lexer(input, &all) == 0)
             continue; // Eğer lexer başarısızsa, yeni bir satır oku
-        expander(all);
-        parser(all);
-        exec(all);
-        //clean_malloc(all->collector);
+        expander(&all);
+        parser(&all);
+        exec(&all);
+        reset_all(&all);
         // print_env(all->env);
     }
+    rl_clear_history();
     return 0;
 }
