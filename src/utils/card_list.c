@@ -6,7 +6,7 @@ void    create_card(t_all *all, char *card)
     t_card  *current;
 
     new_card = (t_card *) safe_malloc(&all->collector ,sizeof(t_card));
-    new_card->value = card;
+    new_card->value = collector_dup(&all->collector ,card);
     new_card->type = -1;
     new_card->here_flag = 0;
     new_card->next = NULL;

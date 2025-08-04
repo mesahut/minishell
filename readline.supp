@@ -3,7 +3,7 @@
    Memcheck:Leak
    match-leak-kinds: reachable
    ...
-   obj:/libreadline.so
+   obj:*/libreadline.so*
 }
 
 {
@@ -19,5 +19,5 @@
    Memcheck:Leak
    match-leak-kinds: reachable
    ...
-   obj:/libtinfo.so
+   obj:*/libtinfo.so*
 }

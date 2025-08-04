@@ -13,6 +13,8 @@
 # include <limits.h>
 # include <errno.h>
 # include <signal.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 
 #define PIPE 0
@@ -25,7 +27,6 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
-
 
 typedef struct s_collector
 {
@@ -86,6 +87,9 @@ typedef struct	s_sig
 	pid_t			pid;
 }				t_sig;
 
+extern t_sig g_sig;
+
+
 void    set_cmd(t_all *all, t_cmd *cmd);
 void    parser(t_all *all);
 void    exec(t_all *all);
@@ -103,6 +107,11 @@ void    print_env(t_all *env);
 int     flag_check(char *arg);
 void    print_card(t_card *card);
 
+
+
+void    reset_all(t_all *all);
+void   free_env(t_env *env_list);
+void	free_split(char **split);
 
 
 
@@ -123,11 +132,10 @@ char	*found_dollar(char *line, int dollar_place, t_all *all);
 char	is_char_quote(char value, char quote_type);
 
 
-/*
+
 void			sig_int(int code);
 void			sig_quit(int code);
 void			sig_init(void);
 
-extern t_sig g_sig;
-*/
+
 #endif

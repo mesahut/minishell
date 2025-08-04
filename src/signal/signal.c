@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:12:42 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/28 13:34:29 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/04 10:00:56 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # include <signal.h>
 #include <unistd.h>
 
+t_sig g_sig = {0}; 
 
 void	*ft_memdel(void *ptr)
 {
@@ -30,9 +31,8 @@ void	sig_int(int code)
 	(void)code;
 	if (g_sig.pid == 0)
 	{
-		ft_putstr_fd("\b\b  ", STDERR);
 		ft_putstr_fd("\n", STDERR);
-		ft_putstr_fd("\033[0;36m\033[1m🤬 minishell ▸ \033[0m", STDERR);
+		ft_putstr_fd("minishell>>", STDERR);
 		g_sig.exit_status = 1;
 	}
 	else
@@ -45,19 +45,8 @@ void	sig_int(int code)
 
 void	sig_quit(int code)
 {
-	char	*nbr;
-
-	nbr = ft_itoa(code);
-	if (g_sig.pid != 0)
-	{
-		ft_putstr_fd("Quit: ", STDERR);
-		ft_putendl_fd(nbr, STDERR);
-		g_sig.exit_status = 131;
-		g_sig.sigquit = 1;
-	}
-	else
-		ft_putstr_fd("\b\b  \b\b", STDERR);
-	ft_memdel(nbr);
+	(void)code;
+	printf("Quit: %d\n", code);
 }
 
 void	sig_init(void)

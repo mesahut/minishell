@@ -36,7 +36,6 @@ void	check_node(t_card *card, t_card *prev)
 	tmp = card;
 	prev->next = card->next;
 	card = prev;
-	free(tmp);
 	return;
 }
 
@@ -78,17 +77,19 @@ void	delim_node(t_all *all, t_card *node)
 	i = 1;
 	str = NULL;
 	temp = ft_split(node->value, ' ');
-	free(node->value);
-	node->value = temp[0];
+	node->value = collector_dup(&all->collector, temp[0]);
 	if(temp[i] && flag_check(temp[i]))
 	{
 		insert_node_at(all, &node, ft_strdup(temp[i]));
 		node = node->next;
+		i++;
 	}
 	else if(temp[i])
-	str = temp[i];
-	i++;
-	while (temp[i])
+	{
+		str = temp[i];
+		i++;
+	}
+	while (temp && temp[i])
 	{
 		str = ft_strjoin(str, " ");
 		str = ft_strjoin(str, temp[i]);
@@ -96,6 +97,7 @@ void	delim_node(t_all *all, t_card *node)
 	}
 	if (str)
 		insert_node_at(all, &node, ft_strdup(str));
+	free_split(temp);
 }
 
 
@@ -116,6 +118,7 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 			len++;
 	after = ft_substr(line, dollar_place + 1, len);
 	env = ft_getenv(all->env, after);
+	env = ft_strdup(env);
 	free(after);
 	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line) - (dollar_place + len + 1));
 	before = expend_join(before, env);
@@ -183,7 +186,7 @@ void	check_for_expansion(t_all *all)
 	while (node != NULL)
 	{
 		i = 0;
-		while ((node->value)[i])
+		while (node->value[0] != '\0' &&node->value[i])
 		{
 			open_quote = is_char_quote((node->value)[i], open_quote);
 			if(open_quote != '\'' && prev_node->type != HEREDOC && (node->value)[i] == '$' && node->value[i + 1] != '\0')
