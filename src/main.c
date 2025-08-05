@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/04 13:03:36 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/05 22:07:38 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,21 @@ int main(int argc, char **argv, char **env_list)
 	   line = readline("minishell>>");    
 		if (line == NULL)
 		{
-		ft_putstr_fd("exit\n", STDERR_FILENO);
-		exit(g_sig.exit_status);
+			free_env(all.env);
+			reset_all(&all);
+			printf("exit\n");
+			return (0);
+		}
+
+		if (line[0] == '\0')
+		{
+			free(line);
+			continue;
 		}
 			add_history(line);
 			input = collector_dup(&all.collector, line);
 			if (lexer(input, &all) == 0)
-				continue; // Eğer lexer başarısızsa, yeni bir satır oku
+				continue;
 			expander(&all);
 			parser(&all);
 		exec(&all);

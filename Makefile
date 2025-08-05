@@ -12,6 +12,8 @@ SRCS = src/main.c \
 	src/lexer/lexer.c \
 	src/parser/parser.c \
 	src/executor/exec.c \
+	src/executor/exec_utils.c \
+	src/executor/exec_parts.c \
 	src/builtins/builtin.c \
 	src/builtins/cd.c \
 	src/builtins/pwd.c \
@@ -23,7 +25,8 @@ SRCS = src/main.c \
 	src/builtins/exit.c \
 	src/utils/utils.c \
 	src/signal/signal.c \
-
+	src/executor/exec_clean.c \
+	
 OBJS = $(SRCS:.c=.o)
 
 all: $(LIBFT) $(NAME)

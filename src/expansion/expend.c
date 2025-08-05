@@ -30,10 +30,8 @@ char	*ft_getenv(t_env *env, char *key)
 
 void	check_node(t_card *card, t_card *prev)
 {
-	t_card *tmp;
 	if(card->value[0] != '\0')
 		return;
-	tmp = card;
 	prev->next = card->next;
 	card = prev;
 	return;

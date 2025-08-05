@@ -79,15 +79,7 @@ typedef struct s_all
     int         exit_status;
 } t_all;
 
-typedef struct	s_sig
-{
-	int				sigint;
-	int				sigquit;
-	int				exit_status;
-	pid_t			pid;
-}				t_sig;
-
-extern t_sig g_sig;
+extern int g_signal;
 
 
 void    set_cmd(t_all *all, t_cmd *cmd);
@@ -135,7 +127,24 @@ char	is_char_quote(char value, char quote_type);
 
 void			sig_int(int code);
 void			sig_quit(int code);
-void			sig_init(void);
 
+// Cleanup functions
+void			cleanup_fds(int *fds, int count);
+void			cleanup_pipe(int pipefd[2]);
+void			cleanup_redirects(t_redirect *redirects);
+
+// Exec utility functions
+char			*path_find(char *cmd);
+char			**list_to_envp(t_env *env);
+void			exec_external_cmd(char *path, char **args, t_all *all);
+char			*here_expand(char *str, t_all *all);
+int				check_here_flag(t_card *card, char *eof);
+void            handle_redirections(t_cmd *cmd, t_all *all);
+
+// Exec pipeline functions
+void			exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd, int saved_stdin, int saved_stdout);
+void			exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
+void			exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2], pid_t pid);
+void			exec_pipeline(t_all *all);
 
 #endif

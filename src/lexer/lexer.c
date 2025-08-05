@@ -97,8 +97,13 @@ void    split_line(char *line, t_all *all)
         else
             end = pass_letter(line, &i, &quote);
         str = ft_substr(line, start, end);
-        if(str && str[0] != '\0')
-            create_card(all, str);
+        if(str)
+        {
+            if(str[0] != '\0')
+                create_card(all, str);
+            else
+                free(str);
+        }
     }
 }
 
