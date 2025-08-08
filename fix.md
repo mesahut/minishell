@@ -7,6 +7,7 @@
 - [x] >> asd execve field hatası alıyor dosya açması gerekli
 - [x] export 1a="123" tanımlama hatası alıyor ama export as2="123" tanımlanabiliyor       (export kısmında bunu fixledim şu anda yorum satırında kontrol edip yorum satırından çıkarabilir)
 - [x] env komutunun ardından herhangi birşey yazılırsa hata kodu verdirecez
+- [x] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [ ] cat < testfile
 - [ ] echo $? yok
-- [ ] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
+- [ ] exprot a="cho a" yazdıktan sonra e$a yazarsak definitliy lost çıkıyor
