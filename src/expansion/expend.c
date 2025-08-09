@@ -114,5 +114,5 @@ void	expander(t_all *all)
 	put_title(all);
 	check_tilde(all, all->card);
 	check_for_expansion(all);
-	quote_ingnore(all);
+	del_quote(all);
 }

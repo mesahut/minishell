@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 INCLUDE = -I. -I./libft
 LIBFT = libft/libft.a
@@ -26,6 +26,10 @@ SRCS = src/main.c \
 	src/utils/utils.c \
 	src/signal/signal.c \
 	src/executor/exec_clean.c \
+	src/lexer/lexer_utils.c \
+	src/expansion/expand_utils.c \
+	src/expansion/node_utils.c \
+	src/expansion/quote_ignore.c 
 	
 OBJS = $(SRCS:.c=.o)
 

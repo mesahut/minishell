@@ -6,11 +6,11 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 00:30:44 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 00:30:45 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/10 01:04:21 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 char	is_char_quote(char value, char quote_type)
 {
@@ -86,7 +86,7 @@ char	*quote_ignore(t_all *all, char *str, int quotes)
 	open_quote = '\0';
 	len = strlen(str);
 	quotes = quote_count(str);
-	result = (char *)safe_malloc(&all->collector, len - quotes + 1);
+	result = (char *)safe_malloc(&all->collector, (len - quotes + 1));
 	while (str[i])
 	{
 		if (skip_quotes(str, &open_quote, i))
@@ -102,7 +102,7 @@ char	*quote_ignore(t_all *all, char *str, int quotes)
 	return (result);
 }
 
-void	quote_ingnore(t_all *all)
+void	del_quote(t_all *all)
 {
 	t_card	*current;
 	int		quotes;

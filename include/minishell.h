@@ -107,7 +107,6 @@ char	*expend_join(char const *s1, char const *s2);
 void	print_env(t_all *env);
 int		flag_check(char *arg);
 void	print_card(t_card *card);
-
 void	reset_all(t_all *all);
 void	free_env(t_env *env_list);
 void	free_split(char **split);
@@ -147,4 +146,15 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd, int saved_stdin, i
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
 void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2], pid_t pid);
 void	exec_pipeline(t_all *all);
+// expand nomundan sonra eklenenler
+void	del_quote(t_all *all);
+void	put_title(t_all *all);
+void	delim_node(t_all *all, t_card *node);
+void	check_node(t_card *card, t_card *prev);
+char	*ft_getenv(t_env *env, char *key);
+// lexer normundan sonra eklenenler
+int	is_space(char c);
+int	special_case(char c, char next, int *place);
+int	is_operator(char c, char next);
+void	insert_node_at(t_all *all, t_card **pos, char *str);
 #endif
