@@ -7,8 +7,10 @@
 - [x] >> asd execve field hatası alıyor dosya açması gerekli
 - [x] export 1a="123" tanımlama hatası alıyor ama export as2="123" tanımlanabiliyor       (export kısmında bunu fixledim şu anda yorum satırında kontrol edip yorum satırından çıkarabilir)
 - [x] env komutunun ardından herhangi birşey yazılırsa hata kodu verdirecez
+- [x] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [ ] cat < testfile
 - [ ] echo $? yok
+<<<<<<< HEAD
 - [ ] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [ ] echo test >  syntax error vermeli biz test bastırıyoruz
 - [ ] echo test | heredoc gibi girdi penceresi açıyor biz test bastırıyoruz
@@ -18,3 +20,4 @@
                                                                                       ls: 'cat' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
                                                                     bash in çıktısı : ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
 - [ ]pipe bouzk aq
+- [ ] exprot a="cho a" yazdıktan sonra e$a yazarsak definitliy lost çıkıyor

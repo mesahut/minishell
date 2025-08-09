@@ -6,20 +6,20 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/06 13:55:22 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/09 10:32:33 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char    *collector_dup(t_collector **collector, char *line)
+char	*collector_dup(t_collector **collector, char *line)
 {
-	char    *str;
-	int     i;
+	char	*str;
+	int		i;
 
 	i = 0;
 	str = (char *)safe_malloc(collector, ft_strlen(line) + 1);
-	while(line[i])
+	while (line[i])
 	{
 		str[i] = line[i];
 		i++;
@@ -29,17 +29,19 @@ char    *collector_dup(t_collector **collector, char *line)
 	return (str);
 }
 
-void    print_card(t_card *card)
+void	print_card(t_card *card)
 {
-	t_card *current = card;
+	t_card	*current;
+
+	current = card;
 	while (current)
 	{
-		printf("Card Type: %d, Value: %s\n", current->type, current->value);
+		printf(": %d, Value: %s\n", current->type, current->value);
 		current = current->next;
 	}
 }
 
-void reset_all(t_all *all)
+void	reset_all(t_all *all)
 {
 	if (all->collector)
 	{
@@ -50,11 +52,12 @@ void reset_all(t_all *all)
 	all->cmd = NULL;
 }
 
-void free_env(t_env *env_list)
+void	free_env(t_env *env_list)
 {
-	t_env *current = env_list;
-	t_env *next;
+	t_env	*current;
+	t_env	*next;
 
+	current = env_list;
 	while (current)
 	{
 		next = current->next;
@@ -67,10 +70,11 @@ void free_env(t_env *env_list)
 
 void	free_split(char **split)
 {
-	int i = 1;
+	int	i;
 
+	i = 1;
 	if (!split)
-		return;
+		return ;
 	while (split[i])
 	{
 		free(split[i]);
@@ -79,23 +83,21 @@ void	free_split(char **split)
 	free(split);
 }
 
-int main(int argc, char **argv, char **env_list)
+int	main(int argc, char **argv, char **env_list)
 {
+	t_all	all;
+	char	*line;
+	char	*input;
+
+	signal(SIGINT, sig_int);
+	signal(SIGQUIT, sig_quit);
 	(void)argc;
 	(void)argv;
-
-	t_all   all;
-	char    *line = NULL;
-	char    *input;
-	
-	signal(SIGQUIT, sig_quit);
-	signal(SIGINT, sig_int);
-
+	line = NULL;
 	all = (t_all){0};
-   put_env(&all, env_list);
-   while (1)
-   {
-
+	put_env(&all, env_list);
+	while (1)
+	{
 		line = readline("minishell>>");
 		if (line == NULL)
 		{
@@ -113,5 +115,5 @@ int main(int argc, char **argv, char **env_list)
 		exec(&all);
 		reset_all(&all);
 	}
-	return 0;
+	return (0);
 }

@@ -1,68 +1,80 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   card_list.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/08 22:46:08 by mayilmaz          #+#    #+#             */
+/*   Updated: 2025/08/08 22:46:08 by mayilmaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
-void    create_card(t_all *all, char *card)
+void	create_card(t_all *all, char *card)
 {
-    t_card  *new_card;
-    t_card  *current;
+	t_card	*new_card;
+	t_card	*current;
 
-    new_card = (t_card *) safe_malloc(&all->collector ,sizeof(t_card));
-    new_card->value = collector_dup(&all->collector ,card);
-    new_card->type = -1;
-    new_card->here_flag = 0;
-    new_card->next = NULL;
-    if(all->card == NULL)
-        all->card = new_card;
-    else
-    {
-        current = all->card;
-        while (current->next != NULL)
-            current = current->next;
-        current->next = new_card;
-    }
+	new_card = (t_card *) safe_malloc(&all->collector, sizeof(t_card));
+	new_card->value = collector_dup(&all->collector, card);
+	new_card->type = -1;
+	new_card->here_flag = 0;
+	new_card->next = NULL;
+	if (all->card == NULL)
+		all->card = new_card;
+	else
+	{
+		current = all->card;
+		while (current->next != NULL)
+			current = current->next;
+		current->next = new_card;
+	}
 }
 
-void    create_collector(t_collector **head_card, void *address)
+void	create_collector(t_collector **head_card, void *address)
 {
-    t_collector  *new_card;
-    t_collector  *current;
+	t_collector	*new_card;
+	t_collector	*current;
 
-    new_card = (t_collector *) ft_calloc(sizeof(t_collector), 1);
-    new_card->value = address;
-    new_card->next = NULL;
-    if(*head_card == NULL)
-        *head_card = new_card;
-    else
-    {
-        current = *head_card;
-        while (current->next != NULL)
-            current = current->next;
-        current->next = new_card;
-    }
+	new_card = (t_collector *) ft_calloc(sizeof(t_collector), 1);
+	new_card->value = address;
+	new_card->next = NULL;
+	if (*head_card == NULL)
+		*head_card = new_card;
+	else
+	{
+		current = *head_card;
+		while (current->next != NULL)
+			current = current->next;
+		current->next = new_card;
+	}
 }
 
-void    *safe_malloc(t_collector **gc_head, int size)
+void	*safe_malloc(t_collector **gc_head, int size)
 {
-    char    *str;
+	char	*str;
 
-    str = ft_calloc(size, 1);
-    create_collector(gc_head, str);
-    return (str);
+	str = ft_calloc(size, 1);
+	create_collector(gc_head, str);
+	return (str);
 }
 
-void    clean_malloc(t_collector *head)
+void	clean_malloc(t_collector *head)
 {
-    t_collector *current = head;
-    t_collector *temp;
+	t_collector	*current;
+	t_collector	*temp;
 
-    temp = NULL;
-    while (current)
-    {
-        temp = current;
-        current = current->next;
-        if (temp->value)
-            free(temp->value);
-        free(temp);
-    }
-    head = NULL; // Clear the head pointer
+	current = head;
+	temp = NULL;
+	while (current)
+	{
+		temp = current;
+		current = current->next;
+		if (temp->value)
+			free(temp->value);
+		free(temp);
+	}
+	head = NULL;
 }
-
