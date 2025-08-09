@@ -91,7 +91,7 @@ typedef struct s_all
 
 extern int	g_signal;
 
-void	set_cmd(t_all *all, t_cmd *cmd);
+void    set_cmd(t_card *cursor, t_all *all, t_cmd *cmd);
 void	parser(t_all *all);
 void	exec(t_all *all);
 void	create_card(t_all *all, char *card);

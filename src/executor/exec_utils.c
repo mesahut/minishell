@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:00:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/05 17:54:24 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/09 11:51:27 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,49 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
+char	*ft_strjoin3(char *s1, char *s2, char *s3)
+{
+	char *tmp = ft_strjoin(s1, s2);
+	char *result = ft_strjoin(tmp, s3);
+	free(tmp);
+	return (result);
+}
+
 char	*path_find(char *cmd)
 {
+	char	**paths;
+	char	*path_env;
+	char	*full_path;
+	int		i;
+
 	if (!cmd)
 		return (NULL);
-	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+	if (cmd[0] == '/' || cmd[0] == '.')
 		return (ft_strdup(cmd));
-	return (ft_strjoin("/usr/bin/", cmd));
+
+	// PATH environment variable (kendi env listenden alabilirsin)
+	path_env = getenv("PATH");  // Alternatif: get_env_value("PATH", all->env);
+	if (!path_env)
+		return (NULL);
+
+	paths = ft_split(path_env, ':');
+	if (!paths)
+		return (NULL);
+
+	i = 0;
+	while (paths[i])
+	{
+		full_path = ft_strjoin3(paths[i], "/", cmd);  // Üç stringi birleştiren bir yardımcı fonksiyon
+		if (access(full_path, X_OK) == 0)
+		{
+			free_split(paths);
+			return (full_path);
+		}
+		free(full_path);
+		i++;
+	}
+	free_split(paths);
+	return (NULL);
 }
 
 char	**list_to_envp(t_env *env)

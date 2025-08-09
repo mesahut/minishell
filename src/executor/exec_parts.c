@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/06 13:57:18 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/09 11:54:02 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,17 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd, int saved_stdin, i
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
+
 	if (cmd->redirects)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		saved_stdout = dup(STDOUT_FILENO);
-		handle_redirections(cmd, all);
+		handle_redirections(cmd, all); // Hatalıysa artık exit ediyor
 	}
+
 	all->exit_status = exec_builtin(all, cmd);
+
+	// stdin ve stdout restore
 	if (saved_stdin != -1)
 	{
 		dup2(saved_stdin, STDIN_FILENO);
@@ -41,6 +45,7 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd, int saved_stdin, i
 		close(saved_stdout);
 	}
 }
+
 
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 {
@@ -78,6 +83,8 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		if (path)
 		{
 			envp = list_to_envp(all->env);
+			for (int i = 0; cmd->args[i]; i++)
+    			printf("arg[%d]: '%s'\n", i, cmd->args[i]);
 			execve(path, cmd->args, envp);
 			printf("%s: command not found\n", cmd->args[0]);
 			free(path);
