@@ -129,9 +129,7 @@ void			sig_int(int code);
 void			sig_quit(int code);
 
 // Cleanup functions
-void			cleanup_fds(int *fds, int count);
 void			cleanup_pipe(int pipefd[2]);
-void			cleanup_redirects(t_redirect *redirects);
 
 // Exec utility functions
 char			*path_find(char *cmd);

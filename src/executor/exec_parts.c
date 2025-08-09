@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/05 23:05:59 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/06 13:57:18 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,18 @@
 
 void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd, int saved_stdin, int saved_stdout)
 {
-	// Setup input from previous command
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
-	
-	// Save and setup redirections
 	if (cmd->redirects)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		saved_stdout = dup(STDOUT_FILENO);
 		handle_redirections(cmd, all);
 	}
-	
-	// Execute builtin
 	all->exit_status = exec_builtin(all, cmd);
-	
-	// Restore original file descriptors
 	if (saved_stdin != -1)
 	{
 		dup2(saved_stdin, STDIN_FILENO);
@@ -87,9 +80,6 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 			envp = list_to_envp(all->env);
 			execve(path, cmd->args, envp);
 			printf("%s: command not found\n", cmd->args[0]);
-			
-			// Free the path if it was dynamically allocated by path_find
-			// path_find always allocates memory, so we should always free it
 			free(path);
 			
 			if (envp)
@@ -114,7 +104,6 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 			exit(1);
 		}
 	}
-
 	exit(1);
 }
 
@@ -151,7 +140,6 @@ void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2], pi
 		// Mark the read end as closed since it was passed to prev_fd and already closed
 		pipefd[0] = -1;
 	}
-
 	waitpid(pid, &all->exit_status, 0);
 }
 
@@ -191,16 +179,20 @@ void	exec_pipeline(t_all *all)
 		{
 			// Fork and execute command
 			pid = fork();
+			g_signal = 1;
 			if (pid == -1)
 			{
 				perror("fork");
 				exit(1);
 			}
 			else if (pid == 0)
+			{				
 				exec_child_process(cmd, all, prev_fd, pipefd);
+			}
 			else
 				exec_parent_process(cmd, all, &prev_fd, pipefd, pid);
 			cmd = cmd->next;
+			g_signal = 0;
 		}
 	}
 	

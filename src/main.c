@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/05 22:07:38 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/06 13:55:22 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,26 +88,21 @@ int main(int argc, char **argv, char **env_list)
 	char    *line = NULL;
 	char    *input;
 	
-	signal(SIGINT, sig_int);
 	signal(SIGQUIT, sig_quit);
+	signal(SIGINT, sig_int);
 
 	all = (t_all){0};
    put_env(&all, env_list);
    while (1)
    {
-	   line = readline("minishell>>");    
+
+		line = readline("minishell>>");
 		if (line == NULL)
 		{
 			free_env(all.env);
 			reset_all(&all);
 			printf("exit\n");
 			return (0);
-		}
-
-		if (line[0] == '\0')
-		{
-			free(line);
-			continue;
 		}
 			add_history(line);
 			input = collector_dup(&all.collector, line);

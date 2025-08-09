@@ -10,3 +10,11 @@
 - [ ] cat < testfile
 - [ ] echo $? yok
 - [ ] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
+- [ ] echo test >  syntax error vermeli biz test bastırıyoruz
+- [ ] echo test | heredoc gibi girdi penceresi açıyor biz test bastırıyoruz
+- [ ] | cat bizim çıktımız (null): command not found olması gereken syntax error
+- [ ] ls /nonexistent 2> /tmp/error_test cat /tmp/error_test testinde bizim çıktımız: ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+                                                                                      ls: '2' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+                                                                                      ls: 'cat' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+                                                                    bash in çıktısı : ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+- [ ]pipe bouzk aq
