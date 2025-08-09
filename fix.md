@@ -11,7 +11,7 @@
 - [ ] cat < testfile
 - [ ] echo $? yok
 <<<<<<< HEAD
-- [ ] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
+- [x] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [ ] echo test >  syntax error vermeli biz test bastırıyoruz
 - [ ] echo test | heredoc gibi girdi penceresi açıyor biz test bastırıyoruz
 - [ ] | cat bizim çıktımız (null): command not found olması gereken syntax error

@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:00:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/09 11:51:27 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/09 18:53:16 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,14 @@ void	exec_external_cmd(char *path, char **args, t_all *all)
 	int		i;
 
 	envp = list_to_envp(all->env);
+	printf("asdasd\n");
 	execve(path, args, envp);
-	printf("%s: command not found\n", args[0]);
-	// Free the path if it was dynamically allocated by path_find
-	// path_find always allocates memory, so we should always free it
+	if (args[0][0] == '/')
+		printf("%s: No such file or directory\n", args[0]);
+	else if (args[0][0] == '>' || args[0][0] == '<')
+		printf("%s: syntax error\n", args[0]);
+	else 
+		printf("%s: command not found\n", args[0]);
 	if (path)
 		free(path);
 	if (envp)

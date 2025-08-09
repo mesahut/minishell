@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/09 10:32:33 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/09 19:03:41 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_card(t_card *card)
 	current = card;
 	while (current)
 	{
-		printf(": %d, Value: %s\n", current->type, current->value);
+		printf("type: %d, Value: %s\n", current->type, current->value);
 		current = current->next;
 	}
 }
