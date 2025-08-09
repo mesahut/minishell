@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:00:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/09 11:51:27 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/09 18:27:02 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*path_find(char *cmd)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
-
+	printf("test\n");
 	i = 0;
 	while (paths[i])
 	{

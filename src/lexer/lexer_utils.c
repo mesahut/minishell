@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/28 13:12:42 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/10 00:34:45 by mayilmaz         ###   ########.fr       */
+/*   Created: 2025/08/10 00:29:38 by mayilmaz          #+#    #+#             */
+/*   Updated: 2025/08/10 00:30:16 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <signal.h>
-#include <unistd.h>
 
-int	g_signal = 0;
-
-void	sig_int(int sig)
+int	is_space(char c)
 {
-	(void)sig;
-	rl_replace_line("", 0); // satırı sil
-	write(1, "\n", 1);// yeni satıra geç
-	if (g_signal == 0)
-		rl_on_new_line();// readline'e yeni satıra geçmesini söyle
-	rl_redisplay();// prompt'u yeniden yaz
+	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-void	sig_quit(int code)
+int	is_operator(char c, char next)
 {
-	(void)code;
-	g_signal = code;
-}	
+	if ((c == '<' && next == '<') || (c == '>' && next == '>'))
+		return (2);
+	if (c == '|' || c == '<' || c == '>')
+		return (1);
+	return (0);
+}
+
+int	special_case(char c, char next, int *place)
+{
+	int	len;
+
+	len = is_operator(c, next);
+	(*place) = (*place) + len;
+	return (len);
+}

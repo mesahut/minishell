@@ -10,7 +10,6 @@
 - [x] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [ ] cat < testfile
 - [ ] echo $? yok
-<<<<<<< HEAD
 - [ ] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [ ] echo test >  syntax error vermeli biz test bastırıyoruz
 - [ ] echo test | heredoc gibi girdi penceresi açıyor biz test bastırıyoruz
@@ -21,3 +20,4 @@
                                                                     bash in çıktısı : ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
 - [ ]pipe bouzk aq
 - [ ] exprot a="cho a" yazdıktan sonra e$a yazarsak definitliy lost çıkıyor
+dev/null a bak

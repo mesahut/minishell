@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/09 10:32:33 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/10 00:50:14 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	free_split(char **split)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	if (!split)
 		return ;
 	while (split[i])
@@ -106,12 +106,12 @@ int	main(int argc, char **argv, char **env_list)
 			printf("exit\n");
 			return (0);
 		}
-			add_history(line);
-			input = collector_dup(&all.collector, line);
-			if (lexer(input, &all) == 0)
-				continue;
-			expander(&all);
-			parser(&all);
+		add_history(line);
+		input = collector_dup(&all.collector, line);
+		if (lexer(input, &all) == 0)
+			continue ;
+		expander(&all);
+		parser(&all);
 		exec(&all);
 		reset_all(&all);
 	}

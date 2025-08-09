@@ -12,11 +12,6 @@
 
 #include "../../include/minishell.h"
 
-int	is_space(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n');
-}
-
 int	quote_checker(char *words)
 {
 	int		i;
@@ -38,15 +33,6 @@ int	quote_checker(char *words)
 		return (0);
 	}
 	return (1);
-}
-
-int	is_operator(char c, char next)
-{
-	if ((c == '<' && next == '<') || (c == '>' && next == '>'))
-		return (2);
-	if (c == '|' || c == '<' || c == '>')
-		return (1);
-	return (0);
 }
 
 int	pass_letter(char *line, int *place, char *status)
@@ -74,15 +60,6 @@ int	pass_letter(char *line, int *place, char *status)
 	}
 	*place = i;
 	*status = quote;
-	return (len);
-}
-
-int	special_case(char c, char next, int *place)
-{
-	int	len;
-
-	len = is_operator(c, next);
-	(*place) = (*place) + len;
 	return (len);
 }
 
