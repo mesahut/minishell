@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/28 12:52:26 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/10 00:50:14 by mayilmaz         ###   ########.fr       */
+/*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
+/*   Updated: 2025/08/10 10:23:59 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_card(t_card *card)
 	current = card;
 	while (current)
 	{
-		printf(": %d, Value: %s\n", current->type, current->value);
+		printf("type: %d, Value: %s\n", current->type, current->value);
 		current = current->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/09 18:19:09 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/10 10:22:52 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		if (path)
 		{
 			envp = list_to_envp(all->env);
-			for (int i = 0; cmd->args[i]; i++)
-    			printf("arg[%d]: '%s'\n", i, cmd->args[i]);
 			execve(path, cmd->args, envp);
 			printf("%s: command not found\n", cmd->args[0]);
 			free(path);
