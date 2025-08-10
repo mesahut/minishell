@@ -131,66 +131,64 @@ int	is_redir(int type)
 		|| type == HEREDOC || type == R_IN);
 }
 
-int is_arg(t_card *card)
+int	is_arg(t_card *card)
 {
 	return ((card->type == WORD || card->type == -1) && card->value);
 }
 
-int handle_arg(t_card *card, t_cmd *cmd, int i)
+int	handle_arg(t_card *card, t_cmd *cmd, int i)
 {
 	if (i < cmd->args_count)
 	{
 		cmd->args[i] = card->value;
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
 
-void add_redir_to_list(t_redirect **head, t_redirect *new_redir)
+void	add_redir_to_list(t_redirect **head, t_redirect *new_redir)
 {
 	if (!*head)
 		*head = new_redir;
 	else
 	{
-		t_redirect *tmp = *head;
+		t_redirect	*tmp = *head;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new_redir;
 	}
 }
 
-int handle_redir(t_card **card_ptr, t_cmd *cmd, t_all *all)
+int	handle_redir(t_card **card_ptr, t_cmd *cmd, t_all *all)
 {
-	t_card	*card = *card_ptr;
+	t_card		*card = *card_ptr;
 	t_redirect	*redir;
 
 	redir = NULL;
-
 	//if (card->next && card->next->value)
 	//{
-		redir->type = card->type;
-		//redir->filename = card->next->value;
-		redir->value = ">";
-		redir->fd = -1;
-		redir->next = NULL;
-		add_redir_to_list(&cmd->redirects, redir);
-		*card_ptr = card->next;
+	redir->type = card->type;
+	//redir->filename = card->next->value;
+	redir->value = ">";
+	redir->fd = -1;
+	redir->next = NULL;
+	add_redir_to_list(&cmd->redirects, redir);
+	*card_ptr = card->next;
 	//}
 	//else
 	//{<
 	//	printf("%s: syntax error\n", cmd->args[0]);
 	//}
-	return 0;
+	return (0);
 }
 
 void	set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 {
-	t_card *current_card = cursor;
-	int i = 0;
+	t_card	*current_card = cursor;
+	int		i = 0;
 
 	if (!cursor || !all || !current_cmd)
-		return;
-
+		return ;
 	while (current_card && current_card->type != PIPE)
 	{
 		if (is_redir(current_card->type))
@@ -204,17 +202,17 @@ void	set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 	current_cmd->args[i] = NULL;
 }
 
-void parser(t_all *all)
+void	parser(t_all *all)
 {
-	t_cmd *head_cmd = NULL;
-	t_cmd *current_cmd;
-	t_card *cursor = all->card;
+	t_cmd	*head_cmd = NULL;
+	t_cmd	*current_cmd;
+	t_card	*cursor = all->card;
 
 	while (cursor != NULL)
 	{
 		current_cmd = init_cmd(head_cmd, cursor, all);
 		if (!current_cmd)
-			return;
+			return ;
 		put_node(&head_cmd, current_cmd);
 		set_cmd(cursor, all, current_cmd);
 		while (cursor && cursor->type != PIPE)
