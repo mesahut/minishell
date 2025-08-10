@@ -8,7 +8,7 @@ LIBFT = libft/libft.a
 SRCS = src/main.c \
 	src/utils/card_list.c \
 	src/environment/environment.c \
-	src/expansion/expend.c \
+	src/expansion/expand.c \
 	src/lexer/lexer.c \
 	src/parser/parser.c \
 	src/executor/exec.c \

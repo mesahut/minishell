@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parts.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/10 10:22:52 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/10 14:20:47 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		int		i;
 
 		path = path_find(cmd->args[0]);
-		printf("%s\n", path);
 		if (path)
 		{
 			envp = list_to_envp(all->env);
@@ -152,6 +151,77 @@ void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2], pi
 	waitpid(pid, &all->exit_status, 0);
 }
 
+
+void print_cmd(t_cmd *cmd)
+{
+	t_cmd	*current = cmd;
+	
+	while (current)
+	{
+		printf("Command: ");
+		for (int i = 0; i < current->args_count; i++)
+		{
+			if (current->args[i])
+				printf("%s ", current->args[i]);
+		}
+		printf("\n");
+		t_redirect *redir = current->redirects;
+		while (redir)
+		{
+			printf("Redirect: %d %s\n", redir->type, redir->filename ? redir->filename : "NULL");
+			redir = redir->next;
+		}
+		current = current->next;
+	}
+}
+int red_checker(t_redirect *s_redirects)
+{
+	t_redirect	*redir;
+
+	redir = s_redirects;
+	while (redir)
+	{
+		if (redir->type == R_IN || redir->type == R_OUT || redir->type == R_APPEND)
+		{
+			if (!redir->filename || redir->filename[0] == '\0')
+			{
+				printf("syntax error\n");
+				return (1);
+			}
+		}
+		else if (redir->type == HEREDOC)
+		{
+			if (!redir->filename || redir->filename[0] == '\0')
+			{
+				printf("redir syntax error\n");
+				return (1);
+			}
+		}
+		redir = redir->next;
+	}
+	return (0);
+}
+int cmd_checker(t_all *all)
+{
+	t_card *current_card;
+
+	current_card = all->card;
+	if (!all->cmd->args || !all->cmd->args[0])
+	{
+		printf("pipe syntax error\n");
+		return (1);
+	}
+	while (current_card)
+	{
+		if( current_card->type == PIPE && (!current_card->next || current_card->next->type == PIPE))
+		{
+			printf("pipes syntax error\n");
+			return (1);
+		}
+		current_card = current_card->next;
+	}
+	return (0);
+}
 void	exec_pipeline(t_all *all)
 {
 	t_cmd	*cmd;
@@ -168,10 +238,14 @@ void	exec_pipeline(t_all *all)
 	prev_fd = -1;
 	saved_stdin = -1;
 	saved_stdout = -1;
-
 	// Process each command
 	while (cmd)
 	{
+		print_cmd(cmd);
+		if (cmd_checker(all) || cmd->args_count == 0)
+			break;
+		if (red_checker(cmd->redirects))
+			break;
 		if (cmd->next && pipe(pipefd) == -1)
 		{
 			perror("pipe");
@@ -186,7 +260,6 @@ void	exec_pipeline(t_all *all)
 		}
 		else
 		{
-			// Fork and execute command
 			pid = fork();
 			g_signal = 1;
 			if (pid == -1)
@@ -195,16 +268,17 @@ void	exec_pipeline(t_all *all)
 				exit(1);
 			}
 			else if (pid == 0)
-			{				
+			{
 				exec_child_process(cmd, all, prev_fd, pipefd);
 			}
 			else
+			{
 				exec_parent_process(cmd, all, &prev_fd, pipefd, pid);
+			}
 			cmd = cmd->next;
 			g_signal = 0;
 		}
 	}
-	
 	// Final cleanup
 	if (prev_fd != -1)
 	{

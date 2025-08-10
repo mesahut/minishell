@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:40 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 10:23:42 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/10 10:46:16 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*path_find(char *cmd)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
-	printf("test\n");
 	i = 0;
 	while (paths[i])
 	{
@@ -99,7 +98,6 @@ void	exec_external_cmd(char *path, char **args, t_all *all)
 	int		i;
 
 	envp = list_to_envp(all->env);
-	printf("asdasd\n");
 	execve(path, args, envp);
 	if (args[0][0] == '/')
 		printf("%s: No such file or directory\n", args[0]);
