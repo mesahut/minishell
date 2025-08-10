@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 00:28:13 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 00:28:26 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/10 17:29:24 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	check_node(t_card *card, t_card *prev)
 {
-	if (card->value[0] != '\0')
-		return ;
 	prev->next = card->next;
 	card = prev;
 	return ;

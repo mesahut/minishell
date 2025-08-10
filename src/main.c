@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 11:05:30 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/10 17:32:38 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,16 +104,25 @@ int	main(int argc, char **argv, char **env_list)
 			free_env(all.env);
 			reset_all(&all);
 			printf("exit\n");
+			all.exit_status = 0;
 			return (0);
 		}
 		add_history(line);
 		input = collector_dup(&all.collector, line);
 		if (lexer(input, &all) == 0)
 			continue ;
-		expander(&all);
+		if (expander(&all) == 1)
+		{
+			reset_all(&all);
+			continue ;
+		}
+		print_card(all.card);
+		printf("---------------------\n");
 		parser(&all);
+		print_cmd(all.cmd);
 		exec(&all);
 		reset_all(&all);
 	}
+	all.exit_status = 0;
 	return (0);
 }

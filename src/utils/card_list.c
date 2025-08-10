@@ -57,6 +57,11 @@ void	*safe_malloc(t_collector **gc_head, int size)
 	char	*str;
 
 	str = ft_calloc(size, 1);
+	if (str == NULL)
+	{
+		clean_malloc(*gc_head);
+		exit(12);
+	}
 	create_collector(gc_head, str);
 	return (str);
 }

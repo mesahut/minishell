@@ -14,6 +14,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+void	handle_exit_status(t_all *all)
+{
+	printf("%d: command not found\n", all->exit_status);
+}
+
 char	*found_dollar(char *line, int dollar_place, t_all *all)
 {
 	char	*before;
@@ -24,11 +29,13 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 	len = 0;
 	before = ft_substr(line, 0, dollar_place);
 	if (line[dollar_place + 1] == '?')
-		len = 1;
-	else
-		while (line[dollar_place + len + 1] != '\0'
-			&& (ft_isalnum(line[dollar_place + len + 1]) == 1))
-			len++;
+	{
+		handle_exit_status(all);
+		return (0);
+	}
+	while (line[dollar_place + len + 1] != '\0'
+		&& (ft_isalnum(line[dollar_place + len + 1]) == 1))
+		len++;
 	after = ft_substr(line, dollar_place + 1, len);
 	env = ft_getenv(all->env, after);
 	env = ft_strdup(env);
@@ -75,6 +82,8 @@ int	search_dollar(t_all *all, t_card *node, t_card *prev_node)
 			&& (node->value)[i] == '$' && node->value[i + 1] != '\0')
 		{
 			node->value = found_dollar((node->value), i, all);
+			if (node->value == 0)
+				return (-1);
 			flag = 1;
 		}
 		if (node->value[i] == '\0')
@@ -84,7 +93,7 @@ int	search_dollar(t_all *all, t_card *node, t_card *prev_node)
 	return (flag);
 }
 
-void	check_for_expansion(t_all *all)
+int	check_for_expansion(t_all *all)
 {
 	int		flag;
 	t_card	*node;
@@ -97,6 +106,8 @@ void	check_for_expansion(t_all *all)
 	while (node != NULL)
 	{
 		flag = search_dollar(all, node, prev_node);
+		if( flag == -1)
+			return (1);
 		if (node->value[0] == '\0')
 			check_node(node, prev_node);
 		else if (flag == 1)
@@ -107,12 +118,16 @@ void	check_for_expansion(t_all *all)
 		prev_node = node;
 		node = node->next;
 	}
+	return (0);
 }
 
-void	expander(t_all *all)
+int	expander(t_all *all)
 {
 	put_title(all);
 	check_tilde(all, all->card);
-	check_for_expansion(all);
+	if (check_for_expansion(all) == 1)
+		return (1);
 	del_quote(all);
+	return (0);
 }
+	

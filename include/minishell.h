@@ -95,7 +95,7 @@ void    set_cmd(t_card *cursor, t_all *all, t_cmd *cmd);
 void	parser(t_all *all);
 void	exec(t_all *all);
 void	create_card(t_all *all, char *card);
-void	expander(t_all *all);
+int		expander(t_all *all);
 int		lexer(char *line, t_all *all);
 void	put_env(t_all *all, char **env_list);
 void	*safe_malloc(t_collector **gc_head, int size);
@@ -122,7 +122,7 @@ int		ft_exit(t_all *all, t_cmd *cmd);
 t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
 
-void	check_for_expansion(t_all *all);
+int		check_for_expansion(t_all *all);
 char	*found_dollar(char *line, int dollar_place, t_all *all);
 char	is_char_quote(char value, char quote_type);
 
@@ -157,4 +157,5 @@ int	is_space(char c);
 int	special_case(char c, char next, int *place);
 int	is_operator(char c, char next);
 void	insert_node_at(t_all *all, t_card **pos, char *str);
+void print_cmd(t_cmd *cmd);
 #endif

@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/10 14:20:47 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/10 16:38:37 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		{
 			envp = list_to_envp(all->env);
 			execve(path, cmd->args, envp);
-			printf("%s: command not found\n", cmd->args[0]);
 			free(path);
 			
 			if (envp)
@@ -105,6 +104,7 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		}
 		else
 		{
+			all->exit_status = 127;
 			printf("%s: command not found\n", cmd->args[0]);
 			free_env(all->env);
 			reset_all(all);
@@ -241,7 +241,6 @@ void	exec_pipeline(t_all *all)
 	// Process each command
 	while (cmd)
 	{
-		print_cmd(cmd);
 		if (cmd_checker(all) || cmd->args_count == 0)
 			break;
 		if (red_checker(cmd->redirects))
