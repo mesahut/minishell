@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:40 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 10:46:16 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/11 15:01:45 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,16 @@ char	*path_find(char *cmd)
 	char	*path_env;
 	char	*full_path;
 	int		i;
-
 	if (!cmd)
 		return (NULL);
 	if (cmd[0] == '/' || cmd[0] == '.')
-		return (ft_strdup(cmd));
-
-	// PATH environment variable (kendi env listenden alabilirsin)
-	path_env = getenv("PATH");  // Alternatif: get_env_value("PATH", all->env);
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		else
+			return (NULL);
+	}
+	path_env = getenv("PATH");
 	if (!path_env)
 		return (NULL);
 
@@ -49,7 +51,7 @@ char	*path_find(char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		full_path = ft_strjoin3(paths[i], "/", cmd);  // Üç stringi birleştiren bir yardımcı fonksiyon
+		full_path = ft_strjoin3(paths[i], "/", cmd);
 		if (access(full_path, X_OK) == 0)
 		{
 			free_split(paths);

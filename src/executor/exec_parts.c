@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parts.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/11 14:30:37 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 15:03:06 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		char	*path;
 		char	**envp;
 		int		i;
-
 		path = path_find(cmd->args[0]);
 		if (path)
 		{
@@ -105,7 +104,10 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		else
 		{
 			all->exit_status = 127;
-			printf("%s: command not found\n", cmd->args[0]);
+			if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
+				printf("%s: No such file or directory\n", cmd->args[0]);
+			else
+				printf("%s: command not found\n", cmd->args[0]);
 			free_env(all->env);
 			reset_all(all);
 			rl_clear_history();
