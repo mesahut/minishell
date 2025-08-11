@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/11 12:02:34 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/11 18:31:24 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include "../../libft/libft.h"
 #include <unistd.h>     // fork, execve
 #include <sys/wait.h>   // waitpid, WIFEXITED
 #include <stdlib.h>     // exit

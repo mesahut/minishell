@@ -1,25 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   libft_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 22:42:12 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/12 00:41:39 by mayilmaz         ###   ########.fr       */
+/*   Created: 2025/08/11 18:07:59 by mayilmaz          #+#    #+#             */
+/*   Updated: 2025/08/11 20:19:39 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
 #include <stdlib.h>
 
-char	*expend_join(char const *s1, char const *s2)
+int	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s && s[i] != '\0')
+		i++;
+	return (i);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	int		i;
+	int		size;
+	char	*s2;
+
+	i = 0;
+	size = ft_strlen(s1);
+	s2 = malloc((size + 1) * sizeof(char));
+	if (!s2)
+		return (0);
+	while (s2 && size > i)
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		i;
 	int		len1;
 	int		len2;
 	char	*dst;
 
+	if (!s1 || !s2)
+		return (NULL);
 	i = 0;
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
@@ -37,62 +68,31 @@ char	*expend_join(char const *s1, char const *s2)
 		i++;
 	}
 	dst[i] = '\0';
-	free((void *)s1);
-	free((void *)s2);
 	return (dst);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
-	size_t	byte;
-	char	*x;
+	size_t	l;
+	char	*sb;
 
+	if (!s)
+		return (NULL);
 	i = 0;
-	byte = nmemb * size;
-	if (size && (byte / size != nmemb))
+	l = ft_strlen(s);
+	if (start > l)
+		len = 0;
+	else if (l < len + start)
+		len = l - start;
+	sb = (char *)malloc ((len * sizeof(char)) + 1);
+	if (!sb)
 		return (0);
-	x = (char *)malloc(byte);
-	if (!x)
-		return (0);
-	while (byte > 0)
+	while (len > i && s[i + start])
 	{
-		x[i] = 0;
-		i++;
-		byte--;
-	}
-	return ((void *)x);
-}
-
-int	ft_isalnum(int c)
-{
-	if ((c > 47 && c < 58) || (c > 96 && c < 123) || (c > 64 && c < 91)
-		|| (c == '_'))
-		return (1);
-	else
-		return (0);
-}
-
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	c = (unsigned char)c;
-	while (s[i])
-	{
-		if (s[i] == c)
-			return ((char *)s + i);
+		sb[i] = s[i + start];
 		i++;
 	}
-	if (c == '\0')
-		return ((char *)&s[i]);
-	return (0);
+	sb[i] = '\0';
+	return (sb);
 }

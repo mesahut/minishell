@@ -43,12 +43,10 @@ void	create_collector(t_all *all, void *address)
 	if (new_card == NULL)
 	{
 		reset_all(all);
-		free_env(all->env);
 		exit(12);
 	}
 	new_card->value = address;
 	new_card->next = NULL;
-	new_card->all = all;
 	if (all->collector == NULL)
 		all->collector = new_card;
 	else
@@ -68,19 +66,18 @@ void	*safe_malloc(t_all *all, int size)
 	if (str == NULL)
 	{
 		reset_all(all);
-		free_env(all->env);
 		exit(12);
 	}
 	create_collector(all, str);
 	return (str);
 }
 
-void	clean_malloc(t_collector *head)
+void	clean_malloc(t_all *all)
 {
 	t_collector	*current;
 	t_collector	*temp;
 
-	current = head;
+	current = all->collector;
 	temp = NULL;
 	while (current)
 	{
@@ -90,5 +87,7 @@ void	clean_malloc(t_collector *head)
 			free(temp->value);
 		free(temp);
 	}
-	head = NULL;
+	all->collector = NULL;
+	all->card = NULL;
+	all->cmd = NULL;
 }

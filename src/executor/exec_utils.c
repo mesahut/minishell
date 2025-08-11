@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:40 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/11 15:01:45 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/11 21:35:58 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../include/minishell.h"
-#include "../../libft/libft.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -93,7 +92,6 @@ char	**list_to_envp(t_env *env)
 	envp[count] = NULL;
 	return (envp);
 }
-
 void	exec_external_cmd(char *path, char **args, t_all *all)
 {
 	char	**envp;
@@ -120,7 +118,6 @@ void	exec_external_cmd(char *path, char **args, t_all *all)
 		free(envp);
 	}
 	reset_all(all);
-	free_env(all->env);
 	rl_clear_history();
 	exit(1);
 }

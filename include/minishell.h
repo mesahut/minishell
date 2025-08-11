@@ -13,7 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -38,12 +37,10 @@
 # define STDOUT 1
 # define STDERR 2
 
-struct s_all;
 
 typedef struct s_collector
 {
 	void				*value;
-	struct s_all		*all;
 	struct s_collector	*next;
 }	t_collector;
 
@@ -102,12 +99,11 @@ int		expander(t_all *all);
 int		lexer(char *line, t_all *all);
 void	put_env(t_all *all, char **env_list);
 void	*safe_malloc(t_all *all, int size);
-void	clean_malloc(t_collector *head);
+void	clean_malloc(t_all *all);
 char	*collector_dup(t_all *all, char *line);
 int		exec_builtin(t_all *all, t_cmd *cmd);
 int		is_builtin(char *cmd);
 char	*expend_join(char const *s1, char const *s2);
-void	print_env(t_all *env);
 int		flag_check(char *arg);
 void	print_card(t_card *card);
 void	reset_all(t_all *all);
@@ -162,4 +158,15 @@ int	special_case(char c, char next, int *place);
 int	is_operator(char c, char next);
 void	insert_node_at(t_all *all, t_card **pos, char *str);
 void print_cmd(t_cmd *cmd);
+
+int ft_strlen(const char *s);
+void	*ft_calloc(size_t nmemb, size_t size);
+int	ft_isalnum(int c);
+int	ft_isdigit(int c);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	**ft_split(char const *s, char c);
+
 #endif

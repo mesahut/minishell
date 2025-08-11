@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/04 11:37:21 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/11 21:35:24 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	ft_exit(t_all *all, t_cmd *cmd)
 		exit(status);
 	}
 	reset_all(all);
-	free_env(all->env);
 	rl_clear_history();
 	printf("%s\n", "exit");
 	exit(all->exit_status);

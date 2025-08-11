@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/11 15:45:33 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 00:43:53 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,12 @@ void	print_card(t_card *card)
 
 void	reset_all(t_all *all)
 {
-	if (all->collector)
+	clean_malloc(all);
+	if (all->env)
 	{
-		clean_malloc(all->collector);
-		all->collector = NULL;
+		free_env(all->env);
+		all->env = NULL;
 	}
-	all->card = NULL;
-	all->cmd = NULL;
 }
 
 void	free_env(t_env *env_list)
@@ -83,6 +82,21 @@ void	free_split(char **split)
 	free(split);
 }
 
+void print_env(t_all *all)
+{
+	t_env	*current;
+
+	current = all->env;
+	while (current)
+	{
+		if (current->value)
+			printf("%s=%s\n", current->key, current->value);
+		else
+			printf("%s=\n", current->key);
+		current = current->next;
+	}
+}
+
 int	main(int argc, char **argv, char **env_list)
 {
 	t_all	all;
@@ -100,7 +114,6 @@ int	main(int argc, char **argv, char **env_list)
 		line = readline("minishell>>");
 		if (line == NULL)
 		{
-			free_env(all.env);
 			reset_all(&all);
 			printf("exit\n");
 			all.exit_status = 0;
@@ -112,12 +125,12 @@ int	main(int argc, char **argv, char **env_list)
 			continue ;
 		if (expander(&all) == 1)
 		{
-			reset_all(&all);
+			clean_malloc(&all);
 			continue ;
 		}
 		parser(&all);
 		exec(&all);
-		reset_all(&all);
+		clean_malloc(&all);
 	}
 	all.exit_status = 0;
 	return (0);

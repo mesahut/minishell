@@ -2,8 +2,6 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
-INCLUDE = -I. -I./libft
-LIBFT = libft/libft.a
 
 SRCS = src/main.c \
 	src/utils/card_list.c \
@@ -29,27 +27,24 @@ SRCS = src/main.c \
 	src/lexer/lexer_utils.c \
 	src/expansion/expand_utils.c \
 	src/expansion/node_utils.c \
-	src/expansion/quote_ignore.c 
+	src/expansion/quote_ignore.c \
+	src/utils/libft_utils.c \
+	src/utils/ft_split.c \
 	
 OBJS = $(SRCS:.c=.o)
 
-all: $(LIBFT) $(NAME)
-
-$(LIBFT):
-	$(MAKE) -C ./libft
+all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(MAKE) -C ./libft clean
 	rm -f $(OBJS)
 
 fclean: clean
-	$(MAKE) -C ./libft fclean
 	rm -f $(NAME)
 
 re: fclean all

@@ -18,6 +18,11 @@ void	create_env(char **env_line, t_all *all)
 	t_env	*current;
 
 	new_env = (t_env *)malloc(sizeof(t_env));
+	if (!new_env)
+	{
+		free_env(all->env);
+		exit(12);
+	}
 	new_env->key = strdup(env_line[0]);
 	if (env_line[1])
 		new_env->value = strdup(env_line[1]);
