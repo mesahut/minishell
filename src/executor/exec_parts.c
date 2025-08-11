@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/11 14:22:05 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 14:30:37 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,8 +206,8 @@ void	exec_pipeline(t_all *all)
 		}
 		else
 		{
+			signal_switch(2);
 			pid = fork();
-			g_signal = 1;
 			if (pid == -1)
 			{
 				perror("fork");
@@ -222,7 +222,7 @@ void	exec_pipeline(t_all *all)
 				exec_parent_process(cmd, all, &prev_fd, pipefd, pid);
 			}
 			cmd = cmd->next;
-			g_signal = 0;
+			signal_switch(1);
 		}
 	}
 	// Final cleanup
