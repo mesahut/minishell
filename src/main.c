@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 17:32:38 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/10 19:25:14 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,7 @@ int	main(int argc, char **argv, char **env_list)
 			reset_all(&all);
 			continue ;
 		}
-		print_card(all.card);
-		printf("---------------------\n");
 		parser(&all);
-		print_cmd(all.cmd);
 		exec(&all);
 		reset_all(&all);
 	}

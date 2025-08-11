@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parts.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/10 16:38:37 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/10 19:23:15 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,6 @@ void print_cmd(t_cmd *cmd)
 	
 	while (current)
 	{
-		printf("Command: ");
 		for (int i = 0; i < current->args_count; i++)
 		{
 			if (current->args[i])

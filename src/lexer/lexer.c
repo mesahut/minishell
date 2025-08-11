@@ -107,6 +107,7 @@ int	line_checker(char *line)
 	return (0);
 }
 
+
 int	lexer(char *line, t_all *all)
 {
 	if (line_checker(line) == 0)
