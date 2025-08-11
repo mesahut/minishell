@@ -97,7 +97,7 @@ int	line_checker(char *line)
 
 	i = 0;
 	if (!line || line[0] == '\0')
-		return (0);
+		return (1);
 	while (line[i])
 	{
 		if (!is_space(line[i]))

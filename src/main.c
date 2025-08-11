@@ -6,19 +6,19 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/11 14:30:45 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 15:45:33 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*collector_dup(t_collector **collector, char *line)
+char	*collector_dup(t_all *all, char *line)
 {
 	char	*str;
 	int		i;
 
 	i = 0;
-	str = (char *)safe_malloc(collector, ft_strlen(line) + 1);
+	str = (char *)safe_malloc(all, ft_strlen(line) + 1);
 	while (line[i])
 	{
 		str[i] = line[i];
@@ -107,7 +107,7 @@ int	main(int argc, char **argv, char **env_list)
 			return (0);
 		}
 		add_history(line);
-		input = collector_dup(&all.collector, line);
+		input = collector_dup(&all, line);
 		if (lexer(input, &all) == 1)
 			continue ;
 		if (expander(&all) == 1)

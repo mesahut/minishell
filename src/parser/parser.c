@@ -58,7 +58,7 @@ t_cmd *init_cmd(t_cmd *head_cmd, t_card *cursor, t_all *all)
 		return NULL;
 
 	arg_count = args_counter(cursor);
-	cmd = (t_cmd *)safe_malloc(&all->collector, sizeof(t_cmd));
+	cmd = (t_cmd *)safe_malloc(all, sizeof(t_cmd));
 	if (!cmd)
 		return NULL;
 
@@ -70,7 +70,7 @@ t_cmd *init_cmd(t_cmd *head_cmd, t_card *cursor, t_all *all)
 	cmd->fd_out = 1;
 	cmd->args_count = arg_count;
 
-	cmd->args = (char **)safe_malloc(&all->collector, sizeof(char *) * (arg_count + 1));
+	cmd->args = (char **)safe_malloc(all, sizeof(char *) * (arg_count + 1));
 	if (!cmd->args)
 		return NULL;
 
@@ -119,7 +119,7 @@ void set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 		if (current_card->type == R_APPEND || current_card->type == R_OUT ||
 			current_card->type == HEREDOC || current_card->type == R_IN)
 		{
-			t_redirect *redir = safe_malloc(&all->collector, sizeof(t_redirect));
+			t_redirect *redir = safe_malloc(all, sizeof(t_redirect));
 			redir->type = current_card->type;
 			if (current_card->next && current_card->next->value)
 				redir->filename = current_card->next->value;

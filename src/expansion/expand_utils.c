@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 00:26:52 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 00:27:01 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 15:00:47 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	delim_node(t_all *all, t_card *node)
 	i = 1;
 	str = NULL;
 	temp = ft_split(node->value, ' ');
-	node->value = collector_dup(&all->collector, temp[0]);
+	node->value = collector_dup(all, temp[0]);
 	if (temp[i] && flag_check(temp[i]))
 	{
 		insert_node_at(all, &node, ft_strdup(temp[i]));
@@ -76,7 +76,7 @@ void	delim_node(t_all *all, t_card *node)
 	}
 	str = join_words(temp, str, i);
 	if (str)
-		insert_node_at(all, &node, collector_dup(&all->collector, str));
+		insert_node_at(all, &node, collector_dup(all, str));
 	free(temp);
 }
 

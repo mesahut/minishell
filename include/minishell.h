@@ -38,9 +38,12 @@
 # define STDOUT 1
 # define STDERR 2
 
+struct s_all;
+
 typedef struct s_collector
 {
 	void				*value;
+	struct s_all		*all;
 	struct s_collector	*next;
 }	t_collector;
 
@@ -98,9 +101,9 @@ void	create_card(t_all *all, char *card);
 int		expander(t_all *all);
 int		lexer(char *line, t_all *all);
 void	put_env(t_all *all, char **env_list);
-void	*safe_malloc(t_collector **gc_head, int size);
+void	*safe_malloc(t_all *all, int size);
 void	clean_malloc(t_collector *head);
-char	*collector_dup(t_collector **collector, char *line);
+char	*collector_dup(t_all *all, char *line);
 int		exec_builtin(t_all *all, t_cmd *cmd);
 int		is_builtin(char *cmd);
 char	*expend_join(char const *s1, char const *s2);

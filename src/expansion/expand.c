@@ -44,7 +44,7 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 			ft_strlen(line) - (dollar_place + len + 1));
 	before = expend_join(before, env);
 	after = expend_join(before, after);
-	after = collector_dup(&all->collector, after);
+	after = collector_dup(all, after);
 	return (after);
 }
 
@@ -60,7 +60,7 @@ void	check_tilde(t_all *all, t_card *node)
 		if (current->value[0] == '~' && current->value[1] == '\0')
 		{
 			home = ft_getenv(all->env, "HOME");
-			current->value = collector_dup(&all->collector, home);
+			current->value = collector_dup(all, home);
 		}
 		current = current->next;
 	}
@@ -121,24 +121,33 @@ int	check_for_expansion(t_all *all)
 	return (0);
 }
 
+void	syntex_error(t_all *all)
+{
+	all->exit_status = 256;
+	printf("syntax error\n");
+}
+
 int syntax_checker(t_all *all)
 {
 	t_card	*current;
-	
+
 	current = all->card;
+	if (current->type == PIPE)
+	{
+		syntex_error(all);
+		return (1);
+	}
 	while (current)
 	{
 		if(current->type == PIPE && (!current->next || current->next->type != WORD))
 		{
-			printf("syntax error\n");
-			all->exit_status = 256;
+			syntex_error(all);
 			return (1);
 		}
 		if ((current->type == R_OUT || current->type == R_IN || current->type == R_APPEND
 			|| current->type == HEREDOC) && (!current->next || current->next->type != WORD))
 		{
-			printf("syntax error\n");
-			all->exit_status = 256;
+			syntex_error(all);
 			return (1);
 		}
 		current = current->next;

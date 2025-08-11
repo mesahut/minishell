@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_ignore.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 00:30:44 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 17:30:23 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/11 15:03:08 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*quote_ignore(t_all *all, char *str, int quotes)
 	open_quote = '\0';
 	len = strlen(str);
 	quotes = quote_count(str);
-	result = (char *)safe_malloc(&all->collector, (len - quotes + 1));
+	result = (char *)safe_malloc(all, (len - quotes + 1));
 	while (str[i])
 	{
 		if (skip_quotes(str, &open_quote, i))

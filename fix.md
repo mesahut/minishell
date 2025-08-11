@@ -9,13 +9,15 @@
 - [x] env komutunun ardından herhangi birşey yazılırsa hata kodu verdirecez
 - [x] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [x] cat < testfile
-- [ ] echo $? yok
+- [x] echo $? yok
 - [x] lexerdaki quote checker kısmında hata alırsak hata çıktısı verdirilecek
 - [x] echo test >  syntax error vermeli biz test bastırıyoruz
 - [X]pipe bouzk aq
 - [x] export a="cho a" yazdıktan sonra e$a yazarsak definitliy lost çıkıyor
-- [ ] echo test | heredoc gibi girdi penceresi açıyor biz test bastırıyoruz
-- [ ] | cat bizim çıktımız (null): command not found olması gereken syntax error
+- [x] echo test | heredoc gibi girdi penceresi açıyor biz test bastırıyoruz
+- [x] | cat bizim çıktımız (null): command not found olması gereken syntax error
+- [ ] mallocların hata durumları kontrol edilecek
+- [ ] string.h tan çekilen fonksiyonlar ftler ile değiştirilecek
 - [ ] ls /nonexistent 2> /tmp/error_test cat /tmp/error_test testinde bizim çıktımız: ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
                                                                                       ls: '2' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
                                                                                       ls: 'cat' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
