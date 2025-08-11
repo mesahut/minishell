@@ -121,11 +121,38 @@ int	check_for_expansion(t_all *all)
 	return (0);
 }
 
+int syntax_checker(t_all *all)
+{
+	t_card	*current;
+	
+	current = all->card;
+	while (current)
+	{
+		if(current->type == PIPE && (!current->next || current->next->type != WORD))
+		{
+			printf("syntax error\n");
+			all->exit_status = 256;
+			return (1);
+		}
+		if ((current->type == R_OUT || current->type == R_IN || current->type == R_APPEND
+			|| current->type == HEREDOC) && (!current->next || current->next->type != WORD))
+		{
+			printf("syntax error\n");
+			all->exit_status = 256;
+			return (1);
+		}
+		current = current->next;
+		}
+	return (0);
+}
+
 int	expander(t_all *all)
 {
 	put_title(all);
 	check_tilde(all, all->card);
 	if (check_for_expansion(all) == 1)
+		return (1);
+	if(syntax_checker(all) == 1)
 		return (1);
 	del_quote(all);
 	return (0);

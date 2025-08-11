@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/10 19:23:15 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 14:22:05 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,54 +173,6 @@ void print_cmd(t_cmd *cmd)
 		current = current->next;
 	}
 }
-int red_checker(t_redirect *s_redirects)
-{
-	t_redirect	*redir;
-
-	redir = s_redirects;
-	while (redir)
-	{
-		if (redir->type == R_IN || redir->type == R_OUT || redir->type == R_APPEND)
-		{
-			if (!redir->filename || redir->filename[0] == '\0')
-			{
-				printf("syntax error\n");
-				return (1);
-			}
-		}
-		else if (redir->type == HEREDOC)
-		{
-			if (!redir->filename || redir->filename[0] == '\0')
-			{
-				printf("redir syntax error\n");
-				return (1);
-			}
-		}
-		redir = redir->next;
-	}
-	return (0);
-}
-int cmd_checker(t_all *all)
-{
-	t_card *current_card;
-
-	current_card = all->card;
-	if (!all->cmd->args || !all->cmd->args[0])
-	{
-		printf("pipe syntax error\n");
-		return (1);
-	}
-	while (current_card)
-	{
-		if( current_card->type == PIPE && (!current_card->next || current_card->next->type == PIPE))
-		{
-			printf("pipes syntax error\n");
-			return (1);
-		}
-		current_card = current_card->next;
-	}
-	return (0);
-}
 void	exec_pipeline(t_all *all)
 {
 	t_cmd	*cmd;
@@ -240,10 +192,6 @@ void	exec_pipeline(t_all *all)
 	// Process each command
 	while (cmd)
 	{
-		if (cmd_checker(all) || cmd->args_count == 0)
-			break;
-		if (red_checker(cmd->redirects))
-			break;
 		if (cmd->next && pipe(pipefd) == -1)
 		{
 			perror("pipe");

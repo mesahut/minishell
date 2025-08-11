@@ -30,9 +30,9 @@ int	quote_checker(char *words)
 	if (open_quote != '\0')
 	{
 		fprintf(stderr, "syntax error: unclosed quote\n");
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 int	pass_letter(char *line, int *place, char *status)
@@ -101,19 +101,19 @@ int	line_checker(char *line)
 	while (line[i])
 	{
 		if (!is_space(line[i]))
-			return (1);
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 
 int	lexer(char *line, t_all *all)
 {
-	if (line_checker(line) == 0)
-		return (0);
-	if (quote_checker(line) == 0)
-		return (0);
+	if (line_checker(line) == 1)
+		return (1);
+	if (quote_checker(line) == 1)
+		return (1);
 	split_line(line, all);
-	return (1);
+	return (0);
 }

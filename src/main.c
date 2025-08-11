@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 19:25:14 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 13:31:55 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	main(int argc, char **argv, char **env_list)
 		}
 		add_history(line);
 		input = collector_dup(&all.collector, line);
-		if (lexer(input, &all) == 0)
+		if (lexer(input, &all) == 1)
 			continue ;
 		if (expander(&all) == 1)
 		{
