@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 10:50:51 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/09 19:27:59 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/11 11:01:52 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	handle_redirections(t_cmd *cmd, t_all *all)
 		}
 		else if (redir->type == HEREDOC)
 		{
+			g_signal = 2;
 			int heredoc_pipe[2];
 			if (pipe(heredoc_pipe) == -1)
 			{
@@ -105,6 +106,7 @@ void	handle_redirections(t_cmd *cmd, t_all *all)
 				exit(1);
 			}
 			close(redir->fd);
+			g_signal = 0;
 		}
 		redir = redir->next;
 	}

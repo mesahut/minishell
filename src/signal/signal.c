@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:12:42 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/10 10:27:09 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:16:22 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ void	sig_int(int sig)
 	write(1, "\n", 1);
 	if (g_signal == 0)
 		rl_on_new_line();
+	if (g_signal == 2)
+	{
+		close(0);
+	}
 	rl_redisplay();
 }
 
