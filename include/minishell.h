@@ -128,7 +128,8 @@ char	is_char_quote(char value, char quote_type);
 
 void	sig_int(int code);
 void	sig_quit(int code);
-
+void	sig_prompt(int sig);
+void	signal_switch(int status);
 // Cleanup functions
 void			cleanup_pipe(int pipefd[2]);
 void	cleanup_pipe(int pipefd[2]);

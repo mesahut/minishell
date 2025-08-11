@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/10 19:25:14 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:55:52 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ int	main(int argc, char **argv, char **env_list)
 	char	*line;
 	char	*input;
 
-	signal(SIGINT, sig_int);
-	signal(SIGQUIT, sig_quit);
+	signal_switch(1);
 	(void)argc;
 	(void)argv;
 	line = NULL;
