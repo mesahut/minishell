@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/12 00:50:30 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:50:42 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,13 @@ static void	append_env_node(t_all *all, const char *key, const char *value)
 	t_env	*current;
 
 	new_node = malloc(sizeof(t_env));
-	new_node->key = strdup(key);
-	new_node->value = strdup(value);
+	if (!new_node)
+	{
+		reset_all(all, 12);
+		exit(12);
+	}
+	new_node->key = ft_strdup(key, all);
+	new_node->value = ft_strdup(value, all);
 	new_node->next = NULL;
 	if (!all->env)
 	{
@@ -59,18 +64,19 @@ static int	parse_export_arg(t_all *all, const char *arg)
 	char		*arg_copy;
 	char		*equal_pos;
 
-	if (arg && ft_isdigit(arg[0]))
+	if (arg && (ft_isdigit(arg[0]) || arg[0] == '='))
 	{
 		fprintf(stderr, "export: `%s`: not a valid identifier\n", arg);
 		return (1);
 	}
 	equal_sign = strchr(arg, '=');
-	if (!equal_sign || equal_sign == arg)
+	arg_copy = ft_strdup(arg, all);
+	if (!equal_sign)
 	{
-		fprintf(stderr, "export: `%s`: not a valid identifier\n", arg);
+		append_env_node(all, arg_copy, NULL);
+		free(arg_copy);
 		return (1);
 	}
-	arg_copy = ft_strdup(arg);
 	if (!arg_copy)
 		return (1);
 	equal_pos = strchr(arg_copy, '=');
@@ -87,7 +93,7 @@ int	ft_export(t_all *all, t_cmd *cmd)
 	i = 1;
 	if (!cmd->args[1])
 	{
-		print_sorted_env(all->env);
+		print_sorted_env(all);
 		return (0);
 	}
 	while (cmd->args[i])

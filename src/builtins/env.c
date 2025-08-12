@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:46:46 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/02 13:12:55 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/12 18:47:46 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_env(t_all *all, t_cmd *cmd)
 	{
 		while (current)
 		{
-			if (current->value)
+			if (current->value && current->value[0] != '\0')
 				printf("%s=%s\n", current->key, current->value);
 			current = current->next;
 		}

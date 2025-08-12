@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/11 21:35:46 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:08:51 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 		char	*path;
 		char	**envp;
 		int		i;
-		path = path_find(cmd->args[0]);
+		path = path_find(cmd->args[0], all);
 		if (path)
 		{
-			envp = list_to_envp(all->env);
+			envp = list_to_envp(all);
 			execve(path, cmd->args, envp);
 			free(path);
 			
@@ -95,7 +95,7 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 				}
 				free(envp);
 			}			
-			reset_all(all);
+			reset_all(all, 0);
 			rl_clear_history();
 			exit(1);
 		}
@@ -106,7 +106,7 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 				printf("%s: No such file or directory\n", cmd->args[0]);
 			else
 				printf("%s: command not found\n", cmd->args[0]);
-			reset_all(all);
+			reset_all(all, 0);
 			rl_clear_history();
 			exit(1);
 		}

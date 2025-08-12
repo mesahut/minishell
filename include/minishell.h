@@ -103,10 +103,10 @@ void	clean_malloc(t_all *all);
 char	*collector_dup(t_all *all, char *line);
 int		exec_builtin(t_all *all, t_cmd *cmd);
 int		is_builtin(char *cmd);
-char	*expend_join(char const *s1, char const *s2);
+char	*expend_join(char const *s1, char const *s2, t_all *all);
 int		flag_check(char *arg);
 void	print_card(t_card *card);
-void	reset_all(t_all *all);
+void	reset_all(t_all *all, int status_type);
 void	free_env(t_env *env_list);
 void	free_split(char **split);
 
@@ -116,7 +116,7 @@ int		ft_echo(t_all *all, t_cmd *cmd);
 int		ft_export(t_all *all, t_cmd *cmd);
 int		ft_unset(t_all *all, t_cmd *cmd);
 int		ft_env(t_all *all, t_cmd *cmd);
-void	print_sorted_env(t_env *env_list);
+void	print_sorted_env(t_all *all);
 int		ft_exit(t_all *all, t_cmd *cmd);
 t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
@@ -134,8 +134,8 @@ void			cleanup_pipe(int pipefd[2]);
 void	cleanup_pipe(int pipefd[2]);
 
 // Exec utility functions
-char	*path_find(char *cmd);
-char	**list_to_envp(t_env *env);
+char	*path_find(char *cmd, t_all *all);
+char	**list_to_envp(t_all *all);
 void	exec_external_cmd(char *path, char **args, t_all *all);
 char	*here_expand(char *str, t_all *all);
 int		check_here_flag(t_card *card, char *eof);
@@ -164,9 +164,9 @@ void	*ft_calloc(size_t nmemb, size_t size);
 int	ft_isalnum(int c);
 int	ft_isdigit(int c);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	**ft_split(char const *s, char c);
+char	*ft_strdup(const char *s1, t_all *all);
+char	*ft_strjoin(char const *s1, char const *s2, t_all *all);
+char	*ft_substr(char const *s, unsigned int start, size_t len, t_all *all);
+char	**ft_split(char const *s, char c, t_all *all);
 
 #endif

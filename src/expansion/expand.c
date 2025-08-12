@@ -2,15 +2,19 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   expend.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+
+	+:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+
+	+#+        */
+/*                                                +#+#+#+#+#+
+	+#+           */
 /*   Created: 2025/05/29 16:36:24 by marvin            #+#    #+#             */
 /*   Updated: 2025/05/29 16:36:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -27,23 +31,23 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 	int		len;
 
 	len = 0;
-	before = ft_substr(line, 0, dollar_place);
+	before = ft_substr(line, 0, dollar_place, all);
 	if (line[dollar_place + 1] == '?')
 	{
 		handle_exit_status(all);
 		return (0);
 	}
-	while (line[dollar_place + len + 1] != '\0'
-		&& (ft_isalnum(line[dollar_place + len + 1]) == 1))
+	while (line[dollar_place + len + 1] != '\0' && \
+		(ft_isalnum(line[dollar_place + len + 1]) == 1))
 		len++;
-	after = ft_substr(line, dollar_place + 1, len);
+	after = ft_substr(line, dollar_place + 1, len, all);
 	env = ft_getenv(all->env, after);
-	env = ft_strdup(env);
+	env = ft_strdup(env, all);
 	free(after);
-	after = ft_substr(line, dollar_place + len + 1,
-			ft_strlen(line) - (dollar_place + len + 1));
-	before = expend_join(before, env);
-	after = expend_join(before, after);
+	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line)
+			- (dollar_place + len + 1), all);
+	before = expend_join(before, env, all);
+	after = expend_join(before, after, all);
 	after = collector_dup(all, after);
 	return (after);
 }
@@ -106,7 +110,7 @@ int	check_for_expansion(t_all *all)
 	while (node != NULL)
 	{
 		flag = search_dollar(all, node, prev_node);
-		if( flag == -1)
+		if (flag == -1)
 			return (1);
 		if (node->value[0] == '\0')
 			check_node(node, prev_node);
@@ -127,7 +131,7 @@ void	syntex_error(t_all *all)
 	printf("syntax error\n");
 }
 
-int syntax_checker(t_all *all)
+int	syntax_checker(t_all *all)
 {
 	t_card	*current;
 
@@ -139,19 +143,21 @@ int syntax_checker(t_all *all)
 	}
 	while (current)
 	{
-		if(current->type == PIPE && (!current->next || current->next->type != WORD))
+		if (current->type == PIPE && (!current->next
+				|| current->next->type != WORD))
 		{
 			syntex_error(all);
 			return (1);
 		}
-		if ((current->type == R_OUT || current->type == R_IN || current->type == R_APPEND
-			|| current->type == HEREDOC) && (!current->next || current->next->type != WORD))
+		if ((current->type == R_OUT || current->type == R_IN
+				|| current->type == R_APPEND || current->type == HEREDOC)
+			&& (!current->next || current->next->type != WORD))
 		{
 			syntex_error(all);
 			return (1);
 		}
 		current = current->next;
-		}
+	}
 	return (0);
 }
 
@@ -161,9 +167,8 @@ int	expander(t_all *all)
 	check_tilde(all, all->card);
 	if (check_for_expansion(all) == 1)
 		return (1);
-	if(syntax_checker(all) == 1)
+	if (syntax_checker(all) == 1)
 		return (1);
 	del_quote(all);
 	return (0);
 }
-	

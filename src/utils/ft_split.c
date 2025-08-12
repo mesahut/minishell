@@ -6,11 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:15:36 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/11 18:29:03 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:09:29 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "../../include/minishell.h"
 
 static void	free_malloc(char **f, int k)
 {
@@ -76,7 +77,7 @@ static int	word_save(char **f, char const *s, char c, int i)
 	return (0);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, t_all *all)
 {
 	char	**f;
 	int		a;
@@ -87,12 +88,12 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	f = (char **)malloc(sizeof(char *) * (word_count(s, c) + 1));
 	if (!f)
-		return (NULL);
+		reset_all(all, 12);
 	a = word_save(f, s, c, i);
 	if (a != 0)
 	{
 		free(f);
-		return (NULL);
+		reset_all(all, 12);
 	}
 	return (f);
 }

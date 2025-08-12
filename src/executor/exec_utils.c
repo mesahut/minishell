@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:40 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/11 21:35:58 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:09:12 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
-char	*ft_strjoin3(char *s1, char *s2, char *s3)
+char	*ft_strjoin3(char *s1, char *s2, char *s3, t_all *all)
 {
-	char *tmp = ft_strjoin(s1, s2);
-	char *result = ft_strjoin(tmp, s3);
+	char *tmp = ft_strjoin(s1, s2, all);
+	char *result = ft_strjoin(tmp, s3, all);
 	free(tmp);
 	return (result);
 }
 
-char	*path_find(char *cmd)
+char	*path_find(char *cmd, t_all *all)
 {
 	char	**paths;
 	char	*path_env;
@@ -36,7 +36,7 @@ char	*path_find(char *cmd)
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
 		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
+			return ((cmd));
 		else
 			return (NULL);
 	}
@@ -44,13 +44,13 @@ char	*path_find(char *cmd)
 	if (!path_env)
 		return (NULL);
 
-	paths = ft_split(path_env, ':');
+	paths = ft_split(path_env, ':', all);
 	if (!paths)
 		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
-		full_path = ft_strjoin3(paths[i], "/", cmd);
+		full_path = ft_strjoin3(paths[i], "/", cmd, all);
 		if (access(full_path, X_OK) == 0)
 		{
 			free_split(paths);
@@ -63,13 +63,13 @@ char	*path_find(char *cmd)
 	return (NULL);
 }
 
-char	**list_to_envp(t_env *env)
+char	**list_to_envp(t_all *all)
 {
 	t_env	*current;
 	int		count;
 	int		i;
 
-	current = env;
+	current = all->env;
 	count = 0;
 	while (current)
 	{
@@ -78,13 +78,16 @@ char	**list_to_envp(t_env *env)
 	}
 	char **envp = malloc(sizeof(char *) * (count + 1));
 	if (!envp)
-		return (NULL);
-	current = env;
+	{
+		reset_all(all, 12);
+		exit(12);
+	}
+	current = all->env;
 	i = 0;
 	while (i < count)
 	{
-		char *temp = ft_strjoin(current->key, "=");
-		envp[i] = ft_strjoin(temp, current->value);
+		char *temp = ft_strjoin(current->key, "=", all);
+		envp[i] = ft_strjoin(temp, current->value, all);
 		free(temp);
 		current = current->next;
 		i++;
@@ -97,7 +100,7 @@ void	exec_external_cmd(char *path, char **args, t_all *all)
 	char	**envp;
 	int		i;
 
-	envp = list_to_envp(all->env);
+	envp = list_to_envp(all);
 	execve(path, args, envp);
 	if (args[0][0] == '/')
 		printf("%s: No such file or directory\n", args[0]);
@@ -117,7 +120,7 @@ void	exec_external_cmd(char *path, char **args, t_all *all)
 		}
 		free(envp);
 	}
-	reset_all(all);
+	reset_all(all, 0);
 	rl_clear_history();
 	exit(1);
 }

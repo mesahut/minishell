@@ -6,14 +6,14 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 22:42:12 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/12 00:41:39 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:09:52 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <stdlib.h>
 
-char	*expend_join(char const *s1, char const *s2)
+char	*expend_join(char const *s1, char const *s2, t_all *all)
 {
 	int		i;
 	int		len1;
@@ -25,7 +25,7 @@ char	*expend_join(char const *s1, char const *s2)
 	len2 = ft_strlen(s2);
 	dst = malloc(((len1 + len2) * sizeof(char)) + 1);
 	if (!dst)
-		return (0);
+		reset_all(all, 12);
 	while (i < len1)
 	{
 		dst[i] = s1[i];

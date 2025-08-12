@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:15:23 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/11 20:19:10 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:40:16 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,47 +35,19 @@ int	env_list_size(t_env *env)
 	return (count);
 }
 
-char	**env_to_array(t_env *env_list)
-{
-	char	**arr;
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	arr = malloc(sizeof(char *) * (env_list_size(env_list) + 1));
-	if (!arr)
-		return (NULL);
-	while (env_list)
-	{
-		if (env_list->value)
-		{
-			tmp = malloc(strlen(env_list->key) + strlen(env_list->value) + 2);
-			sprintf(tmp, "%s=%s", env_list->key, env_list->value);
-		}
-		else
-		{
-			tmp = strdup(env_list->key);
-		}
-		arr[i++] = tmp;
-		env_list = env_list->next;
-	}
-	arr[i] = NULL;
-	return (arr);
-}
-
-static char	**get_sorted_keys(t_env *env_list)
+static char	**get_sorted_keys(t_all *all)
 {
 	int		size;
 	char	**keys;
 	t_env	*current;
 	int		i;
 
-	current = env_list;
+	current = all->env;
 	i = 0;
-	size = env_list_size(env_list);
+	size = env_list_size(all->env);
 	keys = malloc(sizeof(char *) * (size + 1));
 	if (!keys)
-		return (NULL);
+		reset_all(all, 12);
 	while (current)
 	{
 		keys[i++] = strdup(current->key);
@@ -86,22 +58,22 @@ static char	**get_sorted_keys(t_env *env_list)
 	return (keys);
 }
 
-void	print_sorted_env(t_env *env_list)
+void	print_sorted_env(t_all *all)
 {
 	char	**keys;
 	int		j;
 	t_env	*node;
 
-	keys = get_sorted_keys(env_list);
+	keys = get_sorted_keys(all);
 	if (!keys)
 		return ;
 	j = 0;
-	while (j < env_list_size(env_list))
+	while (j < env_list_size(all->env))
 	{
-		node = find_env_by_key(env_list, keys[j]);
+		node = find_env_by_key(all->env, keys[j]);
 		if (node)
 		{
-			if (node->value)
+			if (node->value && node->value[0] != '\0')
 				printf("declare -x %s=\"%s\"\n",
 					node->key, node->value);
 			else

@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/12 00:43:53 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/12 18:52:22 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	print_card(t_card *card)
 	}
 }
 
-void	reset_all(t_all *all)
+void	reset_all(t_all *all, int status_type)
 {
 	clean_malloc(all);
 	if (all->env)
@@ -49,6 +49,12 @@ void	reset_all(t_all *all)
 		free_env(all->env);
 		all->env = NULL;
 	}
+	rl_clear_history();
+	if (status_type == 12)
+		printf("allocation failed\n");
+	all->exit_status = status_type;
+	// hata çıktılarının ifi olacak status_type a göre
+	exit(all->exit_status);
 }
 
 void	free_env(t_env *env_list)
@@ -82,7 +88,7 @@ void	free_split(char **split)
 	free(split);
 }
 
-void print_env(t_all *all)
+void	print_env(t_all *all)
 {
 	t_env	*current;
 
@@ -114,7 +120,7 @@ int	main(int argc, char **argv, char **env_list)
 		line = readline("minishell>>");
 		if (line == NULL)
 		{
-			reset_all(&all);
+			reset_all(&all, 0);
 			printf("exit\n");
 			all.exit_status = 0;
 			return (0);

@@ -53,12 +53,12 @@ void	put_env(t_all *all, char **env_list)
 		eq_pos = ft_strchr(env_list[i], '=');
 		if (eq_pos)
 		{
-			key = ft_substr(env_list[i], 0, eq_pos - env_list[i]);
-			value = ft_strdup(eq_pos + 1);
+			key = ft_substr(env_list[i], 0, eq_pos - env_list[i], all);
+			value = ft_strdup(eq_pos + 1, all);
 		}
 		else
 		{
-			key = ft_strdup(env_list[i]);
+			key = ft_strdup(env_list[i], all);
 			value = NULL;
 		}
 		create_env((char *[3]){key, value, NULL}, all);

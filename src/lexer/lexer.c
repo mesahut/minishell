@@ -85,7 +85,7 @@ void	split_line(char *line, t_all *all)
 			end = special_case(line[i], line[i + 1], &i);
 		else
 			end = pass_letter(line, &i, &quote);
-		str = ft_substr(line, start, end);
+		str = ft_substr(line, start, end, all);
 		if (str)
 			create_card(all, str);
 	}
@@ -106,7 +106,6 @@ int	line_checker(char *line)
 	}
 	return (1);
 }
-
 
 int	lexer(char *line, t_all *all)
 {
