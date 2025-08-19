@@ -40,6 +40,7 @@ int args_counter(t_card *start)
 		else if (current_card->type == R_APPEND || current_card->type == R_OUT ||
 				 current_card->type == HEREDOC || current_card->type == R_IN)
 		{
+			// Skip the redirection operator and its filename
 			if (current_card->next)
 				current_card = current_card->next;
 		}
@@ -122,7 +123,11 @@ void set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 			t_redirect *redir = safe_malloc(all, sizeof(t_redirect));
 			redir->type = current_card->type;
 			if (current_card->next && current_card->next->value)
+			{
 				redir->filename = current_card->next->value;
+				// Skip the filename token
+				current_card = current_card->next;
+			}
 			else
 				redir->filename = NULL;
 			redir->value = NULL;

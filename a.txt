@@ -1,0 +1,237 @@
+MINISHELL PIPELINE EXECUTION ANALYSIS
+=====================================
+Komut: ls -l | grep "src" | wc -l > a.txt
+
+Bu raporun amacı, minishell'inizin karmaşık bir pipeline komutunu nasıl işlediğini adım adım açıklamaktır.
+
+1. KOMUT PARSING VE TOKEN ÇÖZÜMLEMESİ
+=====================================
+
+1.1 Lexer Aşaması (src/lexer/lexer.c):
+--------------------------------------
+- Girdi: "ls -l | grep \"src\" | wc -l > a.txt"
+- Lexer bu stringi token'lara böler:
+  * Token 1: "ls" (WORD)
+  * Token 2: "-l" (WORD)
+  * Token 3: "|" (PIPE)
+  * Token 4: "grep" (WORD)
+  * Token 5: "src" (WORD)
+  * Token 6: "|" (PIPE)
+  * Token 7: "wc" (WORD)
+  * Token 8: "-l" (WORD)
+  * Token 9: ">" (R_OUT - Output Redirection)
+  * Token 10: "a.txt" (WORD)
+
+1.2 Parser Aşaması (src/parser/parser.c):
+-----------------------------------------
+- parser() fonksiyonu token'ları alır ve komut yapısını oluşturur
+- Her PIPE token'ı yeni bir t_cmd yapısı oluşturur
+- Bu örnekte 3 adet t_cmd yapısı oluşturulur:
+
+Komut 1 (t_cmd):
+- args[0] = "ls"
+- args[1] = "-l"
+- args[2] = NULL
+- redirects = NULL
+- next = Komut 2'ye pointer
+
+Komut 2 (t_cmd):
+- args[0] = "grep"
+- args[1] = "src"
+- args[2] = NULL
+- redirects = NULL
+- next = Komut 3'e pointer
+
+Komut 3 (t_cmd):
+- args[0] = "wc"
+- args[1] = "-l"
+- args[2] = NULL
+- redirects = > a.txt (t_redirect yapısı)
+- next = NULL (son komut)
+
+2. EXECUTION BAŞLANGICI
+=======================
+
+2.1 exec() Fonksiyonu (src/executor/exec_pipeline.c):
+----------------------------------------------------
+- init_pipeline_vars() çağrılır:
+  * cmd = all->cmd (ilk komut)
+  * prev_fd = -1 (başlangıçta önceki file descriptor yok)
+
+- Pipeline'daki her komut için process_single_cmd() çağrılır
+
+3. KOMUT 1 EXECUTION: "ls -l"
+=============================
+
+3.1 process_single_cmd() - Komut 1:
+-----------------------------------
+- process_builtin_cmd() kontrolü: "ls" builtin değil, return 0
+- pipefd[0] = -1, pipefd[1] = -1 (initialize edilir)
+- cmd->next var (grep komutu), bu yüzden pipe(pipefd) çağrılır
+- pipefd[0] = 3 (read end), pipefd[1] = 4 (write end)
+
+3.2 process_fork_cmd() - Komut 1:
+---------------------------------
+- signal_switch(2) çağrılır
+- fork() çağrılır, yeni process oluşturulur
+
+3.3 Child Process (ls -l):
+-------------------------
+- exec_child_process() çağrılır
+- setup_child_io():
+  * prev_fd = -1 (önceki komut yok)
+  * cmd->next var, bu yüzden pipefd[1] STDOUT'a dup2 edilir
+  * pipefd[1] kapatılır
+  * pipefd[0] kapatılır (child'da read end kullanılmaz)
+- handle_redirections(): Komut 1'de redirection yok
+- is_builtin("ls") = false
+- execute_child_cmd():
+  * path_find("ls") = "/bin/ls" bulunur
+  * execve("/bin/ls", ["ls", "-l"], envp) çağrılır
+  * ls komutu çalışır, çıktısı pipe'a yazılır
+
+3.4 Parent Process:
+------------------
+- exec_parent_process():
+  * prev_fd = -1, kapatılacak bir şey yok
+  * waitpid() ile child'ın bitmesi beklenir
+- handle_pipe_parent():
+  * cmd->next var, bu yüzden pipefd[1] kapatılır
+  * prev_fd = pipefd[0] (3) olarak set edilir
+
+4. KOMUT 2 EXECUTION: "grep src"
+===============================
+
+4.1 process_single_cmd() - Komut 2:
+-----------------------------------
+- process_builtin_cmd() kontrolü: "grep" builtin değil, return 0
+- pipefd[0] = -1, pipefd[1] = -1 (initialize edilir)
+- cmd->next var (wc komutu), bu yüzden pipe(pipefd) çağrılır
+- pipefd[0] = 5 (read end), pipefd[1] = 6 (write end)
+
+4.2 process_fork_cmd() - Komut 2:
+---------------------------------
+- fork() çağrılır, yeni process oluşturulur
+
+4.3 Child Process (grep src):
+----------------------------
+- exec_child_process() çağrılır
+- setup_child_io():
+  * prev_fd = 3 (ls komutundan gelen pipe), STDIN'e dup2 edilir
+  * prev_fd kapatılır
+  * cmd->next var, bu yüzden pipefd[1] STDOUT'a dup2 edilir
+  * pipefd[1] kapatılır
+  * pipefd[0] kapatılır
+- handle_redirections(): Komut 2'de redirection yok
+- is_builtin("grep") = false
+- execute_child_cmd():
+  * path_find("grep") = "/bin/grep" bulunur
+  * execve("/bin/grep", ["grep", "src"], envp) çağrılır
+  * grep komutu ls çıktısını okur, "src" içeren satırları bulur
+
+4.4 Parent Process:
+------------------
+- exec_parent_process():
+  * prev_fd = 3, kapatılır
+  * waitpid() ile child'ın bitmesi beklenir
+- handle_pipe_parent():
+  * cmd->next var, bu yüzden pipefd[1] kapatılır
+  * prev_fd = pipefd[0] (5) olarak set edilir
+
+5. KOMUT 3 EXECUTION: "wc -l > a.txt"
+====================================
+
+5.1 process_single_cmd() - Komut 3:
+-----------------------------------
+- process_builtin_cmd() kontrolü: "wc" builtin değil, return 0
+- pipefd[0] = -1, pipefd[1] = -1 (initialize edilir)
+- cmd->next yok (son komut), pipe() çağrılmaz
+
+5.2 process_fork_cmd() - Komut 3:
+---------------------------------
+- fork() çağrılır, yeni process oluşturulur
+
+5.3 Child Process (wc -l):
+-------------------------
+- exec_child_process() çağrılır
+- setup_child_io():
+  * prev_fd = 5 (grep komutundan gelen pipe), STDIN'e dup2 edilir
+  * prev_fd kapatılır
+  * cmd->next yok, pipe setup yapılmaz
+- handle_redirections() çağrılır:
+  * process_single_redirect() çağrılır
+  * redir->type = R_OUT (> a.txt)
+  * handle_redir_out():
+    - open("a.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644)
+    - fd = 7 (a.txt için file descriptor)
+    - dup2(7, STDOUT_FILENO) - STDOUT'u a.txt'ye yönlendirir
+    - close(7)
+- is_builtin("wc") = false
+- execute_child_cmd():
+  * path_find("wc") = "/usr/bin/wc" bulunur
+  * execve("/usr/bin/wc", ["wc", "-l"], envp) çağrılır
+  * wc komutu grep çıktısını okur, satır sayısını hesaplar
+  * Sonuç a.txt dosyasına yazılır
+
+5.4 Parent Process:
+------------------
+- exec_parent_process():
+  * prev_fd = 5, kapatılır
+  * waitpid() ile child'ın bitmesi beklenir
+- handle_pipe_parent():
+  * cmd->next yok, hiçbir pipe cleanup yapılmaz
+
+6. PIPELINE COMPLETION
+=====================
+
+6.1 exec() fonksiyonunda:
+------------------------
+- cmd = cmd->next ile son komuta geçilir
+- cmd = NULL olduğu için while loop sona erer
+- prev_fd = -1 (handle_pipe_parent'ta set edilmedi çünkü son komuttu)
+- Final cleanup yapılmaz çünkü prev_fd = -1
+
+7. FILE DESCRIPTOR YÖNETİMİ
+===========================
+
+7.1 FD Oluşturma ve Kapatma Sırası:
+-----------------------------------
+Pipeline boyunca şu file descriptor'lar kullanıldı:
+
+Komut 1 (ls -l):
+- pipe() çağrısı: pipefd[0]=3, pipefd[1]=4
+- Child: pipefd[1]=4 STDOUT'a dup2, sonra 3,4 kapatılır
+- Parent: pipefd[1]=4 kapatılır, pipefd[0]=3 prev_fd olarak saklanır
+
+Komut 2 (grep src):
+- pipe() çağrısı: pipefd[0]=5, pipefd[1]=6
+- Child: prev_fd=3 STDIN'e dup2, pipefd[1]=6 STDOUT'a dup2, sonra 3,5,6 kapatılır
+- Parent: prev_fd=3 kapatılır, pipefd[1]=6 kapatılır, pipefd[0]=5 prev_fd olarak saklanır
+
+Komut 3 (wc -l > a.txt):
+- pipe() çağrılmaz (son komut)
+- Child: prev_fd=5 STDIN'e dup2, a.txt için fd=7 açılır ve STDOUT'a dup2
+- Parent: prev_fd=5 kapatılır
+
+7.2 Güvenlik Önlemleri:
+-----------------------
+- pipefd array'i her zaman -1 ile initialize edilir (uninitialized değer hatalarını önler)
+- Parent process'te kullanılmayan pipe end'leri hemen kapatılır
+- Child process'te tüm pipe end'leri kullanıldıktan sonra kapatılır
+- Redirection'lar için açılan dosyalar dup2'den sonra kapatılır
+
+8. SONUÇ
+========
+
+Bu pipeline komutu şu adımları takip etti:
+1. "ls -l" komutu çalıştırıldı, çıktısı pipe'a yazıldı
+2. "grep src" komutu pipe'tan okudu, "src" içeren satırları buldu (1 satır)
+3. "wc -l" komutu grep çıktısını okudu, satır sayısını hesapladı (1)
+4. Sonuç "a.txt" dosyasına yazıldı
+
+Final dosya içeriği: "1\n"
+
+Bu işlem sırasında 3 adet child process oluşturuldu, 2 adet pipe kullanıldı ve 1 adet dosya redirection yapıldı. Tüm file descriptor'lar düzgün şekilde yönetildi ve memory leak'i önlendi.
+
+PIPELINE EXECUTION TAMAMLANDI
+==============================

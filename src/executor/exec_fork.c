@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/15 12:00:00 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/19 09:19:24 by asezgin          ###   ########.fr       */
+/*   Created: 2025/08/19 09:40:17 by asezgin           #+#    #+#             */
+/*   Updated: 2025/08/19 09:50:30 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,13 @@ static void	handle_pipe_parent(t_cmd *cmd, int *prev_fd, int pipefd[2])
 {
 	if (cmd->next)
 	{
-		close(pipefd[1]);
-		*prev_fd = pipefd[0];
-	}
-	else
-	{
+		// Only close if pipe was actually created
 		if (pipefd[1] != -1)
 			close(pipefd[1]);
-		if (pipefd[0] != -1)
-			close(pipefd[0]);
+		*prev_fd = pipefd[0];
 	}
+	// Note: When cmd->next is NULL, no pipe was created, so no cleanup needed
+	// The pipefd array will contain -1 values from initialization
 }
 
 int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd)

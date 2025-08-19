@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/15 12:00:00 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/19 09:19:27 by asezgin          ###   ########.fr       */
+/*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
+/*   Updated: 2025/08/19 09:50:30 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,13 @@ static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2])
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
-	if (cmd->next)
+	if (cmd->next && pipefd[1] != -1)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
+		// Close the read end of the pipe in child
+		if (pipefd[0] != -1)
+			close(pipefd[0]);
 	}
 }
 

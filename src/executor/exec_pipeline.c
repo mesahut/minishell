@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/15 12:00:00 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/19 09:35:22 by asezgin          ###   ########.fr       */
+/*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
+/*   Updated: 2025/08/19 09:50:43 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static int	process_single_cmd(t_cmd *cmd, t_all *all, int *prev_fd)
 
 	if (process_builtin_cmd(cmd, all, *prev_fd))
 		return (1);
+	pipefd[0] = -1;
+	pipefd[1] = -1;
 	if (cmd->next && pipe(pipefd) == -1)
 	{
 		perror("pipe");

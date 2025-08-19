@@ -31,7 +31,6 @@ SRCS = src/main.c \
 	src/utils/utils.c \
 	src/utils/debug_utils.c \
 	src/signal/signal.c \
-	src/executor/exec_clean.c \
 	src/lexer/lexer_utils.c \
 	src/expansion/expand_utils.c \
 	src/expansion/node_utils.c \
