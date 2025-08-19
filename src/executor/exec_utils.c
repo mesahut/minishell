@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:40 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/12 18:09:12 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/19 09:19:24 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../include/minishell.h"
 #include <unistd.h>
@@ -17,99 +16,29 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
-char	*ft_strjoin3(char *s1, char *s2, char *s3, t_all *all)
+static int	print_error_msg(char *cmd)
 {
-	char *tmp = ft_strjoin(s1, s2, all);
-	char *result = ft_strjoin(tmp, s3, all);
-	free(tmp);
-	return (result);
+	if (cmd[0] == '/')
+	{
+		printf("%s: No such file or directory\n", cmd);
+		return (EXIT_COMMAND_NOT_FOUND);
+	}
+	else if (cmd[0] == '>' || cmd[0] == '<')
+	{
+		printf("%s: syntax error\n", cmd);
+		return (EXIT_MISUSE);
+	}
+	else
+	{
+		printf("%s: command not found\n", cmd);
+		return (EXIT_COMMAND_NOT_FOUND);
+	}
 }
 
-char	*path_find(char *cmd, t_all *all)
+static void	free_envp_array(char **envp)
 {
-	char	**paths;
-	char	*path_env;
-	char	*full_path;
-	int		i;
-	if (!cmd)
-		return (NULL);
-	if (cmd[0] == '/' || cmd[0] == '.')
-	{
-		if (access(cmd, X_OK) == 0)
-			return ((cmd));
-		else
-			return (NULL);
-	}
-	path_env = getenv("PATH");
-	if (!path_env)
-		return (NULL);
+	int	i;
 
-	paths = ft_split(path_env, ':', all);
-	if (!paths)
-		return (NULL);
-	i = 0;
-	while (paths[i])
-	{
-		full_path = ft_strjoin3(paths[i], "/", cmd, all);
-		if (access(full_path, X_OK) == 0)
-		{
-			free_split(paths);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
-	}
-	free_split(paths);
-	return (NULL);
-}
-
-char	**list_to_envp(t_all *all)
-{
-	t_env	*current;
-	int		count;
-	int		i;
-
-	current = all->env;
-	count = 0;
-	while (current)
-	{
-		count++;
-		current = current->next;
-	}
-	char **envp = malloc(sizeof(char *) * (count + 1));
-	if (!envp)
-	{
-		reset_all(all, 12);
-		exit(12);
-	}
-	current = all->env;
-	i = 0;
-	while (i < count)
-	{
-		char *temp = ft_strjoin(current->key, "=", all);
-		envp[i] = ft_strjoin(temp, current->value, all);
-		free(temp);
-		current = current->next;
-		i++;
-	}
-	envp[count] = NULL;
-	return (envp);
-}
-void	exec_external_cmd(char *path, char **args, t_all *all)
-{
-	char	**envp;
-	int		i;
-
-	envp = list_to_envp(all);
-	execve(path, args, envp);
-	if (args[0][0] == '/')
-		printf("%s: No such file or directory\n", args[0]);
-	else if (args[0][0] == '>' || args[0][0] == '<')
-		printf("%s: syntax error\n", args[0]);
-	else 
-		printf("%s: command not found\n", args[0]);
-	if (path)
-		free(path);
 	if (envp)
 	{
 		i = 0;
@@ -120,9 +49,22 @@ void	exec_external_cmd(char *path, char **args, t_all *all)
 		}
 		free(envp);
 	}
+}
+
+void	exec_external_cmd(char *path, char **args, t_all *all)
+{
+	char	**envp;
+	int		exit_code;
+
+	envp = list_to_envp(all);
+	execve(path, args, envp);
+	exit_code = print_error_msg(args[0]);
+	if (path)
+		free(path);
+	free_envp_array(envp);
 	reset_all(all, 0);
 	rl_clear_history();
-	exit(1);
+	exit(exit_code);
 }
 
 char	*here_expand(char *str, t_all *all)
@@ -157,4 +99,3 @@ int	check_here_flag(t_card *card, char *eof)
 	}
 	return (1);
 }
-

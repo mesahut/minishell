@@ -43,7 +43,7 @@ void	create_collector(t_all *all, void *address)
 	if (new_card == NULL)
 	{
 		reset_all(all, 12);
-		exit(12);
+		exit(EXIT_FAILURE);
 	}
 	new_card->value = address;
 	new_card->next = NULL;
@@ -66,7 +66,7 @@ void	*safe_malloc(t_all *all, int size)
 	if (str == NULL)
 	{
 		reset_all(all, 12);
-		exit(12);
+		exit(EXIT_FAILURE);
 	}
 	create_collector(all, str);
 	return (str);

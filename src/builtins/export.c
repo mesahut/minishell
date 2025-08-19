@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/12 18:50:42 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/19 09:19:24 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static void	append_env_node(t_all *all, const char *key, const char *value)
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 	{
-		reset_all(all, 12);
-		exit(12);
+		reset_all(all, EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	new_node->key = ft_strdup(key, all);
 	new_node->value = ft_strdup(value, all);

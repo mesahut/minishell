@@ -9,9 +9,16 @@ SRCS = src/main.c \
 	src/expansion/expand.c \
 	src/lexer/lexer.c \
 	src/parser/parser.c \
-	src/executor/exec.c \
 	src/executor/exec_utils.c \
 	src/executor/exec_parts.c \
+	src/executor/exec_redirect.c \
+	src/executor/exec_heredoc.c \
+	src/executor/exec_child.c \
+	src/executor/exec_parent.c \
+	src/executor/exec_path.c \
+	src/executor/exec_env.c \
+	src/executor/exec_pipeline.c \
+	src/executor/exec_fork.c \
 	src/builtins/builtin.c \
 	src/builtins/cd.c \
 	src/builtins/pwd.c \
@@ -22,6 +29,7 @@ SRCS = src/main.c \
 	src/builtins/export.c \
 	src/builtins/exit.c \
 	src/utils/utils.c \
+	src/utils/debug_utils.c \
 	src/signal/signal.c \
 	src/executor/exec_clean.c \
 	src/lexer/lexer_utils.c \

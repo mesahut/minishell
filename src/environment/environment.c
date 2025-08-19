@@ -21,7 +21,7 @@ void	create_env(char **env_line, t_all *all)
 	if (!new_env)
 	{
 		free_env(all->env);
-		exit(12);
+		exit(EXIT_FAILURE);
 	}
 	new_env->key = strdup(env_line[0]);
 	if (env_line[1])

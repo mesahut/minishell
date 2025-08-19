@@ -37,6 +37,14 @@
 # define STDOUT 1
 # define STDERR 2
 
+# define EXIT_SUCCESS 0
+# define EXIT_FAILURE 1
+# define EXIT_MISUSE 2
+# define EXIT_CANNOT_EXECUTE 126
+# define EXIT_COMMAND_NOT_FOUND 127
+# define EXIT_INVALID_EXIT 128
+# define EXIT_CTRL_C 130
+
 
 typedef struct s_collector
 {
@@ -142,9 +150,9 @@ int		check_here_flag(t_card *card, char *eof);
 void	handle_redirections(t_cmd *cmd, t_all *all);
 
 // Exec pipeline functions
-void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd, int saved_stdin, int saved_stdout);
+void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
-void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2], pid_t pid);
+void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid);
 void	exec_pipeline(t_all *all);
 // expand nomundan sonra eklenenler
 void	del_quote(t_all *all);
