@@ -150,6 +150,8 @@ int		check_here_flag(t_card *card, char *eof);
 void	handle_redirections(t_cmd *cmd, t_all *all);
 
 // Exec pipeline functions
+void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2]);
+int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
 void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid);

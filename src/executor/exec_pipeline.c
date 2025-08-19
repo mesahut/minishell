@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:00:00 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/19 09:19:27 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/19 09:35:22 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd);
-void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2]);
 
 static void	init_pipeline_vars(t_all *all, t_cmd **cmd, int *prev_fd)
 {

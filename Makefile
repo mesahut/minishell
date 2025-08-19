@@ -17,8 +17,8 @@ SRCS = src/main.c \
 	src/executor/exec_parent.c \
 	src/executor/exec_path.c \
 	src/executor/exec_env.c \
-	src/executor/exec_pipeline.c \
 	src/executor/exec_fork.c \
+	src/executor/exec_pipeline.c \
 	src/builtins/builtin.c \
 	src/builtins/cd.c \
 	src/builtins/pwd.c \
