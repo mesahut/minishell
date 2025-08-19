@@ -18,9 +18,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void	handle_exit_status(t_all *all)
+char	*handle_exit_status(t_all *all)
 {
-	printf("%d: command not found\n", all->exit_status);
+	char	*status_str;
+	
+	status_str = ft_itoa(all->exit_status, all);
+	return (status_str);
 }
 
 char	*found_dollar(char *line, int dollar_place, t_all *all)
@@ -28,28 +31,48 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 	char	*before;
 	char	*after;
 	char	*env;
+	char	*result;
 	int		len;
 
 	len = 0;
 	before = ft_substr(line, 0, dollar_place, all);
 	if (line[dollar_place + 1] == '?')
 	{
-		handle_exit_status(all);
-		return (0);
+		env = handle_exit_status(all);
+		after = ft_substr(line, dollar_place + 2, ft_strlen(line) - (dollar_place + 2), all);
+		result = ft_strjoin(before, env, all);
+		free(before);
+		free(env);
+		before = ft_strjoin(result, after, all);
+		free(result);
+		free(after);
+		return (before);
 	}
 	while (line[dollar_place + len + 1] != '\0' && \
 		(ft_isalnum(line[dollar_place + len + 1]) == 1))
 		len++;
+	
+	// If no valid identifier follows $, treat $ as literal
+	if (len == 0)
+	{
+		free(before);
+		// Return the original line unchanged
+		return (ft_strdup(line, all));
+	}
+	
 	after = ft_substr(line, dollar_place + 1, len, all);
 	env = ft_getenv(all->env, after);
 	env = ft_strdup(env, all);
 	free(after);
 	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line)
 			- (dollar_place + len + 1), all);
-	before = expend_join(before, env, all);
-	after = expend_join(before, after, all);
-	after = collector_dup(all, after);
-	return (after);
+	result = ft_strjoin(before, env, all);
+	free(before);
+	free(env);
+	before = ft_strjoin(result, after, all);
+	free(result);
+	free(after);
+	return (before);
 }
 
 void	check_tilde(t_all *all, t_card *node)

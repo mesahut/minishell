@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:43:51 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/19 15:15:06 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,18 @@ int	handle_heredoc_process(t_redirect *redir, t_all *all)
 	}
 	close(redir->fd);
 	return (0);
+}
+
+int	check_here_flag(t_card *card, char *eof)
+{
+	t_card	*current;
+
+	current = card;
+	while (current)
+	{
+		if (current->here_flag == 1 && strcmp(current->value, eof) == 0)
+			return (0);
+		current = current->next;
+	}
+	return (1);
 }

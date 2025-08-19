@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:50:30 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/19 15:16:24 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
+
+void	handle_output_redirects(t_redirect *redir)
+{
+	if (redir->type == R_OUT)
+	{
+		if (handle_redir_out(redir))
+			exit(EXIT_FAILURE);
+	}
+	else if (redir->type == R_APPEND)
+	{
+		if (handle_redir_append(redir))
+			exit(EXIT_FAILURE);
+	}
+}
 
 static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2])
 {
@@ -27,17 +42,9 @@ static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2])
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
-		// Close the read end of the pipe in child
 		if (pipefd[0] != -1)
 			close(pipefd[0]);
 	}
-}
-
-static void	cleanup_and_exit(t_all *all, int status)
-{
-	reset_all(all, 0);
-	rl_clear_history();
-	exit(status);
 }
 
 static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
@@ -58,7 +65,7 @@ static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
 		}
 		free(envp);
 	}
-			cleanup_and_exit(all, EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 static void	execute_child_cmd(t_cmd *cmd, t_all *all)
@@ -70,12 +77,11 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 		execute_with_path(path, cmd, all);
 	else
 	{
-		all->exit_status = EXIT_COMMAND_NOT_FOUND;
 		if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
 			printf("%s: No such file or directory\n", cmd->args[0]);
 		else
 			printf("%s: command not found\n", cmd->args[0]);
-		cleanup_and_exit(all, EXIT_COMMAND_NOT_FOUND);
+		exit(EXIT_COMMAND_NOT_FOUND);
 	}
 }
 

@@ -37,8 +37,6 @@ char	*expend_join(char const *s1, char const *s2, t_all *all)
 		i++;
 	}
 	dst[i] = '\0';
-	free((void *)s1);
-	free((void *)s2);
 	return (dst);
 }
 

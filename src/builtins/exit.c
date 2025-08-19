@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:19:24 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/19 15:27:35 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,12 @@ int	ft_exit(t_all *all, t_cmd *cmd)
 	}
 	if (cmd->args[2])
 	{
-		printf("minishell: exit: too many arguments\n");
+		fprintf(stderr, "too many arguments\n");
 		return (1);
 	}
 	if (is_numeric_overflow(cmd->args[1]) || !is_valid_number(cmd->args[1]))
 	{
-		printf("minishell: exit: %s: numeric argument required\n", cmd->args[1]);
+		fprintf(stderr, "numeric argument required\n");
 		exit_with_cleanup(all, EXIT_MISUSE);
 	}
 	exit_code = (unsigned char)ft_atol(cmd->args[1]);

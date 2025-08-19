@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:07:59 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/12 18:09:47 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/19 14:38:48 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,48 @@ char	*ft_substr(char const *s, unsigned int start, size_t len, t_all *all)
 	}
 	sb[i] = '\0';
 	return (sb);
+}
+
+static int	count_digits(int n)
+{
+	int	count;
+
+	count = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+		count = 1;
+	while (n != 0)
+	{
+		n /= 10;
+		count++;
+	}
+	return (count);
+}
+
+char	*ft_itoa(int n, t_all *all)
+{
+	char	*str;
+	int		len;
+	long	num;
+
+	num = n;
+	len = count_digits(n);
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
+		reset_all(all, 12);
+	str[len] = '\0';
+	if (num == 0)
+		str[0] = '0';
+	if (num < 0)
+	{
+		str[0] = '-';
+		num = -num;
+	}
+	while (num > 0)
+	{
+		str[--len] = (num % 10) + '0';
+		num /= 10;
+	}
+	return (str);
 }

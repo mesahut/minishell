@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:44:36 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/19 15:15:06 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <readline/readline.h>
+#include <fcntl.h>
 
 static int	print_error_msg(char *cmd)
 {
@@ -84,18 +85,4 @@ char	*here_expand(char *str, t_all *all)
 		i++;
 	}
 	return (str);
-}
-
-int	check_here_flag(t_card *card, char *eof)
-{
-	t_card	*current;
-
-	current = card;
-	while (current)
-	{
-		if (current->here_flag == 1 && strcmp(current->value, eof) == 0)
-			return (0);
-		current = current->next;
-	}
-	return (1);
 }

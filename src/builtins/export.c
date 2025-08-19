@@ -6,91 +6,85 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:19:24 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/19 16:02:36 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	update_env_value(t_env *env, const char *key, const char *value)
+static int	is_valid_identifier(const char *identifier)
 {
-	while (env)
+	int	i;
+
+	if (!identifier || !*identifier)
+		return (0);
+	if (ft_isdigit(identifier[0]) || identifier[0] == '=')
+		return (0);
+	i = 0;
+	while (identifier[i] && identifier[i] != '=')
 	{
-		if (strcmp(env->key, key) == 0)
-		{
-			free(env->value);
-			env->value = strdup(value);
-			return (1);
-		}
-		env = env->next;
+		if (!ft_isalnum(identifier[i]) && identifier[i] != '_')
+			return (0);
+		i++;
 	}
+	return (1);
+}
+
+static int	handle_export_with_value(t_all *all, const char *arg)
+{
+	char	*arg_copy;
+	char	*equal_pos;
+	char	*value;
+
+	arg_copy = ft_strdup(arg, all);
+	if (!arg_copy)
+		return (1);
+	equal_pos = strchr(arg_copy, '=');
+	value = equal_pos + 1;
+	*equal_pos = '\0';
+	add_or_update_env(all, arg_copy, value);
+	free(arg_copy);
 	return (0);
 }
 
-static void	append_env_node(t_all *all, const char *key, const char *value)
+static int	handle_export_without_value(t_all *all, const char *arg)
 {
-	t_env	*new_node;
-	t_env	*current;
+	char	*arg_copy;
 
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-	{
-		reset_all(all, EXIT_FAILURE);
-		exit(EXIT_FAILURE);
-	}
-	new_node->key = ft_strdup(key, all);
-	new_node->value = ft_strdup(value, all);
-	new_node->next = NULL;
-	if (!all->env)
-	{
-		all->env = new_node;
-		return ;
-	}
-	current = all->env;
-	while (current->next)
-		current = current->next;
-	current->next = new_node;
-}
-
-void	add_or_update_env(t_all *all, const char *key, const char *value)
-{
-	if (!update_env_value(all->env, key, value))
-		append_env_node(all, key, value);
+	arg_copy = ft_strdup(arg, all);
+	if (!arg_copy)
+		return (1);
+	append_env_node(all, arg_copy, NULL);
+	free(arg_copy);
+	return (0);
 }
 
 static int	parse_export_arg(t_all *all, const char *arg)
 {
 	const char	*equal_sign;
-	char		*arg_copy;
-	char		*equal_pos;
 
-	if (arg && (ft_isdigit(arg[0]) || arg[0] == '='))
+	if (!arg)
+		return (1);
+	if (!is_valid_identifier(arg))
 	{
-		fprintf(stderr, "export: `%s`: not a valid identifier\n", arg);
+		fprintf(stderr, "not a valid identifier\n");
+		all->exit_status = 1;
 		return (1);
 	}
 	equal_sign = strchr(arg, '=');
-	arg_copy = ft_strdup(arg, all);
-	if (!equal_sign)
-	{
-		append_env_node(all, arg_copy, NULL);
-		free(arg_copy);
-		return (1);
-	}
-	if (!arg_copy)
-		return (1);
-	equal_pos = strchr(arg_copy, '=');
-	*equal_pos = '\0';
-	add_or_update_env(all, arg_copy, equal_pos + 1);
-	free(arg_copy);
-	return (0);
+	if (equal_sign)
+		return (handle_export_with_value(all, arg));
+	else
+		return (handle_export_without_value(all, arg));
 }
 
 int	ft_export(t_all *all, t_cmd *cmd)
 {
 	int	i;
+	int	has_error;
 
 	i = 1;
+	has_error = 0;
 	if (!cmd->args[1])
 	{
 		print_sorted_env(all);
@@ -98,8 +92,9 @@ int	ft_export(t_all *all, t_cmd *cmd)
 	}
 	while (cmd->args[i])
 	{
-		parse_export_arg(all, cmd->args[i]);
+		if (parse_export_arg(all, cmd->args[i]))
+			has_error = 1;
 		i++;
 	}
-	return (0);
+	return (has_error);
 }

@@ -18,7 +18,7 @@
 - [x] | cat bizim çıktımız (null): command not found olması gereken syntax error
 - [ ] mallocların hata durumları kontrol edilecek
 - [ ] string.h tan çekilen fonksiyonlar ftler ile değiştirilecek
-- [ ] ls /nonexistent 2> /tmp/error_test cat /tmp/error_test testinde bizim çıktımız: ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
-                                                                                      ls: '2' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
-                                                                                      ls: 'cat' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
-                                                                    bash in çıktısı : ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+- [x] ls /nonexistent 2> /tmp/error_test cat /tmp/error_test testinde bizim çıktımız: ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+                                                                                     ls: '2' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+                                                                                     ls: 'cat' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+                                                                   bash in çıktısı : ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok

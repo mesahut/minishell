@@ -14,7 +14,6 @@ SRCS = src/main.c \
 	src/executor/exec_redirect.c \
 	src/executor/exec_heredoc.c \
 	src/executor/exec_child.c \
-	src/executor/exec_parent.c \
 	src/executor/exec_path.c \
 	src/executor/exec_env.c \
 	src/executor/exec_fork.c \
@@ -29,7 +28,6 @@ SRCS = src/main.c \
 	src/builtins/export.c \
 	src/builtins/exit.c \
 	src/utils/utils.c \
-	src/utils/debug_utils.c \
 	src/signal/signal.c \
 	src/lexer/lexer_utils.c \
 	src/expansion/expand_utils.c \

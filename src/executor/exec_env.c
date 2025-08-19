@@ -6,13 +6,50 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:43 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:43:44 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/19 15:17:33 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <fcntl.h>
+
+int	handle_redir_append(t_redirect *redir)
+{
+	redir->fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (redir->fd < 0)
+	{
+		perror(redir->filename);
+		return (1);
+	}
+	if (dup2(redir->fd, STDOUT_FILENO) == -1)
+	{
+		perror("dup2 for append");
+		close(redir->fd);
+		return (1);
+	}
+	close(redir->fd);
+	return (0);
+}
+
+int	handle_redir_in(t_redirect *redir)
+{
+	redir->fd = open(redir->filename, O_RDONLY);
+	if (redir->fd < 0)
+	{
+		perror(redir->filename);
+		return (1);
+	}
+	if (dup2(redir->fd, STDIN_FILENO) == -1)
+	{
+		perror("dup2 for input");
+		close(redir->fd);
+		return (1);
+	}
+	close(redir->fd);
+	return (0);
+}
 
 static int	count_env_vars(t_env *env)
 {

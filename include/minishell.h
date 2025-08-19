@@ -32,6 +32,8 @@
 # define HEREDOC 3
 # define R_IN 4
 # define WORD 5
+# define R_ERR_OUT 6
+# define R_ERR_APPEND 7
 
 # define STDIN 0
 # define STDOUT 1
@@ -44,7 +46,6 @@
 # define EXIT_COMMAND_NOT_FOUND 127
 # define EXIT_INVALID_EXIT 128
 # define EXIT_CTRL_C 130
-
 
 typedef struct s_collector
 {
@@ -99,7 +100,7 @@ typedef struct s_all
 
 extern int	g_signal;
 
-void    set_cmd(t_card *cursor, t_all *all, t_cmd *cmd);
+void	set_cmd(t_card *cursor, t_all *all, t_cmd *cmd);
 void	parser(t_all *all);
 void	exec(t_all *all);
 void	create_card(t_all *all, char *card);
@@ -128,6 +129,8 @@ void	print_sorted_env(t_all *all);
 int		ft_exit(t_all *all, t_cmd *cmd);
 t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
+int		update_env_value(t_env *env, const char *key, const char *value);
+void	append_env_node(t_all *all, const char *key, const char *value);
 
 int		check_for_expansion(t_all *all);
 char	*found_dollar(char *line, int dollar_place, t_all *all);
@@ -137,42 +140,48 @@ void	sig_int(int code);
 void	sig_quit(int code);
 void	sig_prompt(int sig);
 void	signal_switch(int status);
-// Exec utility functions
+
 char	*path_find(char *cmd, t_all *all);
 char	**list_to_envp(t_all *all);
 void	exec_external_cmd(char *path, char **args, t_all *all);
 char	*here_expand(char *str, t_all *all);
 int		check_here_flag(t_card *card, char *eof);
 void	handle_redirections(t_cmd *cmd, t_all *all);
+int		handle_redir_append(t_redirect *redir);
+int		handle_redir_in(t_redirect *redir);
+int		handle_redir_err_out(t_redirect *redir);
+int		handle_redir_err_append(t_redirect *redir);
+void	handle_output_redirects(t_redirect *redir);
 
-// Exec pipeline functions
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2]);
 int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
 void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid);
 void	exec_pipeline(t_all *all);
-// expand nomundan sonra eklenenler
+
 void	del_quote(t_all *all);
 void	put_title(t_all *all);
 void	delim_node(t_all *all, t_card *node);
 void	check_node(t_card *card, t_card *prev);
 char	*ft_getenv(t_env *env, char *key);
-// lexer normundan sonra eklenenler
-int	is_space(char c);
-int	special_case(char c, char next, int *place);
-int	is_operator(char c, char next);
-void	insert_node_at(t_all *all, t_card **pos, char *str);
-void print_cmd(t_cmd *cmd);
+int		handle_redir_out(t_redirect *redir);
 
-int ft_strlen(const char *s);
+int		is_space(char c);
+int		special_case(char c, char next, int *place);
+int		is_operator(char c, char next);
+void	insert_node_at(t_all *all, t_card **pos, char *str);
+int		handle_heredoc_process(t_redirect *redir, t_all *all);
+
+int		ft_strlen(const char *s);
 void	*ft_calloc(size_t nmemb, size_t size);
-int	ft_isalnum(int c);
-int	ft_isdigit(int c);
+int		ft_isalnum(int c);
+int		ft_isdigit(int c);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s1, t_all *all);
 char	*ft_strjoin(char const *s1, char const *s2, t_all *all);
 char	*ft_substr(char const *s, unsigned int start, size_t len, t_all *all);
 char	**ft_split(char const *s, char c, t_all *all);
+char	*ft_itoa(int n, t_all *all);
 
 #endif

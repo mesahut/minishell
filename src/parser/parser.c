@@ -20,7 +20,8 @@ int redir_counter(t_card *start)
 	while (current_card && current_card->type != PIPE)
 	{
 		if (current_card->type == R_APPEND || current_card->type == R_OUT ||
-			current_card->type == HEREDOC || current_card->type == R_IN)
+			current_card->type == HEREDOC || current_card->type == R_IN ||
+			current_card->type == R_ERR_OUT || current_card->type == R_ERR_APPEND)
 			count++;
 		current_card = current_card->next;
 	}
@@ -38,7 +39,8 @@ int args_counter(t_card *start)
 		if (current_card->type == WORD || current_card->type == -1)
 			count++;
 		else if (current_card->type == R_APPEND || current_card->type == R_OUT ||
-				 current_card->type == HEREDOC || current_card->type == R_IN)
+				 current_card->type == HEREDOC || current_card->type == R_IN ||
+				 current_card->type == R_ERR_OUT || current_card->type == R_ERR_APPEND)
 		{
 			// Skip the redirection operator and its filename
 			if (current_card->next)
@@ -118,7 +120,8 @@ void set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 	while (current_card && current_card->type != PIPE)
 	{
 		if (current_card->type == R_APPEND || current_card->type == R_OUT ||
-			current_card->type == HEREDOC || current_card->type == R_IN)
+			current_card->type == HEREDOC || current_card->type == R_IN ||
+			current_card->type == R_ERR_OUT || current_card->type == R_ERR_APPEND)
 		{
 			t_redirect *redir = safe_malloc(all, sizeof(t_redirect));
 			redir->type = current_card->type;
@@ -146,7 +149,61 @@ void set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 		else if ((current_card->type == WORD || current_card->type == -1)
 				&& current_card->value)
 		{
-			if (i < current_cmd->args_count)
+			// Check for stderr redirection pattern "2>"
+			if (current_card->value[0] == '2' && current_card->value[1] == '\0' &&
+				current_card->next && current_card->next->type == R_OUT)
+			{
+				t_redirect *redir = safe_malloc(all, sizeof(t_redirect));
+				redir->type = R_ERR_OUT;
+				current_card = current_card->next; // Move to ">" token
+				if (current_card->next && current_card->next->value)
+				{
+					redir->filename = current_card->next->value;
+					current_card = current_card->next; // Skip filename
+				}
+				else
+					redir->filename = NULL;
+				redir->value = NULL;
+				redir->fd = -1;
+				redir->next = NULL;
+				if (!current_cmd->redirects)		
+					current_cmd->redirects = redir;
+				else
+				{
+					t_redirect *tmp = current_cmd->redirects;
+					while (tmp->next)
+						tmp = tmp->next;
+					tmp->next = redir;
+				}
+			}
+			// Check for stderr append redirection pattern "2>>"
+			else if (current_card->value[0] == '2' && current_card->value[1] == '\0' &&
+				current_card->next && current_card->next->type == R_APPEND)
+			{
+				t_redirect *redir = safe_malloc(all, sizeof(t_redirect));
+				redir->type = R_ERR_APPEND;
+				current_card = current_card->next; // Move to ">>" token
+				if (current_card->next && current_card->next->value)
+				{
+					redir->filename = current_card->next->value;
+					current_card = current_card->next; // Skip filename
+				}
+				else
+					redir->filename = NULL;
+				redir->value = NULL;
+				redir->fd = -1;
+				redir->next = NULL;
+				if (!current_cmd->redirects)		
+					current_cmd->redirects = redir;
+				else
+				{
+					t_redirect *tmp = current_cmd->redirects;
+					while (tmp->next)
+						tmp = tmp->next;
+					tmp->next = redir;
+				}
+			}
+			else if (i < current_cmd->args_count)
 			{
 				current_cmd->args[i] = current_card->value;
 				i++;
