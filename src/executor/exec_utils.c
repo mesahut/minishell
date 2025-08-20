@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:15:06 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/20 11:18:02 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ char	*here_expand(char *str, t_all *all)
 		if (str[i] == '$' && str[i + 1] != '\0')
 		{
 			str = found_dollar(str, i, all);
+			i = -1;
 		}
 		i++;
 	}

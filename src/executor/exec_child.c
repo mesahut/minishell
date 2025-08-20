@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:16:24 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/20 11:15:10 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 			printf("%s: No such file or directory\n", cmd->args[0]);
 		else
 			printf("%s: command not found\n", cmd->args[0]);
+		reset_all(all, EXIT_COMMAND_NOT_FOUND);
 		exit(EXIT_COMMAND_NOT_FOUND);
 	}
 }
