@@ -6,22 +6,12 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:07:59 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/19 14:38:48 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/22 18:00:05 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "../../include/minishell.h"
-
-int	ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s && s[i] != '\0')
-		i++;
-	return (i);
-}
 
 char	*ft_strdup(const char *s1, t_all *all)
 {

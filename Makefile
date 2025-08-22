@@ -3,8 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 
-SRCS = src/main.c \
-	src/utils/card_list.c \
+SRCS = src/utils/card_list.c \
 	src/environment/environment.c \
 	src/expansion/expand.c \
 	src/lexer/lexer.c \
@@ -35,7 +34,10 @@ SRCS = src/main.c \
 	src/expansion/quote_ignore.c \
 	src/utils/libft_utils.c \
 	src/utils/ft_split.c \
-	
+	src/utils/libft_utils2.c \
+	src/main.c \
+	src/utils/clean.c \
+
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)

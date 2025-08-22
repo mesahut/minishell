@@ -114,7 +114,6 @@ int		exec_builtin(t_all *all, t_cmd *cmd);
 int		is_builtin(char *cmd);
 char	*expend_join(char const *s1, char const *s2, t_all *all);
 int		flag_check(char *arg);
-void	print_card(t_card *card);
 void	reset_all(t_all *all, int status_type);
 void	free_env(t_env *env_list);
 void	free_split(char **split);

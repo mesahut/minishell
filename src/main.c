@@ -6,101 +6,11 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/19 09:26:13 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/22 18:06:37 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-char	*collector_dup(t_all *all, char *line)
-{
-	char	*str;
-	int		i;
-
-	i = 0;
-	str = (char *)safe_malloc(all, ft_strlen(line) + 1);
-	while (line[i])
-	{
-		str[i] = line[i];
-		i++;
-	}
-	str[i] = '\0';
-	free(line);
-	return (str);
-}
-
-void	print_card(t_card *card)
-{
-	t_card	*current;
-
-	current = card;
-	while (current)
-	{
-		printf("type: %d, Value: %s\n", current->type, current->value);
-		current = current->next;
-	}
-}
-
-void	reset_all(t_all *all, int status_type)
-{
-	clean_malloc(all);
-	if (all->env)
-	{
-		free_env(all->env);
-		all->env = NULL;
-	}
-	rl_clear_history();
-	if (status_type == EXIT_FAILURE)
-		printf("allocation failed\n");
-	all->exit_status = status_type;
-	exit(all->exit_status);
-}
-
-void	free_env(t_env *env_list)
-{
-	t_env	*current;
-	t_env	*next;
-
-	current = env_list;
-	while (current)
-	{
-		next = current->next;
-		free(current->key);
-		free(current->value);
-		free(current);
-		current = next;
-	}
-}
-
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	if (!split)
-		return ;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}
-
-void	print_env(t_all *all)
-{
-	t_env	*current;
-
-	current = all->env;
-	while (current)
-	{
-		if (current->value)
-			printf("%s=%s\n", current->key, current->value);
-		else
-			printf("%s=\n", current->key);
-		current = current->next;
-	}
-}
 
 int	main(int argc, char **argv, char **env_list)
 {

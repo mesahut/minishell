@@ -76,7 +76,7 @@ t_cmd *init_cmd(t_cmd *head_cmd, t_card *cursor, t_all *all)
 	cmd->args = (char **)safe_malloc(all, sizeof(char *) * (arg_count + 1));
 	if (!cmd->args)
 		return NULL;
-
+	//WHİLE
 	for (int i = 0; i <= arg_count; i++)
 		cmd->args[i] = NULL;
 
