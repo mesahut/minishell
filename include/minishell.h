@@ -112,7 +112,7 @@ void	clean_malloc(t_all *all);
 char	*collector_dup(t_all *all, char *line);
 int		exec_builtin(t_all *all, t_cmd *cmd);
 int		is_builtin(char *cmd);
-char	*expend_join(char const *s1, char const *s2, t_all *all);
+char	*expend_join(char *s1, char *s2, t_all *all);
 int		flag_check(char *arg);
 void	reset_all(t_all *all, int status_type);
 void	free_env(t_env *env_list);
@@ -134,6 +134,10 @@ void	append_env_node(t_all *all, const char *key, const char *value);
 int		check_for_expansion(t_all *all);
 char	*found_dollar(char *line, int dollar_place, t_all *all);
 char	is_char_quote(char value, char quote_type);
+char	*handle_exit_status(t_all *all, int dollar, char *before, char *line);
+void	check_tilde(t_all *all, t_card *node);
+int		syntax_checker(t_all *all);
+
 
 void	sig_int(int code);
 void	sig_quit(int code);

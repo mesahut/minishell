@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:40:17 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:10:18 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/23 23:28:40 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 {
 	pid_t	pid;
 
-	signal_switch(2);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -68,6 +67,7 @@ void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 		exec_child_process(cmd, all, *prev_fd, pipefd);
 	else
 	{
+		signal_switch(2);
 		exec_parent_process(cmd, all, prev_fd, pid);
 		handle_pipe_parent(cmd, prev_fd, pipefd);
 	}

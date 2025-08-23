@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:46:46 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:49:22 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/23 21:07:40 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_env(t_all *all, t_cmd *cmd)
 	{
 		while (current)
 		{
-			if (current->value && current->value[0] != '\0')
+			if (current->value && current->value[0] != '\0' )
 				printf("%s=%s\n", current->key, current->value);
 			current = current->next;
 		}

@@ -1,15 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expend.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+
-	+:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+
-	+#+        */
-/*                                                +#+#+#+#+#+
-	+#+           */
-/*   Created: 2025/05/29 16:36:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/29 16:36:24 by marvin           ###   ########.fr       */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 18:15:07 by asezgin           #+#    #+#             */
+/*   Updated: 2025/08/23 18:15:07 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,79 +15,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-char	*handle_exit_status(t_all *all)
-{
-	char	*status_str;
-	
-	status_str = ft_itoa(all->exit_status, all);
-	return (status_str);
-}
-
 char	*found_dollar(char *line, int dollar_place, t_all *all)
 {
 	char	*before;
 	char	*after;
 	char	*env;
-	char	*result;
 	int		len;
 
 	len = 0;
 	before = ft_substr(line, 0, dollar_place, all);
 	if (line[dollar_place + 1] == '?')
-	{
-		env = handle_exit_status(all);
-		after = ft_substr(line, dollar_place + 2, ft_strlen(line) - (dollar_place + 2), all);
-		result = ft_strjoin(before, env, all);
-		free(before);
-		free(env);
-		before = ft_strjoin(result, after, all);
-		free(result);
-		free(after);
-		return (before);
-	}
+		return (handle_exit_status(all, dollar_place, before, line));
 	while (line[dollar_place + len + 1] != '\0' && \
 		(ft_isalnum(line[dollar_place + len + 1]) == 1))
 		len++;
-	
-	// If no valid identifier follows $, treat $ as literal
-	if (len == 0)
-	{
-		free(before);
-		// Return the original line unchanged
-		return (ft_strdup(line, all));
-	}
-	
 	after = ft_substr(line, dollar_place + 1, len, all);
 	env = ft_getenv(all->env, after);
 	env = ft_strdup(env, all);
 	free(after);
-	after = ft_substr(line, dollar_place + len + 1, ft_strlen(line)
-			- (dollar_place + len + 1), all);
-	result = ft_strjoin(before, env, all);
-	free(before);
-	free(env);
-	before = ft_strjoin(result, after, all);
-	free(result);
-	free(after);
-	return (before);
-}
-
-void	check_tilde(t_all *all, t_card *node)
-{
-	t_card	*current;
-	char	*home;
-
-	home = NULL;
-	current = node;
-	while (current)
-	{
-		if (current->value[0] == '~' && current->value[1] == '\0')
-		{
-			home = ft_getenv(all->env, "HOME");
-			current->value = collector_dup(all, home);
-		}
-		current = current->next;
-	}
+	after = ft_substr(line, dollar_place + len + 1,
+			ft_strlen(line) - (dollar_place + len + 1), all);
+	before = expend_join(before, env, all);
+	after = expend_join(before, after, all);
+	after = collector_dup(all, after);
+	return (after);
 }
 
 int	search_dollar(t_all *all, t_card *node, t_card *prev_node)
@@ -144,42 +92,6 @@ int	check_for_expansion(t_all *all)
 		}
 		prev_node = node;
 		node = node->next;
-	}
-	return (0);
-}
-
-void	syntex_error(t_all *all)
-{
-	all->exit_status = 256;
-	printf("syntax error\n");
-}
-
-int	syntax_checker(t_all *all)
-{
-	t_card	*current;
-
-	current = all->card;
-	if (current->type == PIPE)
-	{
-		syntex_error(all);
-		return (1);
-	}
-	while (current)
-	{
-		if (current->type == PIPE && (!current->next
-				|| current->next->type != WORD))
-		{
-			syntex_error(all);
-			return (1);
-		}
-		if ((current->type == R_OUT || current->type == R_IN
-				|| current->type == R_APPEND || current->type == HEREDOC)
-			&& (!current->next || current->next->type != WORD))
-		{
-			syntex_error(all);
-			return (1);
-		}
-		current = current->next;
 	}
 	return (0);
 }

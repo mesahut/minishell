@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 22:42:12 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/12 18:09:52 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/23 21:21:02 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <stdlib.h>
 
-char	*expend_join(char const *s1, char const *s2, t_all *all)
+char	*expend_join(char *s1, char *s2, t_all *all)
 {
 	int		i;
 	int		len1;
@@ -37,6 +37,8 @@ char	*expend_join(char const *s1, char const *s2, t_all *all)
 		i++;
 	}
 	dst[i] = '\0';
+	free(s1);
+	free(s2);
 	return (dst);
 }
 

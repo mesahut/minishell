@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:27:35 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/23 22:07:53 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,11 @@ static int	is_numeric_overflow(const char *str)
 	return (0);
 }
 
-static void	exit_with_cleanup(t_all *all, int status)
+static void	exit_with_cleanup(t_all *all)
 {
+	int	n;
+
+	n = all->exit_status;
 	clean_malloc(all);
 	if (all->env)
 	{
@@ -77,7 +80,7 @@ static void	exit_with_cleanup(t_all *all, int status)
 		all->env = NULL;
 	}
 	rl_clear_history();
-	exit(status);
+	exit(n);
 }
 
 int	ft_exit(t_all *all, t_cmd *cmd)
@@ -87,19 +90,22 @@ int	ft_exit(t_all *all, t_cmd *cmd)
 	printf("exit\n");
 	if (!cmd->args[1])
 	{
-		exit_with_cleanup(all, all->exit_status);
+		exit_with_cleanup(all);
 	}
 	if (cmd->args[2])
 	{
 		fprintf(stderr, "too many arguments\n");
-		return (1);
+		all->exit_status = 2;
+		exit_with_cleanup(all);
 	}
 	if (is_numeric_overflow(cmd->args[1]) || !is_valid_number(cmd->args[1]))
 	{
 		fprintf(stderr, "numeric argument required\n");
-		exit_with_cleanup(all, EXIT_MISUSE);
+		all->exit_status = 2;
+		exit_with_cleanup(all);
 	}
 	exit_code = (unsigned char)ft_atol(cmd->args[1]);
-	exit_with_cleanup(all, exit_code);
+	all->exit_status = exit_code;
+	exit_with_cleanup(all);
 	return (0);
 }

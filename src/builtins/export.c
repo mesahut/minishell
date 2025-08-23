@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 16:02:36 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/23 19:25:08 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,20 @@ static int	is_valid_identifier(const char *identifier)
 
 static int	handle_export_with_value(t_all *all, const char *arg)
 {
-	char	*arg_copy;
-	char	*equal_pos;
-	char	*value;
+	char			*arg_copy;
+	char			*equal_pos;
+	char			*value;
+	unsigned char	flag;
 
+	flag = 0;
 	arg_copy = ft_strdup(arg, all);
 	if (!arg_copy)
 		return (1);
 	equal_pos = strchr(arg_copy, '=');
 	value = equal_pos + 1;
 	*equal_pos = '\0';
+	if (value[0] == 0)
+		value = " ";
 	add_or_update_env(all, arg_copy, value);
 	free(arg_copy);
 	return (0);

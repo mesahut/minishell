@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 08:39:58 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:23:18 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/23 23:32:33 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*resolve_cd_path(t_cmd *cmd)
 
 static int	print_cd_home_error(void)
 {
-	printf("cd: HOME not set\n");
+	ft_putstr_fd("cd: HOME not set\n", 2);
 	return (1);
 }
 
@@ -43,7 +43,7 @@ int	ft_cd(t_all *all, t_cmd *cmd)
 
 	if (cmd->args[1] && cmd->args[2])
 	{
-		fprintf(stderr, " too many arguments\n");
+		ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);
 	}
 	path = resolve_cd_path(cmd);
@@ -54,9 +54,11 @@ int	ft_cd(t_all *all, t_cmd *cmd)
 	oldpwd = ft_strdup(cwd, all);
 	if (chdir(path) != 0)
 	{
-		fprintf(stderr, "No such file or directory\n");
+		free(oldpwd);
+		ft_putstr_fd("cd: No such file or directory\n", 2);
 		return (1);
 	}
 	update_env_pwd(all, oldpwd);
+	free(oldpwd);
 	return (0);
 }
