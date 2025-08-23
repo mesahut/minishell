@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 00:26:52 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/23 22:36:16 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:15:34 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	flag_check(char *arg)
 
 char	*join_words(char **temp, char *str, int i, t_all *all)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = NULL;
 	while (temp && temp[i])

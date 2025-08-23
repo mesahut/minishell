@@ -138,7 +138,6 @@ char	*handle_exit_status(t_all *all, int dollar, char *before, char *line);
 void	check_tilde(t_all *all, t_card *node);
 int		syntax_checker(t_all *all);
 
-
 void	sig_int(int code);
 void	sig_quit(int code);
 void	sig_prompt(int sig);

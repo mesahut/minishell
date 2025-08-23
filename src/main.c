@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/23 23:32:07 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:14:36 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **env_list)
 		line = readline("minishell>>");
 		if (line == NULL)
 		{
-			ft_putstr_fd("exit\n", 1);
+			printf("exit\n");
 			reset_all(&all, EXIT_SUCCESS);
 		}
 		if (g_signal == SIGINT)

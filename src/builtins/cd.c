@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 08:39:58 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 23:32:33 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:11:38 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*resolve_cd_path(t_cmd *cmd)
 
 static int	print_cd_home_error(void)
 {
-	ft_putstr_fd("cd: HOME not set\n", 2);
+	printf("cd: HOME not set\n");
 	return (1);
 }
 
@@ -43,7 +43,7 @@ int	ft_cd(t_all *all, t_cmd *cmd)
 
 	if (cmd->args[1] && cmd->args[2])
 	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
+		printf("cd: too many arguments\n");
 		return (1);
 	}
 	path = resolve_cd_path(cmd);
@@ -55,7 +55,7 @@ int	ft_cd(t_all *all, t_cmd *cmd)
 	if (chdir(path) != 0)
 	{
 		free(oldpwd);
-		ft_putstr_fd("cd: No such file or directory\n", 2);
+		printf("cd: No such file or directory\n");
 		return (1);
 	}
 	update_env_pwd(all, oldpwd);

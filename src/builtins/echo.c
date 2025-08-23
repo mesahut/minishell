@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 08:45:15 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 23:33:52 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:14:56 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static void	print_echo_args(char **args, int start)
 {
 	while (args[start])
 	{
-		ft_putstr_fd(args[start], 1);
+		printf(args[start]);
 		if (args[start + 1])
-			ft_putstr_fd(" ", 1);
+			printf(" ");
 		start++;
 	}
 }
@@ -61,18 +61,18 @@ int	ft_echo(t_all *all, t_cmd *cmd)
 	(void)all;
 	if (!cmd->args || !cmd->args[0])
 	{
-		ft_putstr_fd("\n", 1);
+		printf("\n");
 		return (0);
 	}
 	i = parse_echo_flags(cmd->args, &newline);
 	if (!cmd->args[i])
 	{
 		if (newline)
-			ft_putstr_fd("\n", 1);
+			printf("\n");
 		return (0);
 	}
 	print_echo_args(cmd->args, i);
 	if (newline)
-		ft_putstr_fd("\n", 1);
+		printf("\n");
 	return (0);
 }
