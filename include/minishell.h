@@ -128,7 +128,8 @@ void	print_sorted_env(t_all *all);
 int		ft_exit(t_all *all, t_cmd *cmd);
 t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
-int		update_env_value(t_env *env, const char *key, const char *value);
+int		update_env_value(t_env *env, const char *key,
+			const char *value, t_all *all);
 void	append_env_node(t_all *all, const char *key, const char *value);
 
 int		check_for_expansion(t_all *all);
@@ -138,7 +139,6 @@ char	*handle_exit_status(t_all *all, int dollar, char *before, char *line);
 void	check_tilde(t_all *all, t_card *node);
 int		syntax_checker(t_all *all);
 
-void	sig_int(int code);
 void	sig_quit(int code);
 void	sig_prompt(int sig);
 void	signal_switch(int status);
@@ -160,7 +160,6 @@ int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
 void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid);
-void	exec_pipeline(t_all *all);
 
 void	del_quote(t_all *all);
 void	put_title(t_all *all);

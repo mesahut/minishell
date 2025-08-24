@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:19 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:44:23 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 15:16:09 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ char	*path_find(char *cmd, t_all *all)
 	char	*path_env;
 	char	*direct_path;
 
+	if ((cmd[0] == '/' || cmd[0] == '.') && cmd[1] == '\0')
+		return (NULL);
 	direct_path = check_direct_path(cmd);
 	if (direct_path)
 		return (direct_path);

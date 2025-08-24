@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:46:46 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 21:07:40 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 14:57:04 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ t_env	*find_env_by_key(t_env *env_list, const char *key)
 	return (NULL);
 }
 
-int	update_env_value(t_env *env, const char *key, const char *value)
+int	update_env_value(t_env *env, const char *key, const char *value, t_all *all)
 {
 	while (env)
 	{
 		if (strcmp(env->key, key) == 0)
 		{
 			free(env->value);
-			env->value = strdup(value);
+			env->value = ft_strdup(value, all);
 			return (1);
 		}
 		env = env->next;
@@ -87,6 +87,6 @@ void	append_env_node(t_all *all, const char *key, const char *value)
 
 void	add_or_update_env(t_all *all, const char *key, const char *value)
 {
-	if (!update_env_value(all->env, key, value))
+	if (!update_env_value(all->env, key, value, all))
 		append_env_node(all, key, value);
 }

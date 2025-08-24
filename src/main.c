@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/24 14:25:17 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/24 15:51:18 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	main(int argc, char **argv, char **env_list)
 	t_all	all;
 	char	*line;
 	char	*input;
-
 	signal_switch(1);
 	(void)argc;
 	(void)argv;

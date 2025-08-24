@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 19:25:08 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 14:51:17 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	handle_export_without_value(t_all *all, const char *arg)
 	arg_copy = ft_strdup(arg, all);
 	if (!arg_copy)
 		return (1);
-	append_env_node(all, arg_copy, NULL);
+	add_or_update_env(all, arg_copy, NULL);
 	free(arg_copy);
 	return (0);
 }

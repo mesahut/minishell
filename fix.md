@@ -22,3 +22,9 @@
                                                                                      ls: '2' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
                                                                                      ls: 'cat' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
                                                                    bash in çıktısı : ls: '/nonexistent' ögesine erişilemedi: Böyle bir dosya ya da dizin yok
+1 export toplu giriş
+herdoc ard arda çalışmıyor l
+ls | pwd 
+. hata
+dasdasd | . | pwd çıktı = hata - hata - pwd
+dsadasd errorları standart 2 ye yazdır 

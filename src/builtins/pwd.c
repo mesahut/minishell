@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 08:40:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 21:06:24 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 15:41:51 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
 
 int	ft_pwd(t_all *all, t_cmd *cmd)
 {
