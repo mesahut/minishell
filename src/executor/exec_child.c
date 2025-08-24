@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 14:44:03 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/24 17:44:58 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,30 @@ void	handle_output_redirects(t_redirect *redir)
 
 static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2])
 {
-	if (prev_fd != -1)
+	if (prev_fd != -1 && prev_fd != STDIN_FILENO)
 	{
-		dup2(prev_fd, STDIN_FILENO);
+		if (dup2(prev_fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2 for stdin");
+			close(prev_fd);
+			exit(EXIT_FAILURE);
+		}
 		close(prev_fd);
 	}
 	if (cmd->next && pipefd[1] != -1)
 	{
-		dup2(pipefd[1], STDOUT_FILENO);
+		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2 for stdout");
+			close(pipefd[1]);
+			if (pipefd[0] != -1)
+				close(pipefd[0]);
+			exit(EXIT_FAILURE);
+		}
 		close(pipefd[1]);
-		if (pipefd[0] != -1)
-			close(pipefd[0]);
 	}
+	if (cmd->next && pipefd[0] != -1)
+		close(pipefd[0]);
 }
 
 static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
@@ -78,9 +90,9 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 	else
 	{
 		if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
-			fprintf(stderr,"%s: No such file or directory\n", cmd->args[0]);
+			fprintf(stderr, "%s: No such file or directory\n", cmd->args[0]);
 		else
-			fprintf(stderr,"%s: command not found\n", cmd->args[0]);
+			fprintf(stderr, "%s: command not found\n", cmd->args[0]);
 		reset_all(all, EXIT_COMMAND_NOT_FOUND);
 		exit(EXIT_COMMAND_NOT_FOUND);
 	}

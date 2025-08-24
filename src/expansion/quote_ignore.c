@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_ignore.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 00:30:44 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/11 15:03:08 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/24 18:19:10 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ char	*quote_ignore(t_all *all, char *str, int quotes)
 	j = 0;
 	open_quote = '\0';
 	len = strlen(str);
-	quotes = quote_count(str);
 	result = (char *)safe_malloc(all, (len - quotes + 1));
 	while (str[i])
 	{
@@ -111,8 +110,10 @@ void	del_quote(t_all *all)
 	while (current)
 	{
 		quotes = 0;
+		quotes = quote_count(current->value);
 		current->value = quote_ignore(all, current->value, quotes);
-		if (current->type == HEREDOC && current->next && quotes != 0)
+		if (current->type == HEREDOC && current->next
+			&& quote_count(current->next->value) != 0)
 			current->next->here_flag = 1;
 		current = current->next;
 	}

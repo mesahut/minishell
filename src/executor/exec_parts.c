@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:16:05 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:41:39 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,12 @@ static void	exec_with_redirect(t_cmd *cmd, t_all *all)
 
 void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd)
 {
+	int	saved_stdin;
+
 	if (prev_fd != -1)
 	{
-		dup2(prev_fd, STDIN_FILENO);
+		saved_stdin = dup(STDIN_FILENO);
+		dup2(prev_fd, saved_stdin);
 		close(prev_fd);
 	}
 	if (cmd->redirects)
