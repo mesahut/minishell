@@ -168,6 +168,8 @@ void	delim_node(t_all *all, t_card *node);
 void	check_node(t_card *card, t_card *prev);
 char	*ft_getenv(t_env *env, char *key);
 int		handle_redir_out(t_redirect *redir);
+int		is_redir(int type);
+t_cmd	*init_cmd(t_cmd *head_cmd, t_card *cursor, t_all *all);
 
 int		is_space(char c);
 int		special_case(char c, char next, int *place);
@@ -185,5 +187,8 @@ char	*ft_strjoin(char const *s1, char const *s2, t_all *all);
 char	*ft_substr(char const *s, unsigned int start, size_t len, t_all *all);
 char	**ft_split(char const *s, char c, t_all *all);
 char	*ft_itoa(int n, t_all *all);
+
+void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type);
+void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp);
 
 #endif
