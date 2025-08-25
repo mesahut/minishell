@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 09:50:43 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 12:41:30 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	exec(t_all *all)
 {
 	t_cmd	*cmd;
 	int		prev_fd;
+	int		status;
 
 	init_pipeline_vars(all, &cmd, &prev_fd);
 	while (cmd)
@@ -54,5 +55,13 @@ void	exec(t_all *all)
 	if (prev_fd != -1)
 	{
 		close(prev_fd);
+	}
+	// Wait for all child processes
+	while (wait(&status) > 0)
+	{
+		if (WIFEXITED(status))
+			all->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			all->exit_status = 128 + WTERMSIG(status);
 	}
 }

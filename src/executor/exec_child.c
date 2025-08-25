@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 17:44:58 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 12:48:38 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,13 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 {
+	// Only reset signals for pipeline commands, not single commands
+	if (cmd->next != NULL || prev_fd != -1)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+	}
+	
 	setup_child_io(cmd, prev_fd, pipefd);
 	if (cmd->redirects)
 		handle_redirections(cmd, all);

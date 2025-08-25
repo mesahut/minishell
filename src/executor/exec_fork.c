@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:40:17 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 23:28:40 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 12:41:30 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,15 @@ int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd)
 
 void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid)
 {
-	int	status;
-
 	(void)cmd;
+	(void)all;
+	(void)pid;
 	if (*prev_fd != -1)
 	{
 		close(*prev_fd);
 		*prev_fd = -1;
 	}
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		all->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		all->exit_status = 128 + WTERMSIG(status);
+	// Don't wait here - let all processes run in parallel
 }
 
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
