@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 15:02:58 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 22:39:16 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include "../../include/minishell.h"
 
-static char	**collect_heredocs(t_all *all)
+static char	**collect_heredocs(t_cmd *cmd, t_all *all)
 {
 	t_redirect	*tmp;
 	char		**heredocs;
@@ -23,7 +23,7 @@ static char	**collect_heredocs(t_all *all)
 	int			i;
 
 	count = 0;
-	tmp = all->cmd->redirects;
+	tmp = cmd->redirects;
 	while (tmp)
 	{
 		if (tmp->type == HEREDOC)
@@ -32,7 +32,7 @@ static char	**collect_heredocs(t_all *all)
 	}
 	heredocs = (char **)safe_malloc(all, sizeof(char *) * (count + 1));
 	i = 0;
-	tmp = all->cmd->redirects;
+	tmp = cmd->redirects;
 	while (tmp)
 	{
 		if (tmp->type == HEREDOC)
@@ -55,13 +55,6 @@ static int	handle_heredoc_error(int heredoc_pipe[2], int ret)
 static int	setup_heredoc_stdin(t_redirect *redir, int heredoc_pipe[2])
 {
 	redir->fd = heredoc_pipe[0];
-	if (dup2(redir->fd, STDIN_FILENO) == -1)
-	{
-		perror("dup2 for heredoc");
-		close(redir->fd);
-		return (1);
-	}
-	close(redir->fd);
 	return (0);
 }
 
@@ -71,7 +64,7 @@ int	handle_heredoc_process(t_redirect *redir, t_all *all)
 	char	**heredocs;
 	int		ret;
 
-	heredocs = collect_heredocs(all);
+	heredocs = collect_heredocs(all->cmd, all);
 	if (!heredocs)
 		return (1);
 	if (pipe(heredoc_pipe) == -1)
@@ -79,14 +72,44 @@ int	handle_heredoc_process(t_redirect *redir, t_all *all)
 		perror("pipe for heredoc");
 		return (1);
 	}
-	signal_switch(3);
 	ret = heredoc_loop(all, heredocs, heredoc_pipe);
-	signal_switch(1);
 	if (ret != 0)
 		return (handle_heredoc_error(heredoc_pipe, ret));
-	free(heredocs);
 	close(heredoc_pipe[1]);
 	return (setup_heredoc_stdin(redir, heredoc_pipe));
+}
+
+int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
+{
+	int		heredoc_pipe[2];
+	char	**heredocs;
+	int		ret;
+
+	heredocs = collect_heredocs(cmd, all);
+	if (!heredocs)
+		return (1);
+	if (pipe(heredoc_pipe) == -1)
+	{
+		perror("pipe for heredoc");
+		return (1);
+	}
+	ret = heredoc_loop(all, heredocs, heredoc_pipe);
+	if (ret != 0)
+		return (handle_heredoc_error(heredoc_pipe, ret));
+	close(heredoc_pipe[1]);
+	
+	// Set the pipe for the first heredoc redirect
+	t_redirect *redir = cmd->redirects;
+	while (redir)
+	{
+		if (redir->type == HEREDOC)
+		{
+			redir->fd = heredoc_pipe[0];
+			break;
+		}
+		redir = redir->next;
+	}
+	return (0);
 }
 
 int	check_here_flag(t_card *card, char *eof)

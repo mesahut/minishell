@@ -68,18 +68,11 @@ int	heredoc_loop(t_all *all, char **heredocs, int pipefd[2])
 {
 	int	i;
 	int	ret;
-	int	is_last;
-	int	fd;
 
 	i = 0;
 	while (heredocs[i])
 	{
-		is_last = (heredocs[i + 1] == NULL);
-		if (is_last)
-			fd = pipefd[1];
-		else
-			fd = -1;
-		ret = read_heredoc_input(fd, heredocs[i], all);
+		ret = read_heredoc_input(pipefd[1], heredocs[i], all);
 		if (ret == 130)
 			return (ret);
 		i++;

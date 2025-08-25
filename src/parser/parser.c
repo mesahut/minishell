@@ -44,32 +44,7 @@ void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp)
 	}
 }
 
-void	check_init_cmd(t_all *all, t_cmd *cmd, t_card *card, int *palce)
-{
-	int	i;
 
-	i = *palce;
-	if (is_redir(card->type))
-		set_redir(all, cmd, card, card->type);
-	else if ((card->type == WORD || card->type == -1)
-		&& card->value)
-	{
-		if (card->value[0] == '2'
-			&& card->value[1] == '\0'
-			&& card->next && card->next->type == R_OUT)
-			set_redir(all, cmd, card, R_ERR_OUT);
-		else if (card->value[0] == '2'
-			&& card->value[1] == '\0'
-			&& card->next && card->next->type == R_APPEND)
-			set_redir(all, cmd, card, R_ERR_APPEND);
-		else if (i < cmd->args_count)
-		{
-			cmd->args[i] = card->value;
-			i++;
-		}
-	}
-	*palce = i;
-}
 
 void	set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 {
@@ -82,10 +57,75 @@ void	set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 	i = 0;
 	while (current_card && current_card->type != PIPE)
 	{
-		check_init_cmd(all, current_cmd, current_card, &i);
-		current_card = current_card->next;
+		if (is_redir(current_card->type))
+		{
+			set_redir(all, current_cmd, current_card, current_card->type);
+			current_card = current_card->next;
+			if (current_card)
+				current_card = current_card->next;
+		}
+		else if ((current_card->type == WORD || current_card->type == -1)
+			&& current_card->value)
+		{
+			if (current_card->value[0] == '2'
+				&& current_card->value[1] == '\0'
+				&& current_card->next && current_card->next->type == R_OUT)
+			{
+				set_redir(all, current_cmd, current_card, R_ERR_OUT);
+				current_card = current_card->next;
+				if (current_card)
+					current_card = current_card->next;
+			}
+			else if (current_card->value[0] == '2'
+				&& current_card->value[1] == '\0'
+				&& current_card->next && current_card->next->type == R_APPEND)
+			{
+				set_redir(all, current_cmd, current_card, R_ERR_APPEND);
+				current_card = current_card->next;
+				if (current_card)
+					current_card = current_card->next;
+			}
+			else if (i < current_cmd->args_count)
+			{
+				current_cmd->args[i] = current_card->value;
+				i++;
+				current_card = current_card->next;
+			}
+			else
+				current_card = current_card->next;
+		}
+		else
+			current_card = current_card->next;
 	}
 	current_cmd->args[i] = NULL;
+}
+
+static int	preprocess_heredocs(t_all *all)
+{
+	t_cmd		*cmd;
+	t_redirect	*redir;
+	int			ret;
+
+	cmd = all->cmd;
+	while (cmd)
+	{
+		redir = cmd->redirects;
+		while (redir)
+		{
+			if (redir->type == HEREDOC)
+			{
+				signal_switch(3);
+				ret = handle_all_heredocs_for_cmd(cmd, all);
+				signal_switch(1);
+				if (ret != 0)
+					return (ret);
+				break; // Process all heredocs for this command at once
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+	return (0);
 }
 
 void	parser(t_all *all)
@@ -113,4 +153,6 @@ void	parser(t_all *all)
 			cursor = cursor->next;
 	}
 	all->cmd = head_cmd;
+	if (preprocess_heredocs(all) != 0)
+		return ;
 }

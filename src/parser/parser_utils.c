@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 13:16:34 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/24 14:17:13 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:10:49 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,18 @@ int	args_counter(t_card *start)
 	while (current_card && current_card->type != PIPE)
 	{
 		if (current_card->type == WORD || current_card->type == -1)
+		{
 			count++;
+			current_card = current_card->next;
+		}
 		else if (is_redir(current_card->type))
 		{
-			if (current_card->next)
+			current_card = current_card->next;
+			if (current_card)
 				current_card = current_card->next;
 		}
-		current_card = current_card->next;
+		else
+			current_card = current_card->next;
 	}
 	return (count);
 }

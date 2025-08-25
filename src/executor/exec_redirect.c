@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:28 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 14:53:45 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 22:20:24 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	handle_redir_out(t_redirect *redir)
 static void	handle_input_redirects(t_redirect *redir,
 	t_all *all, int *heredoc_done)
 {
+	(void)all;
 	if (redir->type == R_IN)
 	{
 		if (handle_redir_in(redir))
@@ -44,10 +45,15 @@ static void	handle_input_redirects(t_redirect *redir,
 	}
 	else if (redir->type == HEREDOC && !*heredoc_done)
 	{
-		signal_switch(3);
-		if (handle_heredoc_process(redir, all))
-			exit(EXIT_FAILURE);
-		signal_switch(1);
+		if (redir->fd > 0)
+		{
+			if (dup2(redir->fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2 for heredoc");
+				exit(EXIT_FAILURE);
+			}
+			close(redir->fd);
+		}
 		*heredoc_done = 1;
 	}
 }
