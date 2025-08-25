@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 14:03:40 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 16:24:36 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	handle_export_with_value(t_all *all, const char *arg)
 	value = equal_pos + 1;
 	*equal_pos = '\0';
 	if (value[0] == 0)
-		value = " ";
+		*value = (char)4;
 	add_or_update_env(all, arg_copy, value);
 	free(arg_copy);
 	return (0);

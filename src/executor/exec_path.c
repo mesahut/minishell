@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:19 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 15:16:09 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:20:45 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*path_find(char *cmd, t_all *all)
 	direct_path = check_direct_path(cmd);
 	if (direct_path)
 		return (direct_path);
-	path_env = getenv("PATH");
+	path_env = ft_getenv(all->env, "PATH");
 	if (!path_env)
 		return (NULL);
 	paths = ft_split(path_env, ':', all);
