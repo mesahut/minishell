@@ -29,15 +29,15 @@ ls | pwd
 dasdasd | . | pwd çıktı = hata - hata - pwd
 dsadasd errorları standart 2 ye yazdır 
 
-bos komutlarda leak yiyor (enter atinca)
-
 env | grep PATH leak yiyor (child içinden kalıyor)
 
 unset PATH yapinca komutlar calismaya devam ediyor etmemesi lazim fix
 
 bir executable dosyanin pathi export edildiginde, her yerden calistirilabilir hale gelmesi gerekiyor. fix
 
-env -i handle
+env -i handle fix
+
+bos komutlarda leak yiyor (enter atinca) fix
 
 cat << 123 | cat << 456
 
@@ -52,3 +52,7 @@ ctrl + c ve ctrl + \' de $? guncellenecek. 130 ve 131
 genel olarak exit statuslerde sikinti var gibi.
 
 exit 31 69 cikmamasi lazim.
+
+./ leak 
+
+"" leak

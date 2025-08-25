@@ -112,6 +112,7 @@ void	clean_malloc(t_all *all);
 char	*collector_dup(t_all *all, char *line);
 int		exec_builtin(t_all *all, t_cmd *cmd);
 int		is_builtin(char *cmd);
+void	create_env(char **env_line, t_all *all);
 char	*expend_join(char *s1, char *s2, t_all *all);
 int		flag_check(char *arg);
 void	reset_all(t_all *all, int status_type);
