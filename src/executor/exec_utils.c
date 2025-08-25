@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/20 11:18:02 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 08:34:09 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char	*here_expand(char *str, t_all *all)
 {
 	int		i;
 	char	open_quote;
+	char	*new_str;
 
 	i = 0;
 	open_quote = '\0';
@@ -80,7 +81,9 @@ char	*here_expand(char *str, t_all *all)
 		open_quote = is_char_quote(str[i], open_quote);
 		if (str[i] == '$' && str[i + 1] != '\0')
 		{
-			str = found_dollar(str, i, all);
+			new_str = found_dollar(str, i, all);
+			free(str);
+			str = new_str;
 			i = -1;
 		}
 		i++;

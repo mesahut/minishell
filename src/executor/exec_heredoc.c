@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 19:59:00 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/25 11:55:06 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,39 @@
 #include <unistd.h>
 #include "../../include/minishell.h"
 
-static int  read_heredoc_input(int write_fd, char *eof, t_all *all, int is_last)
+static int  read_heredoc_input(int write_fd, char *eof, t_all *all)
 {
     char    *line;
+    extern int g_signal;
 
-	is_last = 0;
     while (1)
     {
-        /* Her satır için heredoc promptunu yazdır */
+        if (g_signal == SIGINT)
+            return (130);
         write(STDOUT_FILENO, "> ", 2);
-        /* Boş prompt ile readline çağırıyoruz; böylece kendi yazdığımız "> " promptu bozulmaz */
         line = readline("");
+        if (g_signal == SIGINT)
+        {
+            if (line)
+                free(line);
+            return (130);
+        }
         if (!line)
-            return (1); /* ctrl-D veya EOF durumunda hata döndürülür */
-
-        /* Delimiter ile karşılaşırsak döngüden çık */
+        {
+            if (g_signal == SIGINT)
+                return (130);
+            write(STDERR_FILENO, "minishell: warning: here-document delimited by end-of-file (wanted `", 67);
+            write(STDERR_FILENO, eof, ft_strlen(eof));
+            write(STDERR_FILENO, "')\n", 3);
+            return (1);
+        }
         if (strcmp(line, eof) == 0)
         {
-            free(line); /* Sadece son here-doc bitiminde yeni satır */
+            free(line);
             break;
         }
-        /* Değişken genişletmesi gerekiyorsa */
         if (check_here_flag(all->card, eof))
             line = here_expand(line, all);
-
-        /* Eğer yazılacak fd geçerli ise, içeriği pipe’a yazdır */
         if (write_fd >= 0)
         {
             write(write_fd, line, ft_strlen(line));
@@ -50,19 +58,24 @@ static int  read_heredoc_input(int write_fd, char *eof, t_all *all, int is_last)
     return (0);
 }
 
-/* Tüm heredoc’ları işler; yalnızca sonuncusunun çıktısı komutun stdin’ine bağlanır */
-static void heredoc_loop(t_all *all, char **heredocs, int pipefd[2])
+/* Tüm heredoc'ları işler; yalnızca sonuncusunun çıktısı komutun stdin'ine bağlanır */
+static int heredoc_loop(t_all *all, char **heredocs, int pipefd[2])
 {
     int i;
+    int ret;
 
     i = 0;
     while (heredocs[i])
     {
         int is_last = (heredocs[i + 1] == NULL);
         int fd = is_last ? pipefd[1] : -1;
-        read_heredoc_input(fd, heredocs[i], all, is_last);
+            
+        ret = read_heredoc_input(fd, heredocs[i], all);
+        if (ret != 0)
+            return (ret);
         i++;
     }
+    return (0);
 }
 
 
@@ -100,11 +113,12 @@ static char **collect_heredocs(t_all *all)
     return (heredocs);
 }
 
-/* heredoc redirect’lerini işler, yalnızca sonuncusunu stdin’e bağlar. */
+/* heredoc redirect'lerini işler, yalnızca sonuncusunu stdin'e bağlar. */
 int handle_heredoc_process(t_redirect *redir, t_all *all)
 {
     int   heredoc_pipe[2];
     char **heredocs;
+    int   ret;
 
     heredocs = collect_heredocs(all);
     if (!heredocs)
@@ -115,10 +129,24 @@ int handle_heredoc_process(t_redirect *redir, t_all *all)
         free(heredocs);
         return (1);
     }
-    heredoc_loop(all, heredocs, heredoc_pipe);
+    signal_switch(3); // Set heredoc signal handler
+    ret = heredoc_loop(all, heredocs, heredoc_pipe);
+    signal_switch(1); // Reset to prompt signal handler
+    if (ret != 0)
+    {
+        free(heredocs);
+        close(heredoc_pipe[0]);
+        close(heredoc_pipe[1]);
+        // Reopen stdin if it was closed by signal
+        if (ret == 130)
+        {
+            freopen("/dev/tty", "r", stdin);
+        }
+        return (ret);
+    }
     free(heredocs);
     close(heredoc_pipe[1]);           /* Yazma ucunu kapat */
-    redir->fd = heredoc_pipe[0];      /* Okuma ucunu redirect’te sakla */
+    redir->fd = heredoc_pipe[0];      /* Okuma ucunu redirect'te sakla */
     if (dup2(redir->fd, STDIN_FILENO) == -1)
     {
         perror("dup2 for heredoc");

@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:12:42 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 17:38:55 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 12:00:09 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	sig_heredoc(int sig)
 {
 	g_signal = sig;
 	rl_replace_line("", 0);
-	close(0);
+	rl_redisplay();
+	close(STDIN_FILENO);
 }
 
 void	signal_switch(int status)

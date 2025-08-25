@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:28 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/19 15:16:40 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 08:47:56 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	handle_redir_out(t_redirect *redir)
 	return (0);
 }
 
+static int heredocs_handled = 0;
+
 static void	handle_input_redirects(t_redirect *redir, t_all *all)
 {
 	if (redir->type == R_IN)
@@ -41,12 +43,13 @@ static void	handle_input_redirects(t_redirect *redir, t_all *all)
 		if (handle_redir_in(redir))
 			exit(EXIT_FAILURE);
 	}
-	else if (redir->type == HEREDOC)
+	else if (redir->type == HEREDOC && !heredocs_handled)
 	{
 		signal_switch(3);
 		if (handle_heredoc_process(redir, all))
 			exit(EXIT_FAILURE);
 		signal_switch(1);
+		heredocs_handled = 1;
 	}
 }
 
@@ -78,6 +81,7 @@ void	handle_redirections(t_cmd *cmd, t_all *all)
 {
 	t_redirect	*redir;
 
+	heredocs_handled = 0; /* Her komut için reset et */
 	redir = cmd->redirects;
 	while (redir)
 	{
