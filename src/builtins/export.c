@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 08:14:55 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 14:03:40 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	handle_export_with_value(t_all *all, const char *arg)
 	char			*arg_copy;
 	char			*equal_pos;
 	char			*value;
-	(void)0; /* no flag needed */
+
 	arg_copy = ft_strdup(arg, all);
 	if (!arg_copy)
 		return (1);

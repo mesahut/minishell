@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:28 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 08:47:56 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 14:53:45 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,21 @@ int	handle_redir_out(t_redirect *redir)
 	return (0);
 }
 
-static int heredocs_handled = 0;
-
-static void	handle_input_redirects(t_redirect *redir, t_all *all)
+static void	handle_input_redirects(t_redirect *redir,
+	t_all *all, int *heredoc_done)
 {
 	if (redir->type == R_IN)
 	{
 		if (handle_redir_in(redir))
 			exit(EXIT_FAILURE);
 	}
-	else if (redir->type == HEREDOC && !heredocs_handled)
+	else if (redir->type == HEREDOC && !*heredoc_done)
 	{
 		signal_switch(3);
 		if (handle_heredoc_process(redir, all))
 			exit(EXIT_FAILURE);
 		signal_switch(1);
-		heredocs_handled = 1;
+		*heredoc_done = 1;
 	}
 }
 
@@ -67,12 +66,13 @@ static void	handle_error_redirects(t_redirect *redir)
 	}
 }
 
-static void	process_single_redirect(t_redirect *redir, t_all *all)
+static void	process_single_redirect(t_redirect *redir,
+	t_all *all, int *heredoc_done)
 {
 	if (redir->type == R_OUT || redir->type == R_APPEND)
 		handle_output_redirects(redir);
 	else if (redir->type == R_IN || redir->type == HEREDOC)
-		handle_input_redirects(redir, all);
+		handle_input_redirects(redir, all, heredoc_done);
 	else if (redir->type == R_ERR_OUT || redir->type == R_ERR_APPEND)
 		handle_error_redirects(redir);
 }
@@ -80,12 +80,13 @@ static void	process_single_redirect(t_redirect *redir, t_all *all)
 void	handle_redirections(t_cmd *cmd, t_all *all)
 {
 	t_redirect	*redir;
+	int			heredoc_done;
 
-	heredocs_handled = 0; /* Her komut için reset et */
+	heredoc_done = 0;
 	redir = cmd->redirects;
 	while (redir)
 	{
-		process_single_redirect(redir, all);
+		process_single_redirect(redir, all, &heredoc_done);
 		redir = redir->next;
 	}
 }

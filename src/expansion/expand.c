@@ -26,8 +26,8 @@ char	*found_dollar(char *line, int dollar_place, t_all *all)
 	before = ft_substr(line, 0, dollar_place, all);
 	if (line[dollar_place + 1] == '?')
 		return (handle_exit_status(all, dollar_place, before, line));
-	while (line[dollar_place + len + 1] != '\0' && \
-		(ft_isalnum(line[dollar_place + len + 1]) == 1))
+	while (line[dollar_place + len + 1] != '\0'
+		&& (ft_isalnum(line[dollar_place + len + 1]) == 1))
 		len++;
 	after = ft_substr(line, dollar_place + 1, len, all);
 	env = ft_getenv(all->env, after);

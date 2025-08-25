@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:12:42 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 12:00:09 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/25 13:46:37 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ void	sig_prompt(int sig)
 
 void	sig_exc(int sig)
 {
-	g_signal = sig;
+	rl_event_hook = NULL;
 	printf("\n");
+	g_signal = sig;
 }
 
 void	sig_heredoc(int sig)

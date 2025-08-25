@@ -189,4 +189,9 @@ char	*ft_itoa(int n, t_all *all);
 void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type);
 void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp);
 
+int		handle_heredoc_eof(char *eof);
+int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all);
+int		read_heredoc_input(int write_fd, char *eof, t_all *all);
+int		heredoc_loop(t_all *all, char **heredocs, int pipefd[2]);
+
 #endif
