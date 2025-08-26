@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:15:23 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 23:34:06 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 14:57:14 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	**get_sorted_keys(t_all *all)
 	size = env_list_size(all->env);
 	keys = malloc(sizeof(char *) * (size + 1));
 	if (!keys)
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	while (current)
 	{
 		keys[i++] = strdup(current->key);

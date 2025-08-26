@@ -29,7 +29,7 @@ int	quote_checker(char *words)
 	}
 	if (open_quote != '\0')
 	{
-		fprintf(stderr, "syntax error: unclosed quote\n");
+		fprintf(stderr, "syntax error: unclosed quote\n"); //değişecek
 		return (1);
 	}
 	return (0);

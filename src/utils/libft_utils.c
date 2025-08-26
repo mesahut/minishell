@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:07:59 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/22 18:00:05 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 14:58:35 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strdup(const char *s1, t_all *all)
 	size = ft_strlen(s1);
 	s2 = malloc((size + 1) * sizeof(char));
 	if (!s2)
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	while (s2 && size > i)
 	{
 		s2[i] = s1[i];
@@ -47,7 +47,7 @@ char	*ft_strjoin(char const *s1, char const *s2, t_all *all)
 	len2 = ft_strlen(s2);
 	dst = malloc(((len1 + len2) * sizeof(char)) + 1);
 	if (!dst)
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	while (i < len1)
 	{
 		dst[i] = s1[i];
@@ -78,7 +78,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len, t_all *all)
 		len = l - start;
 	sb = (char *)malloc ((len * sizeof(char)) + 1);
 	if (!sb)
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	while (len > i && s[i + start])
 	{
 		sb[i] = s[i + start];
@@ -115,7 +115,7 @@ char	*ft_itoa(int n, t_all *all)
 	len = count_digits(n);
 	str = malloc(sizeof(char) * (len + 1));
 	if (!str)
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	str[len] = '\0';
 	if (num == 0)
 		str[0] = '0';

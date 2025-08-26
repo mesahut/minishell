@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:52:55 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/04 17:14:41 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 15:25:40 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	is_builtin(char *cmd)
 		|| strcmp(cmd, "export") == 0
 		|| strcmp(cmd, "unset") == 0
 		|| strcmp(cmd, "env") == 0
-		|| strcmp(cmd, "exit") == 0
 	);
 }
 

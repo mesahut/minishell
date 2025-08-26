@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 22:42:12 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/23 21:21:02 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 14:58:46 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*expend_join(char *s1, char *s2, t_all *all)
 	len2 = ft_strlen(s2);
 	dst = malloc(((len1 + len2) * sizeof(char)) + 1);
 	if (!dst)
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	while (i < len1)
 	{
 		dst[i] = s1[i];

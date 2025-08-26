@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 17:41:39 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 15:22:10 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ static void	exec_with_redirect(t_cmd *cmd, t_all *all)
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	handle_redirections(cmd, all);
-	all->exit_status = exec_builtin(all, cmd);
+	if(exec_builtin(all, cmd))
+		all->exit_status = EXIT_FAILURE;
 	restore_fds(saved_stdin, saved_stdout);
 }
 
@@ -92,5 +93,8 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd)
 	if (cmd->redirects)
 		exec_with_redirect(cmd, all);
 	else
-		all->exit_status = exec_builtin(all, cmd);
+	{
+		if(exec_builtin(all, cmd))
+			all->exit_status = EXIT_FAILURE;
+	}
 }

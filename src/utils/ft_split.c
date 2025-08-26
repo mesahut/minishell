@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:15:36 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/12 18:09:29 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:58:15 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,12 @@ char	**ft_split(char const *s, char c, t_all *all)
 	i = 0;
 	f = (char **)malloc(sizeof(char *) * (word_count(s, c) + 1));
 	if (!f)
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	a = word_save(f, s, c, i);
 	if (a != 0)
 	{
 		free(f);
-		reset_all(all, 12);
+		reset_all(all, EXIT_ALLOC_FAIL);
 	}
 	return (f);
 }

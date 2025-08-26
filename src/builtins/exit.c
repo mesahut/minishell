@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 22:07:53 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 11:11:12 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	ft_exit(t_all *all, t_cmd *cmd)
 	{
 		fprintf(stderr, "too many arguments\n");
 		all->exit_status = 2;
-		exit_with_cleanup(all);
+		return (0);
 	}
 	if (is_numeric_overflow(cmd->args[1]) || !is_valid_number(cmd->args[1]))
 	{

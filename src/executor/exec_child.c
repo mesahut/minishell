@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 22:07:10 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 14:32:07 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,20 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 {
+	int	n;
+
+	n = 0;
 	signal_switch(1);
 	setup_child_io(cmd, prev_fd, pipefd);
 	if (cmd->redirects)
 		handle_redirections(cmd, all);
 	if (is_builtin(cmd->args[0]))
-		exit(exec_builtin(all, cmd));
+	{
+		n = exec_builtin(all, cmd);
+		free_env(all->env);
+		clean_malloc(all);
+		exit(n);
+	}
 	else
 		execute_child_cmd(cmd, all);
 	exit(EXIT_FAILURE);

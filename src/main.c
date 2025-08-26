@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/25 20:26:15 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:30:55 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,19 @@
 
 void	cycle(t_all all, char *line, char *input)
 {
-	line = readline("minishell>>");
+	line = readline("minishell>> ");
 	if (line == NULL)
 	{
 		printf("exit\n");
-		reset_all(&all, EXIT_SUCCESS);
+		reset_all(&all, EXIT_FAILURE);
 	}
 	if (g_signal == SIGINT)
 	{
 		all.exit_status = EXIT_CTRL_C;
 		g_signal = 0;
 	}
-	add_history(line);
+	if (line[0] != '\0')
+		add_history(line);
 	input = collector_dup(&all, line);
 	if (lexer(input, &all) == 1)
 	{
@@ -83,6 +84,5 @@ int	main(int argc, char **argv, char **env_list)
 	input = NULL;
 	while (1)
 		cycle(all, line, input);
-	all.exit_status = 0;
 	return (0);
 }

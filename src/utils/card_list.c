@@ -41,10 +41,7 @@ void	create_collector(t_all *all, void *address)
 	current = all->collector;
 	new_card = (t_collector *) ft_calloc(sizeof(t_collector), 1);
 	if (new_card == NULL)
-	{
-		reset_all(all, 12);
-		exit(EXIT_FAILURE);
-	}
+		reset_all(all, EXIT_ALLOC_FAIL);
 	new_card->value = address;
 	new_card->next = NULL;
 	if (all->collector == NULL)
@@ -64,10 +61,7 @@ void	*safe_malloc(t_all *all, int size)
 
 	str = ft_calloc(size, 1);
 	if (str == NULL)
-	{
-		reset_all(all, 12);
-		exit(EXIT_FAILURE);
-	}
+		reset_all(all, EXIT_ALLOC_FAIL);
 	create_collector(all, str);
 	return (str);
 }

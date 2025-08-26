@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 17:57:24 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 16:13:23 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/26 15:07:30 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	reset_all(t_all *all, int status_type)
 		all->env = NULL;
 	}
 	rl_clear_history();
-	if (status_type == EXIT_FAILURE)
-		printf("allocation failed\n");
 	all->exit_status = status_type;
 	exit(all->exit_status);
 }
