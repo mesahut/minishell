@@ -158,7 +158,7 @@ int		handle_redir_err_append(t_redirect *redir);
 void	handle_output_redirects(t_redirect *redir);
 
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2]);
-int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd);
+int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len);
 void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
 void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid);

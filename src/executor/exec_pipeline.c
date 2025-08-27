@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/26 14:32:14 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/27 14:23:09 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ static void	init_pipeline_vars(t_all *all, t_cmd **cmd, int *prev_fd)
 	*prev_fd = -1;
 }
 
-static int	process_single_cmd(t_cmd *cmd, t_all *all, int *prev_fd)
+static int	process_single_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int len)
 {
 	int		pipefd[2];
 
-	if (process_builtin_cmd(cmd, all, *prev_fd))
+	if (process_builtin_cmd(cmd, all, *prev_fd, len))
 		return (1);
 	pipefd[0] = -1;
 	pipefd[1] = -1;
@@ -52,17 +52,31 @@ void	exec_signal_wait(t_all *all)
 	}
 }
 
+int cmd_len(t_cmd *cmd)
+{
+	int len = 0;
+	t_cmd *temp = cmd;
+	while (temp)
+	{
+		len++;
+		temp = temp->next;
+	}
+	return (len);
+}
+
 void	exec(t_all *all)
 {
 	t_cmd	*cmd;
 	int		prev_fd;
+	int		len;
 	int		is_pipeline;
 
 	init_pipeline_vars(all, &cmd, &prev_fd);
 	is_pipeline = (cmd && cmd->next != NULL);
+	len = cmd_len(cmd);
 	while (cmd)
 	{
-		if (process_single_cmd(cmd, all, &prev_fd))
+		if (process_single_cmd(cmd, all, &prev_fd, len))
 			break ;
 		cmd = cmd->next;
 	}
