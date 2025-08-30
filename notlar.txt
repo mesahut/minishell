@@ -1,8 +1,8 @@
-exit | exit | exit 42'de açık fd kalıyor. (normal exit'te de çıkıyor.)
-exit "      4        "
-cat'den sonra ctrl + \ sinyali
-cd: too many argüments hatasında 1 döndürücek.
-/ ve ./ a bak
+exit | exit | exit 42'de açık fd kalıyor. (normal exit'te de çıkıyor.) ✅ (exit durumları)
+exit "      4        "                                                 ✅
+cat'den sonra ctrl + \ sinyali                                         ✅     
+cd: too many argüments hatasında 1 döndürücek.                         ✅
+/ ve ./ a bak                                                           
 "" : command not found bastırıcak.
 ac kontrolü yap mainde
 cat<<eof>a da açık fd var.
