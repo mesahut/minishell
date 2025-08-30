@@ -1,0 +1,18 @@
+exit | exit | exit 42'de açık fd kalıyor. (normal exit'te de çıkıyor.)
+exit "      4        "
+cat'den sonra ctrl + \ sinyali
+cd: too many argüments hatasında 1 döndürücek.
+/ ve ./ a bak
+"" : command not found bastırıcak.
+ac kontrolü yap mainde
+cat<<eof>a da açık fd var.
+fork açmada hata alınca zombi process kalıyor.
+export not a valid identifier exit code
+cat<<eof control + c sinyali hatalı
+cat<<eof>a|env|cat<<eof>b heredoc'tan çıkamıyorum.
+
+
+
+BELLLKİ
+clear_history fonksiyonunu çağırdığınız yerlere bakın.
+./absolute_path girilince 4 tane açık fd (?)

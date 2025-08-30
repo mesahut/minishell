@@ -44,8 +44,6 @@ void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp)
 	}
 }
 
-
-
 void	set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 {
 	t_card		*current_card;

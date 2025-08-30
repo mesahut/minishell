@@ -138,7 +138,6 @@ int		check_for_expansion(t_all *all);
 char	*found_dollar(char *line, int dollar_place, t_all *all);
 char	is_char_quote(char value, char quote_type);
 char	*handle_exit_status(t_all *all, int dollar, char *before, char *line);
-void	check_tilde(t_all *all, t_card *node);
 int		syntax_checker(t_all *all);
 
 void	sig_quit(int code);

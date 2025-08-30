@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 21:44:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/23 21:59:46 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/29 17:14:29 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,6 @@ char	*handle_exit_status(t_all *all, int dollar, char *before, char *line)
 	after = expend_join(before, after, all);
 	after = collector_dup(all, after);
 	return (after);
-}
-
-void	check_tilde(t_all *all, t_card *node)
-{
-	t_card	*current;
-	char	*home;
-
-	home = NULL;
-	current = node;
-	while (current)
-	{
-		if (current->value[0] == '~' && current->value[1] == '\0')
-		{
-			home = ft_getenv(all->env, "HOME");
-			current->value = collector_dup(all, home);
-		}
-		current = current->next;
-	}
 }
 
 int	syntex_error(t_all *all)

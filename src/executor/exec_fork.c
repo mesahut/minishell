@@ -27,9 +27,9 @@ static void	handle_pipe_parent(t_cmd *cmd, int *prev_fd, int pipefd[2])
 }
 
 int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len)
-{ /*alt satırda exit | exit gibi bir testcasede child açması için child açmadan önceki is_buildim aramasından exit i kaldırdık
-	ama sadece exit girilirse exit artık çalışmaz olacağı için eğer cmd_len 1 ise yani pipe yoksa ve şu anda bulunduğum args elemanı exit ise child a girmeden buadaki fonksiyona girmesini sağlıyoruz */
-	if ((is_builtin(cmd->args[0]) && cmd->next == NULL) || (len == 1 && strcmp(cmd->args[0], "exit") == 0))
+{
+	if ((is_builtin(cmd->args[0]) && cmd->next == NULL)
+		|| (len == 1 && strcmp(cmd->args[0], "exit") == 0))
 	{
 		exec_builtin_single(cmd, all, prev_fd);
 		return (1);

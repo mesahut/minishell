@@ -99,7 +99,6 @@ int	check_for_expansion(t_all *all)
 int	expander(t_all *all)
 {
 	put_title(all);
-	//check_tilde(all, all->card);
 	if (check_for_expansion(all) == 1)
 		return (1);
 	if (syntax_checker(all) == 1)

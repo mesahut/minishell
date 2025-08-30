@@ -29,7 +29,7 @@ int	quote_checker(char *words)
 	}
 	if (open_quote != '\0')
 	{
-		fprintf(stderr, "syntax error: unclosed quote\n"); //değişecek
+		fprintf (stderr, "syntax error: unclosed quote\n"); //değişecek
 		return (1);
 	}
 	return (0);
@@ -112,7 +112,10 @@ int	lexer(char *line, t_all *all)
 	if (line_checker(line) == 1)
 		return (1);
 	if (quote_checker(line) == 1)
+	{
+		all->exit_status = 2;
 		return (1);
+	}
 	split_line(line, all);
 	return (0);
 }

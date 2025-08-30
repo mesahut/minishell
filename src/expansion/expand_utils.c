@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 00:26:52 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/24 00:15:34 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/30 12:46:30 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_getenv(t_env *env, char *key)
 	current = env;
 	while (current)
 	{
-		if (strcmp(current->key, key) == 0)
+		if (strcmp(current->key, key) == 0) // düzeltilecek
 			return (current->value);
 		current = current->next;
 	}

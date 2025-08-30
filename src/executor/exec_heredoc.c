@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 22:39:16 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/29 16:05:21 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
 	if (ret != 0)
 		return (handle_heredoc_error(heredoc_pipe, ret));
 	close(heredoc_pipe[1]);
-	
 	// Set the pipe for the first heredoc redirect
 	t_redirect *redir = cmd->redirects;
 	while (redir)

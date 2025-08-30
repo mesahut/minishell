@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/27 14:28:09 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/30 13:19:59 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 		else
 			fprintf(stderr, "%s: command not found\n", cmd->args[0]);
 		reset_all(all, EXIT_COMMAND_NOT_FOUND);
-		exit(EXIT_COMMAND_NOT_FOUND);
 	}
 }
 
