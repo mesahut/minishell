@@ -175,7 +175,6 @@ int		is_space(char c);
 int		special_case(char c, char next, int *place);
 int		is_operator(char c, char next);
 void	insert_node_at(t_all *all, t_card **pos, char *str);
-int		handle_heredoc_process(t_redirect *redir, t_all *all);
 int		handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all);
 
 int		ft_strlen(const char *s);

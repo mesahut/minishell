@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/30 14:37:39 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/30 16:07:51 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,5 @@ void	exec(t_all *all)
 		close(prev_fd);
 	}
 	if (is_pipeline)
-	{
-		signal_switch(2);
 		exec_signal_wait(all);
-		signal_switch(1);
-	}
 }

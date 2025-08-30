@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:03:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 15:04:46 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/30 19:30:27 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,16 @@ int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all)
 int	read_heredoc_input(int write_fd, char *eof, t_all *all)
 {
 	char		*line;
-	extern int	g_signal;
 
 	while (1)
 	{
-		if (g_signal == SIGINT)
-			return (130);
-		write(STDOUT_FILENO, "> ", 2);
-		line = readline("");
-		if (g_signal == SIGINT || !line)
-		{
-			if (line)
-				free(line);
-			if (g_signal == SIGINT)
-				return (130);
+		line = readline("> ");
+		if (line == NULL)
 			return (handle_heredoc_eof(eof));
+		if (g_signal == SIGINT)
+		{
+			g_signal = 0;
+			return (130);
 		}
 		if (process_heredoc_line(line, write_fd, eof, all))
 			break ;

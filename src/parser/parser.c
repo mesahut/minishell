@@ -117,7 +117,7 @@ static int	preprocess_heredocs(t_all *all)
 				signal_switch(1);
 				if (ret != 0)
 					return (ret);
-				break; // Process all heredocs for this command at once
+				break;
 			}
 			redir = redir->next;
 		}
@@ -126,7 +126,7 @@ static int	preprocess_heredocs(t_all *all)
 	return (0);
 }
 
-void	parser(t_all *all)
+int	parser(t_all *all)
 {
 	t_cmd	*head_cmd;
 	t_cmd	*current_cmd;
@@ -152,5 +152,9 @@ void	parser(t_all *all)
 	}
 	all->cmd = head_cmd;
 	if (preprocess_heredocs(all) != 0)
+	{
+		all->exit_status = 130;
+		all->exit_flag = 1;
 		return ;
+	}
 }

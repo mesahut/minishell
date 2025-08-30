@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/29 16:05:21 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/30 19:33:21 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,33 +52,6 @@ static int	handle_heredoc_error(int heredoc_pipe[2], int ret)
 	return (ret);
 }
 
-static int	setup_heredoc_stdin(t_redirect *redir, int heredoc_pipe[2])
-{
-	redir->fd = heredoc_pipe[0];
-	return (0);
-}
-
-int	handle_heredoc_process(t_redirect *redir, t_all *all)
-{
-	int		heredoc_pipe[2];
-	char	**heredocs;
-	int		ret;
-
-	heredocs = collect_heredocs(all->cmd, all);
-	if (!heredocs)
-		return (1);
-	if (pipe(heredoc_pipe) == -1)
-	{
-		perror("pipe for heredoc");
-		return (1);
-	}
-	ret = heredoc_loop(all, heredocs, heredoc_pipe);
-	if (ret != 0)
-		return (handle_heredoc_error(heredoc_pipe, ret));
-	close(heredoc_pipe[1]);
-	return (setup_heredoc_stdin(redir, heredoc_pipe));
-}
-
 int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
 {
 	int		heredoc_pipe[2];
@@ -97,7 +70,6 @@ int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
 	if (ret != 0)
 		return (handle_heredoc_error(heredoc_pipe, ret));
 	close(heredoc_pipe[1]);
-	// Set the pipe for the first heredoc redirect
 	t_redirect *redir = cmd->redirects;
 	while (redir)
 	{

@@ -56,11 +56,13 @@ void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid)
 	}
 }
 
+
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 {
 	pid_t	pid;
 
 	pid = fork();
+	signal_switch(2);
 	if (pid == -1)
 	{
 		perror("fork");
@@ -70,7 +72,6 @@ void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 		exec_child_process(cmd, all, *prev_fd, pipefd);
 	else
 	{
-		signal_switch(2);
 		exec_parent_process(cmd, all, prev_fd, pid);
 		handle_pipe_parent(cmd, prev_fd, pipefd);
 	}
