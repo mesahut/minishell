@@ -139,7 +139,7 @@ int	parser(t_all *all)
 	{
 		current_cmd = init_cmd(head_cmd, cursor, all);
 		if (!current_cmd)
-			return ;
+			return (0);
 		put_node(&head_cmd, current_cmd);
 		old_card = all->card;
 		all->card = cursor;
@@ -155,6 +155,7 @@ int	parser(t_all *all)
 	{
 		all->exit_status = 130;
 		all->exit_flag = 1;
-		return ;
+		return(all->exit_flag);
 	}
+	return (0);
 }

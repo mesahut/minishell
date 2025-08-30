@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/30 16:07:51 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/30 20:10:48 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int cmd_len(t_cmd *cmd)
 	return (len);
 }
 
-void	exec(t_all *all)
+int	exec(t_all *all)
 {
 	t_cmd	*cmd;
 	int		prev_fd;
@@ -86,4 +86,5 @@ void	exec(t_all *all)
 	}
 	if (is_pipeline)
 		exec_signal_wait(all);
+	return (all->exit_flag);
 }

@@ -96,20 +96,21 @@ typedef struct s_all
 	t_card			*card;
 	t_cmd			*cmd;
 	t_env			*env;
+	int				exit_flag;
 	int				exit_status;
 }	t_all;
 
 extern int	g_signal;
 
 void	set_cmd(t_card *cursor, t_all *all, t_cmd *cmd);
-void	parser(t_all *all);
-void	exec(t_all *all);
+int		parser(t_all *all);
+int		exec(t_all *all);
 void	create_card(t_all *all, char *card);
 int		expander(t_all *all);
 int		lexer(char *line, t_all *all);
 void	put_env(t_all *all, char **env_list);
 void	*safe_malloc(t_all *all, int size);
-void	clean_malloc(t_all *all);
+int		clean_malloc(t_all *all);
 char	*collector_dup(t_all *all, char *line);
 int		exec_builtin(t_all *all, t_cmd *cmd);
 int		is_builtin(char *cmd);
@@ -140,13 +141,11 @@ char	is_char_quote(char value, char quote_type);
 char	*handle_exit_status(t_all *all, int dollar, char *before, char *line);
 int		syntax_checker(t_all *all);
 
-void	sig_quit(int code);
 void	sig_prompt(int sig);
 void	signal_switch(int status);
 
 char	*path_find(char *cmd, t_all *all);
 char	**list_to_envp(t_all *all);
-void	exec_external_cmd(char *path, char **args, t_all *all);
 char	*here_expand(char *str, t_all *all);
 int		check_here_flag(t_card *card, char *eof);
 void	handle_redirections(t_cmd *cmd, t_all *all);

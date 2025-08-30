@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/26 15:22:10 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/30 20:08:51 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd)
 	else
 	{
 		if(exec_builtin(all, cmd))
+		{
 			all->exit_status = EXIT_FAILURE;
+			all->exit_flag = 1;
+		}
 	}
 }

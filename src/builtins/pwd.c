@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 08:40:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 15:41:51 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/30 20:02:30 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_pwd(t_all *all, t_cmd *cmd)
 	else if (ok == -1)
 	{
 		perror("error: ");
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }

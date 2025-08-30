@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/29 16:56:05 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/30 20:02:05 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,49 +20,63 @@ static int	is_valid_number(const char *str)
 	if (!str || !*str)
 		return (0);
 	i = 0;
+	while (str[i] && is_space(str[i]))
+			i++;
 	if (str[i] == '+' || str[i] == '-')
 		i++;
 	if (!str[i])
 		return (0);
-	while (str[i])
+	while (str[i] && !is_space(str[i]))
 	{
 		if (!ft_isdigit(str[i]))
 			return (0);
 		i++;
 	}
+	while (str[i] && is_space(str[i]))
+		i++;
+	if (str[i])
+		return (0);
 	return (1);
 }
 
-static long	ft_atol(const char *str)
+int	ft_atoi(char *str)
 {
-	long	result;
-	int		sign;
-	int		i;
+	int			i;
+	long int	number;
+	int			sign;
 
-	result = 0;
-	sign = 1;
 	i = 0;
-	if (str[i] == '+' || str[i] == '-')
+	number = 0;
+	sign = 1;
+	while(str[i] && is_space(str[i]))
+		i++;
+	if (str[i] == 45 || str[i] == 43)
 	{
-		if (str[i] == '-')
-			sign = -1;
+		if (str[i] == 45)
+			sign *= -1;
 		i++;
 	}
-	while (str[i] && ft_isdigit(str[i]))
+	while (str[i] >= 48 && str[i] <= 57)
 	{
-		result = result * 10 + (str[i] - '0');
+		number *= 10;
+		number += str[i] - 48;
 		i++;
 	}
-	return (result * sign);
+	while (str[i] && is_space(str[i]))
+		i++;
+	if (str[i])
+		return (0);
+	number *= sign;
+	return (number);
 }
 
-static int	is_numeric_overflow(const char *str)
+static int	is_numeric_overflow(char *str)
 {
 	long	num;
 
 	if (!is_valid_number(str))
 		return (1);
-	num = ft_atol(str);
+	num = ft_atoi(str);
 	if (num > LONG_MAX || num < LONG_MIN)
 		return (1);
 	return (0);
@@ -98,13 +112,13 @@ int	ft_exit(t_all *all, t_cmd *cmd)
 		all->exit_status = 1;
 		return (1);
 	}
-	if (is_numeric_overflow(cmd->args[1]) || !is_valid_number(cmd->args[1]))
+	if (is_numeric_overflow(cmd->args[1]))
 	{
-		fprintf(stderr, "numeric argument required\n");
+		printf("minishell: exit: %snumeric argument required\n", cmd->args[1]);
 		all->exit_status = 2;
 		exit_with_cleanup(all);
 	}
-	exit_code = (unsigned char)ft_atol(cmd->args[1]);
+	exit_code = (unsigned char)ft_atoi(cmd->args[1]);
 	all->exit_status = exit_code;
 	exit_with_cleanup(all);
 	return (0);

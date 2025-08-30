@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/30 16:19:15 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/30 20:04:16 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
 
 	envp = list_to_envp(all);
 	execve(path, cmd->args, envp);
+	if(path[0] == '.' && path[1] == '/')
+		printf("minishell: %s: is a directory\n", cmd->args[0]);
 	free(path);
 	if (envp)
 	{
@@ -87,6 +89,8 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 	path = path_find(cmd->args[0], all);
 	if (path)
 		execute_with_path(path, cmd, all);
+	else if (cmd->args[0][0] == '\0')
+		fprintf(stderr, "'': command not found\n");
 	else
 	{
 		if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')

@@ -66,7 +66,7 @@ void	*safe_malloc(t_all *all, int size)
 	return (str);
 }
 
-void	clean_malloc(t_all *all)
+int	clean_malloc(t_all *all)
 {
 	t_collector	*current;
 	t_collector	*temp;
@@ -84,4 +84,5 @@ void	clean_malloc(t_all *all)
 	all->collector = NULL;
 	all->card = NULL;
 	all->cmd = NULL;
+	return (1);
 }

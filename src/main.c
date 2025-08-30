@@ -6,13 +6,13 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/30 19:39:27 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/30 20:23:58 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	cycle(t_all *all, char *line, char *input)
+int	cycle(t_all *all, char *line, char *input)
 {
 	line = readline("minishell>>");
 	if (line == NULL)
@@ -29,19 +29,16 @@ void	cycle(t_all *all, char *line, char *input)
 		add_history(line);
 	input = collector_dup(all, line);
 	if (lexer(input, all) == 1)
-	{
-		clean_malloc(all);
-		return ;
-	}
+		return (clean_malloc(all));
 	if (expander(all) == 1)
-	{
-		clean_malloc(all);
-		return ;
-	}
-	parser(all);
-	exec(all);
+		return (clean_malloc(all));
+	if (parser(all) == 1)
+		return (clean_malloc(all));
+	if (exec(all) == 1)
+		return (clean_malloc(all));
 	clean_malloc(all);
 	all->exit_status = 0;
+	return (0);
 }
 
 void	env_not_found(t_all *all)
@@ -74,16 +71,23 @@ int	main(int argc, char **argv, char **env_list)
 	char	*input;
 
 	signal_switch(1);
-	(void)argc;
-	(void)argv;
 	line = NULL;
 	all = (t_all){0};
+	if (argc > 1)
+	{
+		printf("%s: No such file or directory\n", argv[1]);
+		all.exit_status = 127;
+		return (all.exit_status);
+	}
 	if (!env_list[0])
 		env_not_found(&all);
 	else
 		put_env(&all, env_list);
 	input = NULL;
 	while (1)
+	{
 		cycle(&all, line, input);
+		all.exit_flag = 0;
+	}
 	return (0);
 }
