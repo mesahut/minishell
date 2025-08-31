@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 11:36:27 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 11:56:53 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
 	}
 	exit(EXIT_FAILURE);
 }
-
 static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 {
 	char	*path;
@@ -98,16 +97,10 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 		fprintf(stderr, "'': command not found\n");
 	else
 	{
-		if (cmd->args[0][0] == '.' && cmd->args[0][1] == '/' && cmd->args[0][2] == '\0')
-			fprintf(stderr, "minishell: %s: is a directory\n", cmd->args[0]);
-		else if (cmd->args[0][0] == '.' && cmd->args[0][1] == '/' && cmd->args[0][2] != '\0')
-			fprintf(stderr, "minishell: %s: no such file or directory\n", cmd->args[0]);
-		else if (cmd->args[0][0] == '/' && cmd->args[0][1] == '\0')
-			fprintf(stderr, "minishell: %s: is a directory\n", cmd->args[0]);
-		else if (cmd->args[0][0] == '.' && cmd->args[0][1] == '\0')
-			printf("minishell: %s: filename argument required\n", cmd->args[0]);
+		if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
+			fprintf(stderr, "%s: No such file or directory\n", cmd->args[0]);
 		else
-			fprintf(stdout, "minishell: %s: command not found\n", cmd->args[0]);
+			fprintf(stderr, "%s: command not found\n", cmd->args[0]);
 		reset_all(all, EXIT_COMMAND_NOT_FOUND);
 	}
 }
