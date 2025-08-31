@@ -6,11 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 16:24:36 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:44:19 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static int	is_valid_identifier(const char *identifier)
 {

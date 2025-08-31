@@ -6,11 +6,17 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 16:58:16 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:45:06 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
 
 int	cycle(t_all *all, char *line, char *input)
 {

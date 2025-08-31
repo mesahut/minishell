@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 17:57:24 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/26 15:07:30 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 18:31:00 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "../../include/minishell.h"
+#include <readline/readline.h>
 
 char	*collector_dup(t_all *all, char *line)
 {

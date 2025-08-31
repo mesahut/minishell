@@ -34,7 +34,7 @@ static void	handle_pipe_parent(t_cmd *cmd, int *prev_fd, int pipefd[2])
 int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len)
 {
 	if ((is_builtin(cmd->args[0]) && cmd->next == NULL)
-		|| (len == 1 && strcmp(cmd->args[0], "exit") == 0))
+		|| (len == 1 && ft_strcmp(cmd->args[0], "exit") == 0))
 	{
 		exec_builtin_single(cmd, all, prev_fd);
 		return (1);
@@ -97,6 +97,21 @@ void	wait_forks(t_all *all)
 	reset_all(all, 1);
 }
 
+void	fork_fail(t_all *all, int *prev_fd, int pipefd[2])
+{
+	if (*prev_fd != -1)
+	{
+		close(*prev_fd);
+		*prev_fd = -1;
+	}
+	if (pipefd[0] != -1)
+		close(pipefd[0]);
+	if (pipefd[1] != -1)
+		close(pipefd[1]);
+	perror("fork");
+	wait_forks(all);
+}
+
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 {
 	pid_t	pid;
@@ -105,17 +120,7 @@ void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 	signal_switch(2);
 	if (pid == -1)
 	{
-		if (*prev_fd != -1)
-		{
-			close(*prev_fd);
-			*prev_fd = -1;
-		}
-		if (pipefd[0] != -1)
-			close(pipefd[0]);
-		if (pipefd[1] != -1)
-			close(pipefd[1]);
-		perror("fork");
-		wait_forks(all);
+		fork_fail(all, prev_fd, pipefd);
 		return ;
 	}
 	else if (pid == 0)

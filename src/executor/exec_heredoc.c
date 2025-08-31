@@ -6,13 +6,14 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 17:57:02 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:48:15 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdio.h>
 #include "../../include/minishell.h"
 
 static char	**collect_heredocs(t_cmd *cmd, t_all *all)
@@ -67,7 +68,7 @@ int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
 		perror("pipe for heredoc");
 		return (1);
 	}
-	ret = heredoc_loop(all, heredocs, heredoc_pipe);
+	ret = read_heredoc_input(heredoc_pipe[1], heredocs, all);
 	if (ret != 0)
 		return (handle_heredoc_error(heredoc_pipe, ret));
 	close(heredoc_pipe[1]);
@@ -91,7 +92,7 @@ int	check_here_flag(t_card *card, char *eof)
 	current = card;
 	while (current)
 	{
-		if (current->here_flag == 1 && strcmp(current->value, eof) == 0)
+		if (current->here_flag == 1 && ft_strcmp(current->value, eof) == 0)
 			return (0);
 		current = current->next;
 	}

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:31:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/07/28 09:34:20 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 18:44:08 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdlib.h>
 
 static void	remove_env_key(t_all *all, const char *key)
 {
@@ -21,7 +22,7 @@ static void	remove_env_key(t_all *all, const char *key)
 	curr = all->env;
 	while (curr)
 	{
-		if (strcmp(curr->key, key) == 0)
+		if (ft_strcmp(curr->key, key) == 0)
 		{
 			if (prev)
 				prev->next = curr->next;

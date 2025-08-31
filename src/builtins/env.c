@@ -6,11 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:46:46 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 14:57:04 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:43:58 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int	ft_env(t_all *all, t_cmd *cmd)
 {
@@ -38,7 +40,7 @@ t_env	*find_env_by_key(t_env *env_list, const char *key)
 {
 	while (env_list)
 	{
-		if (!strcmp(env_list->key, key))
+		if (!ft_strcmp(env_list->key, key))
 			return (env_list);
 		env_list = env_list->next;
 	}
@@ -49,7 +51,7 @@ int	update_env_value(t_env *env, const char *key, const char *value, t_all *all)
 {
 	while (env)
 	{
-		if (strcmp(env->key, key) == 0)
+		if (ft_strcmp(env->key, key) == 0)
 		{
 			free(env->value);
 			env->value = ft_strdup(value, all);

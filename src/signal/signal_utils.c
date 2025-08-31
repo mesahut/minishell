@@ -6,11 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:46:01 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 13:49:14 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:30:13 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <readline/readline.h>
 #include <signal.h>
 
 void	sig_cat_quit(int sig)

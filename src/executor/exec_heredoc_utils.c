@@ -6,11 +6,16 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:03:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 17:24:43 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:46:34 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <readline/readline.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
 
 int	handle_heredoc_eof(char *eof)
 {
@@ -23,7 +28,7 @@ int	handle_heredoc_eof(char *eof)
 
 int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all)
 {
-	if (strcmp(line, eof) == 0)
+	if (ft_strcmp(line, eof) == 0)
 	{
 		free(line);
 		return (1);
@@ -39,37 +44,44 @@ int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all)
 	return (0);
 }
 
-int	read_heredoc_input(int write_fd, char *eof, t_all *all)
+int	read_heredoc_input(int write_fd, char **heredoc, t_all *all)
 {
-	char		*line;
+	char	*line;
+	int		i = 0;
+	int		count = 0;
 
-	while (1)
+	// Kaç heredoc olduğunu bul
+	while (heredoc[count])
+		count++;
+
+	while (i < count)
 	{
-		line = readline("> ");
-		if (line == NULL)
-			return (handle_heredoc_eof(eof));
-		if (g_signal == SIGINT)
+		int		is_last = (i == count - 1);  // sadece sonuncuysa yaz
+
+		while (1)
 		{
-			g_signal = 0;
-			return (130);
+			line = readline("> ");
+			if (line == NULL)
+			{
+				handle_heredoc_eof(heredoc[i]);
+				break;
+			}
+			if (g_signal == SIGINT)
+			{
+				g_signal = 0;
+				free(line);
+				return (130);
+			}
+			if (strcmp(line, heredoc[i]) == 0)
+			{
+				free(line);
+				break;
+			}
+			if (is_last)
+				process_heredoc_line(line, write_fd, heredoc[i], all);
+			else
+				free(line);  // discard
 		}
-		if (process_heredoc_line(line, write_fd, eof, all))
-			break ;
-	}
-	return (0);
-}
-
-int	heredoc_loop(t_all *all, char **heredocs, int pipefd[2])
-{
-	int	i;
-	int	ret;
-
-	i = 0;
-	while (heredocs[i])
-	{
-		ret = read_heredoc_input(pipefd[1], heredocs[i], all);
-		if (ret == 130)
-			return (ret);
 		i++;
 	}
 	return (0);

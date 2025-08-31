@@ -6,11 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 08:45:15 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 13:29:55 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:38:33 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
 
 static void	print_echo_args(char **args, int start)
 {

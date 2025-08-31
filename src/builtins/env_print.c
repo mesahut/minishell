@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env_print.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:15:23 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/26 14:57:14 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 18:43:47 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int	cmp_env(const void *a, const void *b)
 {
@@ -19,7 +21,7 @@ int	cmp_env(const void *a, const void *b)
 
 	s2 = *(const char **)b;
 	s1 = *(const char **)a;
-	return (strcmp(s1, s2));
+	return (ft_strcmp(s1, s2));
 }
 
 int	env_list_size(t_env *env)

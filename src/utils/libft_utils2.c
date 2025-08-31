@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 18:00:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 14:01:59 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:22:59 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,14 @@ int	ft_atoi(char *str)
 		return (0);
 	number *= sign;
 	return (number);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1 && s2 && s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

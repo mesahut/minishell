@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 13:44:06 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:25:17 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,19 @@ void	handle_output_redirects(t_redirect *redir)
 	}
 }
 
+void	set_out(t_all *all, int pipefd[2])
+{
+	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+	{
+		perror("dup2 for stdout");
+		close(pipefd[1]);
+		if (pipefd[0] != -1)
+			close(pipefd[0]);
+		reset_all(all, 1);
+	}
+	close(pipefd[1]);
+}
+
 static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2], t_all *all)
 {
 	if ((prev_fd != -1 && prev_fd != STDIN_FILENO))
@@ -44,17 +57,7 @@ static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2], t_all *all)
 		close(prev_fd);
 	}
 	if (cmd->next && pipefd[1] != -1)
-	{
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2 for stdout");
-			close(pipefd[1]);
-			if (pipefd[0] != -1)
-				close(pipefd[0]);
-			reset_all(all, 1);
-		}
-		close(pipefd[1]);
-	}
+		set_out(all, pipefd);
 	if (pipefd[0] != -1)
 		close(pipefd[0]);
 	if (prev_fd != -1 && prev_fd != STDIN_FILENO)
@@ -111,7 +114,7 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 	setup_child_io(cmd, prev_fd, pipefd, all);
 	if (cmd->redirects)
 		handle_redirections(cmd, all);
-	if (is_builtin(cmd->args[0]) || strcmp(cmd->args[0], "exit") == 0)
+	if (is_builtin(cmd->args[0]) || ft_strcmp(cmd->args[0], "exit") == 0)
 	{
 		n = exec_builtin(all, cmd, 0);
 		reset_all(all, n);

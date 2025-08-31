@@ -13,18 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
 # include <string.h>
 # include <fcntl.h>
-# include <dirent.h>
-# include <sys/wait.h>
-# include <limits.h>
-# include <errno.h>
-# include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 
 # define PIPE 0
 # define R_APPEND 1
@@ -194,6 +184,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len, t_all *all);
 char	**ft_split(char const *s, char c, t_all *all);
 char	*ft_itoa(int n, t_all *all);
 int		ft_atoi(char *str);
+int		ft_strcmp(const char *s1, const char *s2);
 void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type);
 void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp);
 void	put_node(t_cmd **head_cmd, t_cmd *new_cmd);
@@ -202,8 +193,7 @@ int		redir_case( t_card **current_card, int redir_type);
 int		preprocess_heredocs(t_all *all);
 int		handle_heredoc_eof(char *eof);
 int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all);
-int		read_heredoc_input(int write_fd, char *eof, t_all *all);
-int		heredoc_loop(t_all *all, char **heredocs, int pipefd[2]);
+int		read_heredoc_input(int write_fd, char **heredocs, t_all *all);
 void	wait_forks(t_all *all);
 
 void	sig_exc(int sig);

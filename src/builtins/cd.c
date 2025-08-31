@@ -6,15 +6,18 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 08:39:58 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 00:11:38 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:43:35 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 static char	*resolve_cd_path(t_cmd *cmd)
 {
-	if (!cmd->args[1] || strcmp(cmd->args[1], "~") == 0)
+	if (!cmd->args[1] || ft_strcmp(cmd->args[1], "~") == 0)
 		return (getenv("HOME"));
 	return (cmd->args[1]);
 }

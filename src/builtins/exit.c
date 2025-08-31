@@ -6,11 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 13:54:52 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:44:29 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <readline/readline.h>
+#include <stdlib.h>
 #include <limits.h>
 
 static int	is_valid_number(const char *str)

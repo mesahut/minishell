@@ -6,11 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 21:44:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/29 17:14:29 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 18:39:29 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdio.h>
 
 char	*handle_exit_status(t_all *all, int dollar, char *before, char *line)
 {
