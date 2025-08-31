@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 18:00:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/24 14:17:34 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 14:01:59 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,37 @@ int	ft_strlen(const char *s)
 	return (i);
 }
 
-int	is_redir(int type)
+void	skip_space(const char *s, int *i)
 {
-	if (type == R_APPEND || type == R_OUT || type == HEREDOC
-		|| type == R_IN || type == R_ERR_OUT || type == R_ERR_APPEND)
+	while (s && s[*i] && is_space(s[*i]))
+		(*i)++;
+}
+
+int	ft_atoi(char *str)
+{
+	int			i;
+	long int	number;
+	int			sign;
+
+	i = 0;
+	number = 0;
+	sign = 1;
+	skip_space(str, &i);
+	if (str[i] == 45 || str[i] == 43)
 	{
-		return (1);
+		if (str[i] == 45)
+			sign *= -1;
+		i++;
 	}
-	return (0);
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		number *= 10;
+		number += str[i] - 48;
+		i++;
+	}
+	skip_space(str, &i);
+	if (str[i])
+		return (0);
+	number *= sign;
+	return (number);
 }

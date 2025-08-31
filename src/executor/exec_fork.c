@@ -22,23 +22,20 @@ static void	handle_pipe_parent(t_cmd *cmd, int *prev_fd, int pipefd[2])
 		close(pipefd[1]);
 	if (cmd->next)
 	{
-		*prev_fd = pipefd[0]; // bir sonraki komut için stdin olacak
+		*prev_fd = pipefd[0];
 	}
 	else
 	{
 		if (pipefd[0] != -1)
-			close(pipefd[0]);  // ✅ son komutsa, pipefd[0] burada kapanmalı
+			close(pipefd[0]);
 	}
 }
-
-
 
 int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len)
 {
 	if ((is_builtin(cmd->args[0]) && cmd->next == NULL)
 		|| (len == 1 && strcmp(cmd->args[0], "exit") == 0))
 	{
-
 		exec_builtin_single(cmd, all, prev_fd);
 		return (1);
 	}
@@ -64,58 +61,62 @@ void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid)
 	}
 }
 
-void set_pid(pid_t pid, t_all *all)
+void	set_pid(pid_t pid, t_all *all)
 {
+	t_clean_pid	*new_node;
+
+	new_node = NULL;
 	if (pid > 0)
 	{
-		t_clean_pid *new_node = safe_malloc(all, sizeof(t_clean_pid));
+		new_node = safe_malloc(all, sizeof(t_clean_pid));
 		if (!new_node)
-			return;
+			return ;
 		new_node->pid = pid;
 		new_node->next = all->clean_pids;
 		all->clean_pids = new_node;
 	}
 }
 
-void wait_forks(t_all *all)
+void	wait_forks(t_all *all)
 {
-    t_clean_pid *current = all->clean_pids;
-    int status;
+	t_clean_pid	*current;
+	int			status;
 
 	status = 0;
-    while (current)
-    {
-        waitpid(current->pid, &status, 0);
-        if (WIFEXITED(status))
-            all->exit_status = WEXITSTATUS(status);
-        else if (WIFSIGNALED(status))
-            all->exit_status = 128 + WTERMSIG(status);
-        current = current->next;
-    }
-    all->clean_pids = NULL;
-    reset_all(all, 1);
+	current = all->clean_pids;
+	while (current)
+	{
+		waitpid(current->pid, &status, 0);
+		if (WIFEXITED(status))
+			all->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			all->exit_status = 128 + WTERMSIG(status);
+		current = current->next;
+	}
+	all->clean_pids = NULL;
+	reset_all(all, 1);
 }
 
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 {
 	pid_t	pid;
-	pid = fork();
 
+	pid = fork();
 	signal_switch(2);
 	if (pid == -1)
 	{
-	if (*prev_fd != -1)
-	{
-		close(*prev_fd);
-		*prev_fd = -1;
-	}
-	if (pipefd[0] != -1)
-		close(pipefd[0]);
-	if (pipefd[1] != -1)
-		close(pipefd[1]);
-	perror("fork");
-	wait_forks(all);
-	return ;
+		if (*prev_fd != -1)
+		{
+			close(*prev_fd);
+			*prev_fd = -1;
+		}
+		if (pipefd[0] != -1)
+			close(pipefd[0]);
+		if (pipefd[1] != -1)
+			close(pipefd[1]);
+		perror("fork");
+		wait_forks(all);
+		return ;
 	}
 	else if (pid == 0)
 		exec_child_process(cmd, all, *prev_fd, pipefd);
@@ -125,5 +126,4 @@ void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 		exec_parent_process(cmd, all, prev_fd, pid);
 		handle_pipe_parent(cmd, prev_fd, pipefd);
 	}
-	signal_switch(1);
 }

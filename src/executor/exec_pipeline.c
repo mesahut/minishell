@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipeline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 12:59:19 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 16:57:44 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,13 @@ void	exec_signal_wait(t_all *all)
 	}
 }
 
-int cmd_len(t_cmd *cmd)
+int	cmd_len(t_cmd *cmd)
 {
-	int len = 0;
-	t_cmd *temp = cmd;
+	int		len;
+	t_cmd	*temp;
+
+	len = 0;
+	temp = cmd;
 	while (temp)
 	{
 		len++;
@@ -78,7 +81,7 @@ int	exec(t_all *all)
 	{
 		if (process_single_cmd(cmd, all, &prev_fd, len))
 			break ;
-		if (cmd->redirects && cmd->redirects->fd != 0)
+		if (cmd->redirects && cmd->redirects->fd >= 0)
 			close(cmd->redirects->fd);
 		cmd = cmd->next;
 	}

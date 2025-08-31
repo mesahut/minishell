@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 13:16:34 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/25 22:10:49 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:54:14 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,14 @@ void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type)
 	redir->fd = -1;
 	redir->next = NULL;
 	put_redir(redir, current_cmd, tmp);
+}
+
+int	is_redir(int type)
+{
+	if (type == R_APPEND || type == R_OUT || type == HEREDOC
+		|| type == R_IN || type == R_ERR_OUT || type == R_ERR_APPEND)
+	{
+		return (1);
+	}
+	return (0);
 }

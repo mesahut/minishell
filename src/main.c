@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/30 20:23:58 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 16:58:16 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	main(int argc, char **argv, char **env_list)
 	char	*line;
 	char	*input;
 
-	signal_switch(1);
 	line = NULL;
 	all = (t_all){0};
 	if (argc > 1)
@@ -86,6 +85,7 @@ int	main(int argc, char **argv, char **env_list)
 	input = NULL;
 	while (1)
 	{
+		signal_switch(1);
 		cycle(&all, line, input);
 		all.exit_flag = 0;
 	}

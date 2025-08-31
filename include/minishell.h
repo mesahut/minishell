@@ -193,6 +193,7 @@ char	*ft_strjoin(char const *s1, char const *s2, t_all *all);
 char	*ft_substr(char const *s, unsigned int start, size_t len, t_all *all);
 char	**ft_split(char const *s, char c, t_all *all);
 char	*ft_itoa(int n, t_all *all);
+int		ft_atoi(char *str);
 void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type);
 void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp);
 
@@ -200,7 +201,10 @@ int		handle_heredoc_eof(char *eof);
 int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all);
 int		read_heredoc_input(int write_fd, char *eof, t_all *all);
 int		heredoc_loop(t_all *all, char **heredocs, int pipefd[2]);
-
-
 void	wait_forks(t_all *all);
+
+void	sig_exc(int sig);
+void	sig_prompt(int sig);
+void	sig_cat_quit(int sig);
+void	sig_heredoc(int sig);
 #endif

@@ -117,7 +117,7 @@ static int	preprocess_heredocs(t_all *all)
 				signal_switch(1);
 				if (ret != 0)
 					return (ret);
-				break;
+				break ;
 			}
 			redir = redir->next;
 		}
@@ -126,14 +126,14 @@ static int	preprocess_heredocs(t_all *all)
 	return (0);
 }
 
-int	parser(t_all *all)
+int	parser_cycle(t_all *all, t_card *cursor)
 {
 	t_cmd	*head_cmd;
 	t_cmd	*current_cmd;
-	t_card	*cursor;
 	t_card	*old_card;
 
-	cursor = all->card;
+	current_cmd = NULL;
+	old_card = NULL;
 	head_cmd = NULL;
 	while (cursor != NULL)
 	{
@@ -151,11 +151,21 @@ int	parser(t_all *all)
 			cursor = cursor->next;
 	}
 	all->cmd = head_cmd;
+	return (1);
+}
+
+int	parser(t_all *all)
+{
+	t_card	*cursor;
+
+	cursor = all->card;
+	if(parser_cycle(all, cursor) == 0)
+		return (0);
 	if (preprocess_heredocs(all) != 0)
 	{
 		all->exit_status = 130;
 		all->exit_flag = 1;
-		return(all->exit_flag);
+		return (all->exit_flag);
 	}
 	return (0);
 }

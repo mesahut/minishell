@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 12:45:35 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:44:06 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2], t_all *all)
 		close(prev_fd);
 }
 
-
 static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
 {
 	char	**envp;
@@ -69,7 +68,7 @@ static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
 
 	envp = list_to_envp(all);
 	execve(path, cmd->args, envp);
-	if(path[0] == '.' && path[1] == '/')
+	if (path[0] == '.' && path[1] == '/')
 		printf("minishell: %s: is a directory\n", cmd->args[0]);
 	free(path);
 	if (envp)
@@ -84,6 +83,7 @@ static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
 	}
 	exit(EXIT_FAILURE);
 }
+
 static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 {
 	char	*path;

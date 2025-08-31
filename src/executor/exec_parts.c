@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parts.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 12:15:47 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:35:48 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	exec_with_redirect(t_cmd *cmd, t_all *all)
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	handle_redirections(cmd, all);
-	if(exec_builtin(all, cmd, 1))
+	if (exec_builtin(all, cmd, 1))
 		all->exit_status = EXIT_FAILURE;
 	restore_fds(saved_stdin, saved_stdout);
 }
@@ -95,15 +95,15 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd)
 		exec_with_redirect(cmd, all);
 	else
 	{
-		if(exec_builtin(all, cmd, 1))
+		if (exec_builtin(all, cmd, 1))
 		{
 			all->exit_status = EXIT_FAILURE;
 			all->exit_flag = 1;
 		}
 	}
 	if (saved_stdin != -1)
-    {
-        dup2(saved_stdin, STDIN_FILENO);
-        close(saved_stdin);
-    }
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
 }

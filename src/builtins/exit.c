@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 12:00:44 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:54:52 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	is_valid_number(const char *str)
 		return (0);
 	i = 0;
 	while (str[i] && is_space(str[i]))
-			i++;
+		i++;
 	if (str[i] == '+' || str[i] == '-')
 		i++;
 	if (!str[i])
@@ -37,37 +37,6 @@ static int	is_valid_number(const char *str)
 	if (str[i])
 		return (0);
 	return (1);
-}
-
-int	ft_atoi(char *str)
-{
-	int			i;
-	long int	number;
-	int			sign;
-
-	i = 0;
-	number = 0;
-	sign = 1;
-	while(str[i] && is_space(str[i]))
-		i++;
-	if (str[i] == 45 || str[i] == 43)
-	{
-		if (str[i] == 45)
-			sign *= -1;
-		i++;
-	}
-	while (str[i] >= 48 && str[i] <= 57)
-	{
-		number *= 10;
-		number += str[i] - 48;
-		i++;
-	}
-	while (str[i] && is_space(str[i]))
-		i++;
-	if (str[i])
-		return (0);
-	number *= sign;
-	return (number);
 }
 
 static int	is_numeric_overflow(char *str)
@@ -101,7 +70,7 @@ int	ft_exit(t_all *all, t_cmd *cmd, int flag)
 {
 	int	exit_code;
 
-	if(flag == 1)
+	if (flag == 1)
 		printf("exit\n");
 	if (!cmd->args[1])
 	{

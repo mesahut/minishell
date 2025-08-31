@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 12:52:40 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:36:45 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ static int	handle_heredoc_error(int heredoc_pipe[2], int ret)
 
 int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
 {
-	int		heredoc_pipe[2];
-	char	**heredocs;
-	int		ret;
+	int			heredoc_pipe[2];
+	char		**heredocs;
+	t_redirect	*redir;
+	int			ret;
 
 	heredocs = collect_heredocs(cmd, all);
 	if (!heredocs)
@@ -70,13 +71,13 @@ int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
 	if (ret != 0)
 		return (handle_heredoc_error(heredoc_pipe, ret));
 	close(heredoc_pipe[1]);
-	t_redirect *redir = cmd->redirects;
+	redir = cmd->redirects;
 	while (redir)
 	{
 		if (redir->type == HEREDOC)
 		{
 			redir->fd = heredoc_pipe[0];
-			break;
+			break ;
 		}
 		redir = redir->next;
 	}

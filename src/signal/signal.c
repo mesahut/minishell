@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:12:42 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/30 20:24:19 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 17:02:32 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,13 @@
 
 int	g_signal = 0;
 
-void	sig_cat_quit(int sig)
-{
-	g_signal = sig;
-	printf("Quit (the core has been removed)\n");
-}
-
-void	sig_prompt(int sig)
-{
-	g_signal = sig;
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void	sig_exc(int sig)
-{
-	rl_event_hook = NULL;
-	g_signal = sig;
-	printf("\n");
-}
-void	sig_heredoc(int sig)
-{
-	g_signal = sig;
-	rl_done = 1;
-}
-
 int	do_nothing(void)
 {
-	return 0;
+	return (0);
+}
+void sig_pipe(int sig)
+{
+	g_signal = sig;
 }
 
 void	signal_switch(int status)
@@ -55,18 +32,21 @@ void	signal_switch(int status)
 	if (status == 1)
 	{
 		rl_event_hook = NULL;
+		signal(SIGPIPE,sig_pipe);
 		signal(SIGINT, sig_prompt);
 		signal(SIGQUIT, SIG_IGN);
 	}
 	else if (status == 2)
 	{
 		rl_event_hook = NULL;
+		signal(SIGPIPE,sig_pipe);
 		signal(SIGINT, sig_exc);
 		signal(SIGQUIT, sig_cat_quit);
 	}
 	else if (status == 3)
 	{
 		rl_event_hook = do_nothing;
+		signal(SIGPIPE,sig_pipe);
 		signal(SIGINT, sig_heredoc);
 	}
 }

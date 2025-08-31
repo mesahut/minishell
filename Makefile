@@ -29,6 +29,7 @@ SRCS = src/utils/card_list.c \
 	src/builtins/exit.c \
 	src/utils/utils.c \
 	src/signal/signal.c \
+	src/signal/signal_utils.c \
 	src/lexer/lexer_utils.c \
 	src/expansion/expand_utils.c \
 	src/expansion/node_utils.c \
