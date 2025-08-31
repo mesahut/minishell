@@ -21,9 +21,9 @@ void	create_env(char **env_line, t_all *all)
 	new_env = (t_env *)malloc(sizeof(t_env));
 	if (!new_env)
 		reset_all(all, EXIT_ALLOC_FAIL);
-	new_env->key = strdup(env_line[0]);
+	new_env->key = ft_strdup(env_line[0], all);
 	if (env_line[1])
-		new_env->value = strdup(env_line[1]);
+		new_env->value = ft_strdup(env_line[1], all);
 	else
 		new_env->value = NULL;
 	new_env->next = NULL;

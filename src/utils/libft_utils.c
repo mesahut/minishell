@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:07:59 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/26 14:58:35 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 19:00:03 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*ft_strdup(const char *s1, t_all *all)
 	s2[i] = '\0';
 	return (s2);
 }
+
+
 
 char	*ft_strjoin(char const *s1, char const *s2, t_all *all)
 {

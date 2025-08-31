@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 18:45:06 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:06:50 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	env_not_found(t_all *all)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		cwd = strdup(".");
+		cwd = ft_strdup(".", all);
 	pair[0] = "PWD";
 	pair[1] = cwd;
 	pair[2] = NULL;

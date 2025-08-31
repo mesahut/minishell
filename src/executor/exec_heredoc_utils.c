@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:03:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 18:46:34 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:22:07 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,24 @@ int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all)
 int	read_heredoc_input(int write_fd, char **heredoc, t_all *all)
 {
 	char	*line;
-	int		i = 0;
-	int		count = 0;
+	int		i;
+	int		count;
+	int		is_last;
 
-	// Kaç heredoc olduğunu bul
+	count = 0;
+	i = 0;
 	while (heredoc[count])
 		count++;
-
 	while (i < count)
 	{
-		int		is_last = (i == count - 1);  // sadece sonuncuysa yaz
-
+		is_last = (i == count - 1);
 		while (1)
 		{
 			line = readline("> ");
 			if (line == NULL)
 			{
 				handle_heredoc_eof(heredoc[i]);
-				break;
+				break ;
 			}
 			if (g_signal == SIGINT)
 			{
@@ -75,12 +75,12 @@ int	read_heredoc_input(int write_fd, char **heredoc, t_all *all)
 			if (strcmp(line, heredoc[i]) == 0)
 			{
 				free(line);
-				break;
+				break ;
 			}
 			if (is_last)
 				process_heredoc_line(line, write_fd, heredoc[i], all);
 			else
-				free(line);  // discard
+				free (line);
 		}
 		i++;
 	}

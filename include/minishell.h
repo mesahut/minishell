@@ -13,8 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <string.h>
 # include <fcntl.h>
+# include <stdlib.h>
 
 # define PIPE 0
 # define R_APPEND 1

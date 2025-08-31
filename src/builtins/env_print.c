@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:15:23 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 18:43:47 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:22:28 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ static char	**get_sorted_keys(t_all *all)
 		reset_all(all, EXIT_ALLOC_FAIL);
 	while (current)
 	{
-		keys[i++] = strdup(current->key);
+		keys[i++] = ft_strdup(current->key, all);
 		current = current->next;
 	}
 	keys[i] = NULL;
-	qsort(keys, size, sizeof(char *), cmp_env);
+	qsort(keys, size, sizeof(char *), cmp_env); // Sort the keys
 	return (keys);
 }
 

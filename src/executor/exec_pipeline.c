@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 16:57:44 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:18:49 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void	init_pipeline_vars(t_all *all, t_cmd **cmd, int *prev_fd)
+int	init_pipeline_vars(t_all *all, t_cmd **cmd, int *prev_fd)
 {
+	if (!all->cmd->args[0])
+	{
+		clean_malloc(all);
+		return (1);
+	}
 	*cmd = all->cmd;
 	*prev_fd = -1;
+	return (0);
 }
 
 static int	process_single_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int len)
@@ -74,7 +80,8 @@ int	exec(t_all *all)
 	int		len;
 	int		is_pipeline;
 
-	init_pipeline_vars(all, &cmd, &prev_fd);
+	if (init_pipeline_vars(all, &cmd, &prev_fd))
+		return (0);
 	is_pipeline = (cmd && cmd->next != NULL);
 	len = cmd_len(cmd);
 	while (cmd)
