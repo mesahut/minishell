@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 12:02:42 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 12:45:35 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 	if (is_builtin(cmd->args[0]) || strcmp(cmd->args[0], "exit") == 0)
 	{
 		n = exec_builtin(all, cmd, 0);
+		reset_all(all, n);
 	}
 	else
 		execute_child_cmd(cmd, all);

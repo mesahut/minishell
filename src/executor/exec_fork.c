@@ -38,6 +38,7 @@ int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len)
 	if ((is_builtin(cmd->args[0]) && cmd->next == NULL)
 		|| (len == 1 && strcmp(cmd->args[0], "exit") == 0))
 	{
+
 		exec_builtin_single(cmd, all, prev_fd);
 		return (1);
 	}
