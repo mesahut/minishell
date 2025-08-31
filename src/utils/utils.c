@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 22:42:12 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 18:29:19 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:25:02 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,22 +77,5 @@ int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
-	return (0);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	c = (unsigned char)c;
-	while (s[i])
-	{
-		if (s[i] == c)
-			return ((char *)s + i);
-		i++;
-	}
-	if (c == '\0')
-		return ((char *)&s[i]);
 	return (0);
 }

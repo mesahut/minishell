@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 18:44:19 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:25:37 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	handle_export_with_value(t_all *all, const char *arg)
 	arg_copy = ft_strdup(arg, all);
 	if (!arg_copy)
 		return (1);
-	equal_pos = strchr(arg_copy, '=');
+	equal_pos = ft_strchr(arg_copy, '=');
 	value = equal_pos + 1;
 	*equal_pos = '\0';
 	if (value[0] == 0)
@@ -75,7 +75,7 @@ static int	parse_export_arg(t_all *all, const char *arg)
 		all->exit_status = 1;
 		return (1);
 	}
-	equal_sign = strchr(arg, '=');
+	equal_sign = ft_strchr(arg, '=');
 	if (equal_sign)
 		return (handle_export_with_value(all, arg));
 	else
