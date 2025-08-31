@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/30 20:08:51 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 11:30:09 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,11 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd)
 {
 	int	saved_stdin;
 
+	saved_stdin = -1;
 	if (prev_fd != -1)
 	{
 		saved_stdin = dup(STDIN_FILENO);
-		dup2(prev_fd, saved_stdin);
+		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
 	if (cmd->redirects)
@@ -98,6 +99,12 @@ void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd)
 		{
 			all->exit_status = EXIT_FAILURE;
 			all->exit_flag = 1;
+			clean_malloc(all);
 		}
 	}
+	if (saved_stdin != -1)
+    {
+        dup2(saved_stdin, STDIN_FILENO);
+        close(saved_stdin);
+    }
 }

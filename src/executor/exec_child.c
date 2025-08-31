@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 10:47:18 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 11:36:27 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ void	handle_output_redirects(t_redirect *redir)
 	}
 }
 
-static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2])
+static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2], t_all *all)
 {
-	if (prev_fd != -1 && prev_fd != STDIN_FILENO)
+	if ((prev_fd != -1 && prev_fd != STDIN_FILENO))
 	{
 		if (dup2(prev_fd, STDIN_FILENO) == -1)
 		{
 			perror("dup2 for stdin");
 			close(prev_fd);
-			exit(EXIT_FAILURE);
+			reset_all(all, 1);
 		}
 		close(prev_fd);
 	}
@@ -51,13 +51,18 @@ static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2])
 			close(pipefd[1]);
 			if (pipefd[0] != -1)
 				close(pipefd[0]);
-			exit(EXIT_FAILURE);
+			reset_all(all, 1);
 		}
 		close(pipefd[1]);
 	}
-	if (cmd->next && pipefd[0] != -1)
+	if (pipefd[0] != -1)
 		close(pipefd[0]);
+
+	// ✅ Child process'te kaldıysa prev_fd'yi tamamen kapat
+	if (prev_fd != -1 && prev_fd != STDIN_FILENO)
+		close(prev_fd);
 }
+
 
 static void	execute_with_path(char *path, t_cmd *cmd, t_all *all)
 {
@@ -102,7 +107,7 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 		else if (cmd->args[0][0] == '.' && cmd->args[0][1] == '\0')
 			printf("minishell: %s: filename argument required\n", cmd->args[0]);
 		else
-			printf("minishell: %s: command not found\n", cmd->args[0]);
+			fprintf(stdout, "minishell: %s: command not found\n", cmd->args[0]);
 		reset_all(all, EXIT_COMMAND_NOT_FOUND);
 	}
 }
@@ -112,7 +117,7 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 	int	n;
 
 	n = 0;
-	setup_child_io(cmd, prev_fd, pipefd);
+	setup_child_io(cmd, prev_fd, pipefd, all);
 	if (cmd->redirects)
 		handle_redirections(cmd, all);
 	if (strcmp(cmd->args[0], "exit") == 0)

@@ -201,4 +201,6 @@ int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all);
 int		read_heredoc_input(int write_fd, char *eof, t_all *all);
 int		heredoc_loop(t_all *all, char **heredocs, int pipefd[2]);
 
+
+void	wait_forks(t_all *all);
 #endif

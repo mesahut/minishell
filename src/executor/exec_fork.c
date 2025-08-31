@@ -18,21 +18,19 @@
 
 static void	handle_pipe_parent(t_cmd *cmd, int *prev_fd, int pipefd[2])
 {
+	if (pipefd[1] != -1)
+		close(pipefd[1]);
 	if (cmd->next)
 	{
-		if (pipefd[1] != -1)
-			close(pipefd[1]);
-		*prev_fd = pipefd[0];
+		*prev_fd = pipefd[0]; // bir sonraki komut için stdin olacak
 	}
 	else
 	{
 		if (pipefd[0] != -1)
-			close(pipefd[0]);
-		if (pipefd[1] != -1)
-			close(pipefd[1]);
-		*prev_fd = -1;
+			close(pipefd[0]);  // ✅ son komutsa, pipefd[0] burada kapanmalı
 	}
 }
+
 
 
 int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len)
@@ -97,18 +95,19 @@ void wait_forks(t_all *all)
     reset_all(all, 1);
 }
 
-
-int test = 0;
-
-
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 {
 	pid_t	pid;
 	pid = fork();
 
 	signal_switch(2);
-	if (pid == -1 || test == 1)
+	if (pid == -1)
 	{
+	if (*prev_fd != -1)
+	{
+		close(*prev_fd);
+		*prev_fd = -1;
+	}
 	if (pipefd[0] != -1)
 		close(pipefd[0]);
 	if (pipefd[1] != -1)
@@ -125,6 +124,5 @@ void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2])
 		exec_parent_process(cmd, all, prev_fd, pid);
 		handle_pipe_parent(cmd, prev_fd, pipefd);
 	}
-	test++;
 	signal_switch(1);
 }

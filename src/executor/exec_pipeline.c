@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 10:43:09 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 11:39:05 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,12 @@ int	exec(t_all *all)
 	if (prev_fd != -1)
 	{
 		close(prev_fd);
+		prev_fd = -1;
 	}
 	if (is_pipeline)
+	{
+		printf("1\n");
 		exec_signal_wait(all);
+	}
 	return (all->exit_flag);
 }
