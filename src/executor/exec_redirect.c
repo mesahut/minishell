@@ -40,10 +40,16 @@ static void	handle_input_redirects(t_redirect *redir,
 	{
 		if (handle_redir_in(redir))
 			exit(EXIT_FAILURE);
+		*heredoc_done = 1; // Regular input overrides heredoc
 	}
-	else if (redir->type == HEREDOC && !*heredoc_done)
+	else if (redir->type == HEREDOC)
 	{
-		if (redir->fd > 0)
+		// Close previous heredoc fd if any
+		if (*heredoc_done && redir->fd > 0)
+		{
+			close(redir->fd);
+		}
+		else if (redir->fd > 0)
 		{
 			if (dup2(redir->fd, STDIN_FILENO) == -1)
 			{
@@ -51,8 +57,8 @@ static void	handle_input_redirects(t_redirect *redir,
 				exit(EXIT_FAILURE);
 			}
 			close(redir->fd);
+			*heredoc_done = 1;
 		}
-		*heredoc_done = 1;
 	}
 }
 

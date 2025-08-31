@@ -12,6 +12,7 @@
 
 #include "../../include/minishell.h"
 #include <readline/readline.h>
+#include <unistd.h>
 
 void	sig_cat_quit(int sig)
 {
@@ -39,4 +40,5 @@ void	sig_heredoc(int sig)
 {
 	g_signal = sig;
 	rl_done = 1;
+	write(STDOUT_FILENO, "\n", 1);
 }

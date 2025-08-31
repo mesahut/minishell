@@ -35,11 +35,21 @@ int	cycle(t_all *all, char *line, char *input)
 	if (lexer(input, all) == 1)
 		return (clean_malloc(all));
 	if (expander(all) == 1)
+	{
+		cleanup_all_heredoc_fds(all);
 		return (clean_malloc(all));
+	}
 	if (parser(all) == 1)
+	{
+		cleanup_all_heredoc_fds(all);
 		return (clean_malloc(all));
+	}
 	if (exec(all) == 1)
+	{
+		cleanup_all_heredoc_fds(all);
 		return (clean_malloc(all));
+	}
+	cleanup_all_heredoc_fds(all);
 	clean_malloc(all);
 	all->exit_status = 0;
 	return (0);

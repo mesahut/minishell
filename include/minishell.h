@@ -192,8 +192,10 @@ int		redir_case( t_card **current_card, int redir_type);
 
 int		preprocess_heredocs(t_all *all);
 int		handle_heredoc_eof(char *eof);
-int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all);
-int		read_heredoc_input(int write_fd, char **heredocs, t_all *all);
+int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all, int quoted);
+int		read_heredoc_input(int write_fd, char *delimiter, t_all *all, int quoted);
+void	cleanup_heredoc_fds(t_cmd *cmd);
+void	cleanup_all_heredoc_fds(t_all *all);
 void	wait_forks(t_all *all);
 
 void	sig_exc(int sig);

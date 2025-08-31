@@ -19,6 +19,7 @@ int	init_pipeline_vars(t_all *all, t_cmd **cmd, int *prev_fd)
 {
 	if (!all->cmd->args[0])
 	{
+		cleanup_all_heredoc_fds(all);
 		clean_malloc(all);
 		return (1);
 	}
@@ -87,8 +88,7 @@ int	exec(t_all *all)
 	{
 		if (process_single_cmd(cmd, all, &prev_fd, len))
 			break ;
-		if (cmd->redirects && cmd->redirects->fd >= 0)
-			close(cmd->redirects->fd);
+		cleanup_heredoc_fds(cmd);
 		cmd = cmd->next;
 	}
 	if (prev_fd != -1)

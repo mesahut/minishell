@@ -109,6 +109,7 @@ int	parser(t_all *all)
 		return (0);
 	if (preprocess_heredocs(all) != 0)
 	{
+		cleanup_all_heredoc_fds(all);
 		all->exit_status = 130;
 		all->exit_flag = 1;
 		return (all->exit_flag);
