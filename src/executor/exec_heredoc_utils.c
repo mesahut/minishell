@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:03:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 16:32:47 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:12:17 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,11 @@ int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all)
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 	}
-	//if (free_flag == 0)
+	if (free_flag == 0)
+	{
 		free(line);
+		line = NULL;
+	}
 	return (0);
 }
 
