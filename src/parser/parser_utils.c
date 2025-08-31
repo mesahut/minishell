@@ -6,109 +6,53 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 13:16:34 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 13:54:14 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:55:38 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	redir_counter(t_card *start)
+void	put_node(t_cmd **head_cmd, t_cmd *new_cmd)
 {
-	t_card	*current_card;
-	int		count;
+	t_cmd	*temp;
 
-	count = 0;
-	current_card = start;
-	while (current_card && current_card->type != PIPE)
+	temp = NULL;
+	if (*head_cmd == NULL)
 	{
-		if (is_redir(current_card->type))
-			count++;
-		current_card = current_card->next;
-	}
-	return (count);
-}
-
-int	args_counter(t_card *start)
-{
-	t_card	*current_card;
-	int		count;
-
-	count = 0;
-	current_card = start;
-	while (current_card && current_card->type != PIPE)
-	{
-		if (current_card->type == WORD || current_card->type == -1)
-		{
-			count++;
-			current_card = current_card->next;
-		}
-		else if (is_redir(current_card->type))
-		{
-			current_card = current_card->next;
-			if (current_card)
-				current_card = current_card->next;
-		}
-		else
-			current_card = current_card->next;
-	}
-	return (count);
-}
-
-void	init_cmd_value(t_all *all, t_cmd *cmd, t_cmd *head_cmd, int arg_count)
-{
-	int	i;
-
-	i = 0;
-	cmd->args = NULL;
-	cmd->redirects = NULL;
-	cmd->next = NULL;
-	cmd->prev = head_cmd;
-	cmd->fd_in = 0;
-	cmd->fd_out = 1;
-	cmd->args_count = arg_count;
-	cmd->args = (char **)safe_malloc(all, sizeof(char *) * (arg_count + 1));
-	while (i <= arg_count)
-	{
-		cmd->args[i] = NULL;
-		i++;
-	}
-}
-
-t_cmd	*init_cmd(t_cmd *head_cmd, t_card *cursor, t_all *all)
-{
-	t_cmd	*cmd;
-	int		arg_count;
-
-	if (!all || !cursor)
-		return (NULL);
-	arg_count = args_counter(cursor);
-	cmd = (t_cmd *)safe_malloc(all, sizeof(t_cmd));
-	init_cmd_value(all, cmd, head_cmd, arg_count);
-	cmd->redirect_count = redir_counter(cursor);
-	if (cmd->redirect_count > 0)
-		cmd->redirects = NULL;
-	return (cmd);
-}
-
-void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type)
-{
-	t_redirect	*tmp;
-	t_redirect	*redir;
-
-	tmp = NULL;
-	redir = safe_malloc(all, sizeof(t_redirect));
-	redir->type = type;
-	if (card->next && card->next->value)
-	{
-		redir->filename = card->next->value;
-		card = card->next;
+		*head_cmd = new_cmd;
 	}
 	else
-		redir->filename = NULL;
-	redir->value = NULL;
-	redir->fd = -1;
-	redir->next = NULL;
-	put_redir(redir, current_cmd, tmp);
+	{
+		temp = *head_cmd;
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new_cmd;
+		new_cmd->prev = temp;
+	}
+}
+
+void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp)
+{
+	if (!current_cmd->redirects)
+		current_cmd->redirects = redir;
+	else
+	{
+		tmp = current_cmd->redirects;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = redir;
+	}
+}
+
+int	redir_case( t_card **current_card, int redir_type)
+{
+	if ((*current_card)->value[0] == '2'
+		&& (*current_card)->value[1] == '\0'
+		&& (*current_card)->next && (*current_card)->next->type == redir_type)
+	{
+		return (1);
+	}
+	return (0);
 }
 
 int	is_redir(int type)
@@ -117,6 +61,34 @@ int	is_redir(int type)
 		|| type == R_IN || type == R_ERR_OUT || type == R_ERR_APPEND)
 	{
 		return (1);
+	}
+	return (0);
+}
+
+int	preprocess_heredocs(t_all *all)
+{
+	t_cmd		*cmd;
+	t_redirect	*redir;
+	int			ret;
+
+	cmd = all->cmd;
+	while (cmd)
+	{
+		redir = cmd->redirects;
+		while (redir)
+		{
+			if (redir->type == HEREDOC)
+			{
+				signal_switch(3);
+				ret = handle_all_heredocs_for_cmd(cmd, all);
+				signal_switch(1);
+				if (ret != 0)
+					return (ret);
+				break ;
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
 	}
 	return (0);
 }

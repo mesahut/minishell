@@ -12,36 +12,48 @@
 
 #include "../../include/minishell.h"
 
-void	put_node(t_cmd **head_cmd, t_cmd *new_cmd)
+void	ft_help( t_all *all, t_cmd *current_cmd, t_card **current_card, int *i)
 {
-	t_cmd	*temp;
-
-	temp = NULL;
-	if (*head_cmd == NULL)
+	if (redir_case(current_card, R_OUT) == 1)
 	{
-		*head_cmd = new_cmd;
+		set_redir(all, current_cmd, (*current_card), R_ERR_OUT);
+		(*current_card) = (*current_card)->next;
+		if ((*current_card))
+			(*current_card) = (*current_card)->next;
+	}
+	else if (redir_case(current_card, R_APPEND))
+	{
+		set_redir(all, current_cmd, (*current_card), R_ERR_APPEND);
+		(*current_card) = (*current_card)->next;
+		if ((*current_card))
+			(*current_card) = (*current_card)->next;
+	}
+	else if ((*i) < current_cmd->args_count)
+	{
+		current_cmd->args[(*i)] = (*current_card)->value;
+		(*i)++;
+		(*current_card) = (*current_card)->next;
 	}
 	else
-	{
-		temp = *head_cmd;
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = new_cmd;
-		new_cmd->prev = temp;
-	}
+		(*current_card) = (*current_card)->next;
 }
 
-void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp)
+void	redir_put(t_all *all, t_cmd *current_cmd, t_card **current_card, int *i)
 {
-	if (!current_cmd->redirects)
-		current_cmd->redirects = redir;
-	else
+	if (is_redir((*current_card)->type))
 	{
-		tmp = current_cmd->redirects;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = redir;
+		set_redir(all, current_cmd, (*current_card), (*current_card)->type);
+		(*current_card) = (*current_card)->next;
+		if ((*current_card))
+			(*current_card) = (*current_card)->next;
 	}
+	else if (((*current_card)->type == WORD || (*current_card)->type == -1)
+		&& (*current_card)->value)
+	{
+		ft_help(all, current_cmd, current_card, i);
+	}
+	else
+		(*current_card) = (*current_card)->next;
 }
 
 void	set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
@@ -55,75 +67,9 @@ void	set_cmd(t_card *cursor, t_all *all, t_cmd *current_cmd)
 	i = 0;
 	while (current_card && current_card->type != PIPE)
 	{
-		if (is_redir(current_card->type))
-		{
-			set_redir(all, current_cmd, current_card, current_card->type);
-			current_card = current_card->next;
-			if (current_card)
-				current_card = current_card->next;
-		}
-		else if ((current_card->type == WORD || current_card->type == -1)
-			&& current_card->value)
-		{
-			if (current_card->value[0] == '2'
-				&& current_card->value[1] == '\0'
-				&& current_card->next && current_card->next->type == R_OUT)
-			{
-				set_redir(all, current_cmd, current_card, R_ERR_OUT);
-				current_card = current_card->next;
-				if (current_card)
-					current_card = current_card->next;
-			}
-			else if (current_card->value[0] == '2'
-				&& current_card->value[1] == '\0'
-				&& current_card->next && current_card->next->type == R_APPEND)
-			{
-				set_redir(all, current_cmd, current_card, R_ERR_APPEND);
-				current_card = current_card->next;
-				if (current_card)
-					current_card = current_card->next;
-			}
-			else if (i < current_cmd->args_count)
-			{
-				current_cmd->args[i] = current_card->value;
-				i++;
-				current_card = current_card->next;
-			}
-			else
-				current_card = current_card->next;
-		}
-		else
-			current_card = current_card->next;
+		redir_put(all, current_cmd, &current_card, &i);
 	}
 	current_cmd->args[i] = NULL;
-}
-
-static int	preprocess_heredocs(t_all *all)
-{
-	t_cmd		*cmd;
-	t_redirect	*redir;
-	int			ret;
-
-	cmd = all->cmd;
-	while (cmd)
-	{
-		redir = cmd->redirects;
-		while (redir)
-		{
-			if (redir->type == HEREDOC)
-			{
-				signal_switch(3);
-				ret = handle_all_heredocs_for_cmd(cmd, all);
-				signal_switch(1);
-				if (ret != 0)
-					return (ret);
-				break ;
-			}
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-	}
-	return (0);
 }
 
 int	parser_cycle(t_all *all, t_card *cursor)
@@ -159,7 +105,7 @@ int	parser(t_all *all)
 	t_card	*cursor;
 
 	cursor = all->card;
-	if(parser_cycle(all, cursor) == 0)
+	if (parser_cycle(all, cursor) == 0)
 		return (0);
 	if (preprocess_heredocs(all) != 0)
 	{

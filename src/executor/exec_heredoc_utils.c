@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:03:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 17:12:17 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:24:43 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,19 @@ int	handle_heredoc_eof(char *eof)
 
 int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all)
 {
-	int free_flag;
-
-	free_flag = 0;
 	if (strcmp(line, eof) == 0)
 	{
 		free(line);
 		return (1);
 	}
 	if (check_here_flag(all->card, eof))
-	{
 		line = here_expand(line, all);
-		free_flag = 1;
-	}
 	if (write_fd >= 0)
 	{
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 	}
-	if (free_flag == 0)
-	{
-		free(line);
-		line = NULL;
-	}
+	free(line);
 	return (0);
 }
 

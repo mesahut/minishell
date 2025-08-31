@@ -196,7 +196,10 @@ char	*ft_itoa(int n, t_all *all);
 int		ft_atoi(char *str);
 void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type);
 void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp);
+void	put_node(t_cmd **head_cmd, t_cmd *new_cmd);
+int		redir_case( t_card **current_card, int redir_type);
 
+int		preprocess_heredocs(t_all *all);
 int		handle_heredoc_eof(char *eof);
 int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all);
 int		read_heredoc_input(int write_fd, char *eof, t_all *all);

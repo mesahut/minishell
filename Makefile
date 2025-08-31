@@ -7,6 +7,7 @@ SRCS = src/utils/card_list.c \
 	src/environment/environment.c \
 	src/expansion/expand.c \
 	src/lexer/lexer.c \
+	src/parser/parser_init.c \
 	src/parser/parser_utils.c \
 	src/parser/parser.c \
 	src/executor/exec_utils.c \

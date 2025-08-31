@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/25 20:44:31 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:24:57 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*here_expand(char *str, t_all *all)
 		{
 			new_str = found_dollar(str, i, all);
 			free(str);
-			str = new_str;
+			str = ft_strdup(new_str, all);
 			i = -1;
 		}
 		i++;
