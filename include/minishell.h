@@ -119,7 +119,7 @@ void	put_env(t_all *all, char **env_list);
 void	*safe_malloc(t_all *all, int size);
 int		clean_malloc(t_all *all);
 char	*collector_dup(t_all *all, char *line);
-int		exec_builtin(t_all *all, t_cmd *cmd);
+int		exec_builtin(t_all *all, t_cmd *cmd, int flag);
 int		is_builtin(char *cmd);
 void	create_env(char **env_line, t_all *all);
 char	*expend_join(char *s1, char *s2, t_all *all);
@@ -135,7 +135,7 @@ int		ft_export(t_all *all, t_cmd *cmd);
 int		ft_unset(t_all *all, t_cmd *cmd);
 int		ft_env(t_all *all, t_cmd *cmd);
 void	print_sorted_env(t_all *all);
-int		ft_exit(t_all *all, t_cmd *cmd);
+int		ft_exit(t_all *all, t_cmd *cmd, int flag);
 t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
 int		update_env_value(t_env *env, const char *key,

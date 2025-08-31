@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:52:55 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/26 15:25:40 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 12:01:53 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	is_builtin(char *cmd)
 	);
 }
 
-int	exec_builtin(t_all *all, t_cmd *cmd)
+int	exec_builtin(t_all *all, t_cmd *cmd, int flag)
 {
 	if (!cmd->args || !cmd->args[0])
 		return (1);
@@ -45,6 +45,6 @@ int	exec_builtin(t_all *all, t_cmd *cmd)
 	else if (strcmp(cmd->args[0], "env") == 0)
 		return (ft_env(all, cmd));
 	else if (strcmp(cmd->args[0], "exit") == 0)
-		return (ft_exit(all, cmd));
+		return (ft_exit(all, cmd, flag));
 	return (1);
 }

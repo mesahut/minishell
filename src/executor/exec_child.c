@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 11:56:53 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 12:02:42 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ static void	setup_child_io(t_cmd *cmd, int prev_fd, int pipefd[2], t_all *all)
 	}
 	if (pipefd[0] != -1)
 		close(pipefd[0]);
-
-	// ✅ Child process'te kaldıysa prev_fd'yi tamamen kapat
 	if (prev_fd != -1 && prev_fd != STDIN_FILENO)
 		close(prev_fd);
 }
@@ -113,15 +111,9 @@ void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2])
 	setup_child_io(cmd, prev_fd, pipefd, all);
 	if (cmd->redirects)
 		handle_redirections(cmd, all);
-	if (strcmp(cmd->args[0], "exit") == 0)
+	if (is_builtin(cmd->args[0]) || strcmp(cmd->args[0], "exit") == 0)
 	{
-		free_env(all->env);
-		clean_malloc(all);
-		exit(n);
-	}
-	if (is_builtin(cmd->args[0]))
-	{
-		n = exec_builtin(all, cmd);
+		n = exec_builtin(all, cmd, 0);
 	}
 	else
 		execute_child_cmd(cmd, all);

@@ -6,7 +6,7 @@
 /*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 09:43:03 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 12:00:44 by asezgin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,12 @@ static void	exit_with_cleanup(t_all *all)
 	exit(n);
 }
 
-int	ft_exit(t_all *all, t_cmd *cmd)
+int	ft_exit(t_all *all, t_cmd *cmd, int flag)
 {
 	int	exit_code;
 
-	printf("exit\n");
+	if(flag == 1)
+		printf("exit\n");
 	if (!cmd->args[1])
 	{
 		exit_with_cleanup(all);
