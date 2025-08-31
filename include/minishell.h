@@ -90,12 +90,19 @@ typedef struct s_cmd
 	struct s_cmd	*prev;
 }	t_cmd;
 
+typedef struct s_clean_pid
+{
+	pid_t					pid;
+	struct s_clean_pid		*next;
+}	t_clean_pid;
+
 typedef struct s_all
 {
 	t_collector		*collector;
 	t_card			*card;
 	t_cmd			*cmd;
 	t_env			*env;
+	t_clean_pid		*clean_pids;
 	int				exit_flag;
 	int				exit_status;
 }	t_all;
