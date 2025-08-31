@@ -6,13 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:52:55 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 18:23:40 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:18:16 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
-#include <string.h>
 
 int	is_builtin(char *cmd)
 {

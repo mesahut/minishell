@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:19 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/30 20:10:00 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 21:14:52 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
-#include <stdlib.h>
 
 static char	*ft_strjoin3(char *s1, char *s2, char *s3, t_all *all)
 {

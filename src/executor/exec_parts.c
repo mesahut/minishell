@@ -6,16 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 13:35:48 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:15:11 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
-#include <sys/wait.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <fcntl.h>
 
 int	handle_redir_err_out(t_redirect *redir)
 {

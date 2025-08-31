@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 19:57:42 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:39:55 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ int	handle_all_heredocs_for_cmd(t_cmd *cmd, t_all *all)
 		}
 		redir = redir->next;
 	}
-	if (redir->type == HEREDOC && redir->fd != -1)
-		close(redir->fd);
+	if (redir->type == HEREDOC && redir->next == NULL)
+		close(heredoc_pipe[0]);
 	return (0);
 }
 

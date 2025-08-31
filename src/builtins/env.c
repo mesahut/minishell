@@ -6,13 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:46:46 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 18:43:58 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:18:28 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 int	ft_env(t_all *all, t_cmd *cmd)
 {

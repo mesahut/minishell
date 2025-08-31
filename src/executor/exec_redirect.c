@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asezgin <asezgin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:28 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 12:49:03 by asezgin          ###   ########.fr       */
+/*   Updated: 2025/08/31 21:11:41 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <fcntl.h>
 
 int	handle_redir_out(t_redirect *redir)
 {

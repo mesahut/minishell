@@ -6,15 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 20:06:50 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:34:20 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <sys/wait.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
 

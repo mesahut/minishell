@@ -13,7 +13,6 @@
 #include "../../include/minishell.h"
 #include <unistd.h>
 #include <sys/wait.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 static void	handle_pipe_parent(t_cmd *cmd, int *prev_fd, int pipefd[2])

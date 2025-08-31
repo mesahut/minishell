@@ -6,16 +6,11 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 17:24:57 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:10:59 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <fcntl.h>
 
 char	*here_expand(char *str, t_all *all)
 {

@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 char	*found_dollar(char *line, int dollar_place, t_all *all)
 {

@@ -6,14 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 20:18:49 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:14:27 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
 #include <sys/wait.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 int	init_pipeline_vars(t_all *all, t_cmd **cmd, int *prev_fd)

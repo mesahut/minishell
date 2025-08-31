@@ -6,11 +6,10 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:07:59 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 19:00:03 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:35:33 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "../../include/minishell.h"
 
 char	*ft_strdup(const char *s1, t_all *all)

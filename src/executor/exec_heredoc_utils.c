@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:03:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 20:22:07 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:17:50 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <readline/readline.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <stdlib.h>
 #include <signal.h>
 
 int	handle_heredoc_eof(char *eof)

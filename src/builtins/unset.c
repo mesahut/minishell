@@ -6,12 +6,11 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:31:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 18:44:08 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:18:41 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdlib.h>
 
 static void	remove_env_key(t_all *all, const char *key)
 {

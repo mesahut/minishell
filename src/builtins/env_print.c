@@ -6,13 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:15:23 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 20:22:28 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/08/31 21:18:26 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 int	cmp_env(const void *a, const void *b)
 {
