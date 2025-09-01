@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:39:25 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:14:27 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 13:42:55 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 int	init_pipeline_vars(t_all *all, t_cmd **cmd, int *prev_fd)
 {
-	if (!all->cmd->args[0])
+	if (!all->cmd->args[0] && all->cmd->redirects->type == HEREDOC)
 	{
 		cleanup_all_heredoc_fds(all);
 		clean_malloc(all);

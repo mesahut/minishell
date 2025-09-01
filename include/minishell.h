@@ -144,12 +144,12 @@ void	signal_switch(int status);
 char	*path_find(char *cmd, t_all *all);
 char	**list_to_envp(t_all *all);
 char	*here_expand(char *str, t_all *all);
-void	handle_redirections(t_cmd *cmd, t_all *all);
-int		handle_redir_append(t_redirect *redir);
-int		handle_redir_in(t_redirect *redir);
+void	handle_redirections(t_cmd *cmd);
+int		handle_redir_append(t_redirect *redir, t_cmd *cmd);
+int		handle_redir_in(t_redirect *redir, t_cmd *cmd);
 int		handle_redir_err_out(t_redirect *redir);
 int		handle_redir_err_append(t_redirect *redir);
-void	handle_output_redirects(t_redirect *redir);
+void	handle_output_redirects(t_redirect *redir, t_cmd *cmd);
 
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2]);
 int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len);
@@ -162,7 +162,7 @@ void	put_title(t_all *all);
 void	delim_node(t_all *all, t_card *node);
 void	check_node(t_card *card, t_card *prev);
 char	*ft_getenv(t_env *env, char *key);
-int		handle_redir_out(t_redirect *redir);
+int		handle_redir_out(t_redirect *redir, t_cmd *cmd);
 int		is_redir(int type);
 t_cmd	*init_cmd(t_cmd *head_cmd, t_card *cursor, t_all *all);
 

@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:33 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 09:52:17 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 14:33:51 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ char	*here_expand(char *str, t_all *all)
 	return (str);
 }
 
-void	handle_output_redirects(t_redirect *redir)
+void	handle_output_redirects(t_redirect *redir, t_cmd *cmd)
 {
 	if (redir->type == R_OUT)
 	{
-		if (handle_redir_out(redir))
+		if (handle_redir_out(redir, cmd))
 			exit(EXIT_FAILURE);
 	}
 	else if (redir->type == R_APPEND)
 	{
-		if (handle_redir_append(redir))
+		if (handle_redir_append(redir, cmd))
 			exit(EXIT_FAILURE);
 	}
 }

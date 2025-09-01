@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:15:11 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 14:46:08 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	exec_with_redirect(t_cmd *cmd, t_all *all)
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	handle_redirections(cmd, all);
+	handle_redirections(cmd);
 	if (exec_builtin(all, cmd, 1))
 		all->exit_status = EXIT_FAILURE;
 	restore_fds(saved_stdin, saved_stdout);

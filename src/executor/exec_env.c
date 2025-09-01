@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:43 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:17:58 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 14:32:35 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,18 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int	handle_redir_append(t_redirect *redir)
+int	handle_redir_append(t_redirect *redir, t_cmd *cmd)
 {
 	redir->fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (redir->fd < 0)
 	{
 		perror(redir->filename);
 		return (1);
+	}
+	if (cmd->redirect_count != 0 && !cmd->args[0])
+	{
+		close(redir->fd);
+		return (0);
 	}
 	if (dup2(redir->fd, STDOUT_FILENO) == -1)
 	{
@@ -33,9 +38,13 @@ int	handle_redir_append(t_redirect *redir)
 	return (0);
 }
 
-int	handle_redir_in(t_redirect *redir)
+int	handle_redir_in(t_redirect *redir, t_cmd *cmd)
 {
 	redir->fd = open(redir->filename, O_RDONLY);
+	if (cmd->redirect_count != 0 && !cmd->args[0])
+	{
+		return (0);
+	}
 	if (redir->fd < 0)
 	{
 		perror(redir->filename);

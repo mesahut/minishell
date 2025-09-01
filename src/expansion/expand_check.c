@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 21:44:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 20:51:48 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 13:48:42 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*handle_exit_status(t_all *all, int dollar, char *before, char *line)
 	return (after);
 }
 
-int	syntex_error(t_all *all)
+int	syntax_error(t_all *all)
 {
 	all->exit_status = 2;
 	printf("syntax error\n");
@@ -40,16 +40,16 @@ int	syntax_checker(t_all *all)
 
 	current = all->card;
 	if (current->type == PIPE)
-		return (syntex_error(all));
+		return (syntax_error(all));
 	while (current)
 	{
 		if (current->type == PIPE && (!current->next
-				|| current->next->type != WORD))
-			return (syntex_error(all));
+				|| current->next->type == PIPE))
+			return (syntax_error(all));
 		if ((current->type == R_OUT || current->type == R_IN
 				|| current->type == R_APPEND || current->type == HEREDOC)
 			&& (!current->next || current->next->type != WORD))
-			return (syntex_error(all));
+			return (syntax_error(all));
 		current = current->next;
 	}
 	return (0);

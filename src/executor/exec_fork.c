@@ -32,6 +32,11 @@ static void	handle_pipe_parent(t_cmd *cmd, int *prev_fd, int pipefd[2])
 
 int	process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len)
 {
+	if (!cmd->args[0])
+	{
+		handle_redirections(cmd);
+		return (1);
+	}
 	if ((is_builtin(cmd->args[0]) && cmd->next == NULL)
 		|| (len == 1 && ft_strcmp(cmd->args[0], "exit") == 0))
 	{

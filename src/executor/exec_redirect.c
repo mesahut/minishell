@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:44:28 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 08:26:58 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 14:35:17 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	handle_redir_out(t_redirect *redir)
+int	handle_redir_out(t_redirect *redir, t_cmd *cmd)
 {
 	redir->fd = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (redir->fd < 0)
 	{
 		perror(redir->filename);
 		return (1);
+	}
+	if (cmd->redirect_count != 0 && !cmd->args[0])
+	{
+		close(redir->fd);
+		return (0);
 	}
 	if (dup2(redir->fd, STDOUT_FILENO) == -1)
 	{
@@ -33,12 +38,11 @@ int	handle_redir_out(t_redirect *redir)
 }
 
 static void	handle_input_redirects(t_redirect *redir,
-	t_all *all, int *heredoc_done)
+	t_cmd *cmd, int *heredoc_done)
 {
-	(void)all;
 	if (redir->type == R_IN)
 	{
-		if (handle_redir_in(redir))
+		if (handle_redir_in(redir, cmd))
 			exit(EXIT_FAILURE);
 		*heredoc_done = 1;
 	}
@@ -76,17 +80,17 @@ static void	handle_error_redirects(t_redirect *redir)
 }
 
 static void	process_single_redirect(t_redirect *redir,
-	t_all *all, int *heredoc_done)
+	int *heredoc_done, t_cmd *cmd)
 {
 	if (redir->type == R_OUT || redir->type == R_APPEND)
-		handle_output_redirects(redir);
+		handle_output_redirects(redir, cmd);
 	else if (redir->type == R_IN || redir->type == HEREDOC)
-		handle_input_redirects(redir, all, heredoc_done);
+		handle_input_redirects(redir, cmd, heredoc_done);
 	else if (redir->type == R_ERR_OUT || redir->type == R_ERR_APPEND)
 		handle_error_redirects(redir);
 }
 
-void	handle_redirections(t_cmd *cmd, t_all *all)
+void	handle_redirections(t_cmd *cmd)
 {
 	t_redirect	*redir;
 	int			heredoc_done;
@@ -95,7 +99,7 @@ void	handle_redirections(t_cmd *cmd, t_all *all)
 	redir = cmd->redirects;
 	while (redir)
 	{
-		process_single_redirect(redir, all, &heredoc_done);
+		process_single_redirect(redir, &heredoc_done, cmd);
 		redir = redir->next;
 	}
 }
