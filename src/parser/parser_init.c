@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 17:49:39 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 20:41:31 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 15:28:31 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type)
 	}
 	else
 		redir->filename = NULL;
-	redir->value = NULL;
 	redir->fd = -1;
 	redir->next = NULL;
 	put_redir(redir, current_cmd, tmp);

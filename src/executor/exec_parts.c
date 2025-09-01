@@ -6,49 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 14:46:08 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:11:15 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
 #include <stdio.h>
-
-int	handle_redir_err_out(t_redirect *redir)
-{
-	redir->fd = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (redir->fd < 0)
-	{
-		perror(redir->filename);
-		return (1);
-	}
-	if (dup2(redir->fd, STDERR_FILENO) == -1)
-	{
-		perror("dup2 for stderr");
-		close(redir->fd);
-		return (1);
-	}
-	close(redir->fd);
-	return (0);
-}
-
-int	handle_redir_err_append(t_redirect *redir)
-{
-	redir->fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (redir->fd < 0)
-	{
-		perror(redir->filename);
-		return (1);
-	}
-	if (dup2(redir->fd, STDERR_FILENO) == -1)
-	{
-		perror("dup2 for stderr append");
-		close(redir->fd);
-		return (1);
-	}
-	close(redir->fd);
-	return (0);
-}
 
 static void	restore_fds(int saved_stdin, int saved_stdout)
 {

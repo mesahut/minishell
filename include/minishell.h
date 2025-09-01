@@ -22,8 +22,6 @@
 # define HEREDOC 3
 # define R_IN 4
 # define WORD 5
-# define R_ERR_OUT 6
-# define R_ERR_APPEND 7
 
 # define STDIN 0
 # define STDOUT 1
@@ -63,7 +61,6 @@ typedef struct s_redirect
 {
 	int					type;
 	char				*filename;
-	char				*value;
 	int					fd;
 	struct s_redirect	*next;
 }	t_redirect;
@@ -99,7 +96,6 @@ typedef struct s_all
 
 extern int	g_signal;
 
-void	set_cmd(t_card *cursor, t_all *all, t_cmd *cmd);
 int		parser(t_all *all);
 int		exec(t_all *all);
 void	create_card(t_all *all, char *card);
@@ -113,7 +109,6 @@ int		exec_builtin(t_all *all, t_cmd *cmd, int flag);
 int		is_builtin(char *cmd);
 void	create_env(char **env_line, t_all *all);
 char	*expend_join(char *s1, char *s2, t_all *all);
-int		flag_check(char *arg);
 void	reset_all(t_all *all, int status_type);
 void	free_env(t_env *env_list);
 void	free_split(char **split);
@@ -128,17 +123,11 @@ void	print_sorted_env(t_all *all);
 int		ft_exit(t_all *all, t_cmd *cmd, int flag);
 t_env	*find_env_by_key(t_env *env_list, const char *key);
 void	add_or_update_env(t_all *all, const char *key, const char *value);
-int		update_env_value(t_env *env, const char *key,
-			const char *value, t_all *all);
-void	append_env_node(t_all *all, const char *key, const char *value);
 
-int		check_for_expansion(t_all *all);
 char	*found_dollar(char *line, int dollar_place, t_all *all);
 char	is_char_quote(char value, char quote_type);
 char	*handle_exit_status(t_all *all, int dollar, char *before, char *line);
 int		syntax_checker(t_all *all);
-
-void	sig_prompt(int sig);
 void	signal_switch(int status);
 
 char	*path_find(char *cmd, t_all *all);
@@ -146,16 +135,13 @@ char	**list_to_envp(t_all *all);
 char	*here_expand(char *str, t_all *all);
 void	handle_redirections(t_cmd *cmd);
 int		handle_redir_append(t_redirect *redir, t_cmd *cmd);
-int		handle_redir_in(t_redirect *redir, t_cmd *cmd);
-int		handle_redir_err_out(t_redirect *redir);
-int		handle_redir_err_append(t_redirect *redir);
+int		handle_redir_in(t_redirect *redir);
 void	handle_output_redirects(t_redirect *redir, t_cmd *cmd);
 
 void	process_fork_cmd(t_cmd *cmd, t_all *all, int *prev_fd, int pipefd[2]);
 int		process_builtin_cmd(t_cmd *cmd, t_all *all, int prev_fd, int len);
 void	exec_builtin_single(t_cmd *cmd, t_all *all, int prev_fd);
 void	exec_child_process(t_cmd *cmd, t_all *all, int prev_fd, int pipefd[2]);
-void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid);
 
 void	del_quote(t_all *all);
 void	put_title(t_all *all);
@@ -187,12 +173,8 @@ int		ft_strcmp(const char *s1, const char *s2);
 void	set_redir(t_all *all, t_cmd *current_cmd, t_card *card, int type);
 void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp);
 void	put_node(t_cmd **head_cmd, t_cmd *new_cmd);
-int		redir_case( t_card **current_card, int redir_type);
 
 int		preprocess_heredocs(t_all *all);
-int		handle_heredoc_eof(char *eof);
-int		process_heredoc_line(char *line, char *eof,
-			t_all *all, int *quoted_and_pipe);
 int		read_heredoc_input(int *quoted_and_pipe, char *delimiter, t_all *all);
 void	cleanup_heredoc_fds(t_cmd *cmd);
 void	cleanup_all_heredoc_fds(t_all *all);

@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:43 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 14:32:35 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:09:12 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,13 @@ int	handle_redir_append(t_redirect *redir, t_cmd *cmd)
 	return (0);
 }
 
-int	handle_redir_in(t_redirect *redir, t_cmd *cmd)
+int	handle_redir_in(t_redirect *redir)
 {
 	redir->fd = open(redir->filename, O_RDONLY);
-	if (cmd->redirect_count != 0 && !cmd->args[0])
-	{
-		return (0);
-	}
 	if (redir->fd < 0)
 	{
-		perror(redir->filename);
-		return (1);
+		printf("%s: No such file or directory\n", redir->filename);
+		return (0);
 	}
 	if (dup2(redir->fd, STDIN_FILENO) == -1)
 	{

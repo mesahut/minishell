@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 13:16:34 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/09/01 10:35:42 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 15:25:25 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,8 @@ void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp)
 
 int	is_redir(int type)
 {
-	if (type == R_APPEND || type == R_OUT || type == HEREDOC
-		|| type == R_IN || type == R_ERR_OUT || type == R_ERR_APPEND)
-	{
+	if (type == R_APPEND || type == R_OUT || type == HEREDOC || type == R_IN)
 		return (1);
-	}
 	return (0);
 }
 
