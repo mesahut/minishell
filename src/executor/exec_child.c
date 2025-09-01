@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 09:48:01 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 10:30:37 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,13 @@ static void	execute_child_cmd(t_cmd *cmd, t_all *all)
 	if (path)
 		execute_with_path(path, cmd, all);
 	else if (cmd->args[0][0] == '\0')
-		fprintf(stderr, "'': command not found\n");
+		printf("'': command not found\n");
 	else
 	{
 		if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
-			fprintf(stderr, "%s: No such file or directory\n", cmd->args[0]);
+			printf("%s: No such file or directory\n", cmd->args[0]);
 		else
-			fprintf(stderr, "%s: command not found\n", cmd->args[0]);
+			printf("%s: command not found\n", cmd->args[0]);
 		reset_all(all, EXIT_COMMAND_NOT_FOUND);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:13:21 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:18:37 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 10:30:01 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	parse_export_arg(t_all *all, const char *arg)
 		return (1);
 	if (!is_valid_identifier(arg))
 	{
-		fprintf(stderr, "not a valid identifier\n");
+		printf("not a valid identifier\n");
 		all->exit_status = 1;
 		return (1);
 	}

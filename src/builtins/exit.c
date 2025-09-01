@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:49:22 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:18:33 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 10:29:49 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_exit(t_all *all, t_cmd *cmd, int flag)
 	}
 	if (cmd->args[2])
 	{
-		fprintf(stderr, "exit: too many arguments\n");
+		printf("exit: too many arguments\n");
 		all->exit_status = 1;
 		return (1);
 	}

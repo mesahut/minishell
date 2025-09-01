@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:46:46 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:18:28 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 10:29:37 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_env(t_all *all, t_cmd *cmd)
 	}
 	else
 	{
-		fprintf(stderr, "env: `%s`: No such file or directory\n", cmd->args[1]);
+		printf("env: `%s`: No such file or directory\n", cmd->args[1]);
 		return (1);
 	}
 	return (0);
