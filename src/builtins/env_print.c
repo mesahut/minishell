@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 09:15:23 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:18:26 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 11:36:38 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,29 @@ int	env_list_size(t_env *env)
 	return (count);
 }
 
+void	ft_sort(char **keys, int size)
+{
+	int		j;
+	char	*temp;
+
+	j = 0;
+	while (0 < size - 1)
+	{
+		j = 0;
+		while (j < size - 1)
+		{
+			if (ft_strcmp(keys[j], keys[j + 1]) > 0)
+			{
+				temp = keys[j];
+				keys[j] = keys[j + 1];
+				keys[j + 1] = temp;
+			}
+			j++;
+		}
+		size--;
+	}
+}
+
 static char	**get_sorted_keys(t_all *all)
 {
 	int		size;
@@ -55,7 +78,7 @@ static char	**get_sorted_keys(t_all *all)
 		current = current->next;
 	}
 	keys[i] = NULL;
-	qsort(keys, size, sizeof(char *), cmp_env); // Sort the keys
+	ft_sort(keys, size);
 	return (keys);
 }
 
@@ -72,7 +95,7 @@ void	print_sorted_env(t_all *all)
 	while (j < env_list_size(all->env))
 	{
 		node = find_env_by_key(all->env, keys[j]);
-		if (node)
+		if (node && ft_strcmp(node->key, "_") != 0)
 		{
 			if (node->value && node->value[0] != '\0')
 				printf("declare -x %s=\"%s\"\n",
