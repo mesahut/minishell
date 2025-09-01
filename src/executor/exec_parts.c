@@ -6,13 +6,12 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 18:10:00 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 16:11:15 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:35:50 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
-#include <stdio.h>
 
 static void	restore_fds(int saved_stdin, int saved_stdout)
 {

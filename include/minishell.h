@@ -27,13 +27,9 @@
 # define STDOUT 1
 # define STDERR 2
 
-# define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 # define EXIT_ALLOC_FAIL 12
-# define EXIT_MISUSE 2
-# define EXIT_CANNOT_EXECUTE 126
 # define EXIT_COMMAND_NOT_FOUND 127
-# define EXIT_INVALID_EXIT 128
 # define EXIT_CTRL_C 130
 
 typedef struct s_collector
@@ -68,8 +64,6 @@ typedef struct s_redirect
 typedef struct s_cmd
 {
 	char			**args;
-	int				fd_in;
-	int				fd_out;
 	int				args_count;
 	int				redirect_count;
 	t_redirect		*redirects;

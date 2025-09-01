@@ -6,16 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:50 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 15:46:45 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:35:19 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <string.h>
+#include "../../include/minishell.h"
 #include <unistd.h>
 #include <stdio.h>
-#include <fcntl.h>
-#include "../../include/minishell.h"
 
 static int	handle_heredoc_error(int heredoc_pipe[2], int ret)
 {
@@ -23,8 +20,6 @@ static int	handle_heredoc_error(int heredoc_pipe[2], int ret)
 		close(heredoc_pipe[0]);
 	if (heredoc_pipe[1] != -1)
 		close(heredoc_pipe[1]);
-	if (ret == 130)
-		freopen("/dev/tty", "r", stdin);
 	return (ret);
 }
 

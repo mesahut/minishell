@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 17:49:39 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/09/01 15:28:31 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:40:33 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ void	init_cmd_value(t_all *all, t_cmd *cmd, t_cmd *head_cmd, int arg_count)
 	cmd->redirects = NULL;
 	cmd->next = NULL;
 	cmd->prev = head_cmd;
-	cmd->fd_in = 0;
-	cmd->fd_out = 1;
 	cmd->args_count = arg_count;
 	cmd->args = (char **)safe_malloc(all, sizeof(char *) * (arg_count + 1));
 	while (i <= arg_count)

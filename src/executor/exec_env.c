@@ -6,14 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:43:43 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 16:09:12 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:30:11 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <stdio.h>
 #include <unistd.h>
-#include <fcntl.h>
 
 int	handle_redir_append(t_redirect *redir, t_cmd *cmd)
 {

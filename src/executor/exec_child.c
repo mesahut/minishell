@@ -6,15 +6,13 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/09/01 14:46:31 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:28:54 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <unistd.h>
-#include <sys/wait.h>
 #include <stdio.h>
-#include <fcntl.h>
 
 void	set_out(t_all *all, int pipefd[2])
 {
