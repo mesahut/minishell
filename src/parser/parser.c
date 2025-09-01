@@ -12,23 +12,9 @@
 
 #include "../../include/minishell.h"
 
-void	ft_help( t_all *all, t_cmd *current_cmd, t_card **current_card, int *i)
+void	ft_help(t_cmd *current_cmd, t_card **current_card, int *i)
 {
-	if (redir_case(current_card, R_OUT) == 1)
-	{
-		set_redir(all, current_cmd, (*current_card), R_ERR_OUT);
-		(*current_card) = (*current_card)->next;
-		if ((*current_card))
-			(*current_card) = (*current_card)->next;
-	}
-	else if (redir_case(current_card, R_APPEND))
-	{
-		set_redir(all, current_cmd, (*current_card), R_ERR_APPEND);
-		(*current_card) = (*current_card)->next;
-		if ((*current_card))
-			(*current_card) = (*current_card)->next;
-	}
-	else if ((*i) < current_cmd->args_count)
+	if ((*i) < current_cmd->args_count)
 	{
 		current_cmd->args[(*i)] = (*current_card)->value;
 		(*i)++;
@@ -50,7 +36,7 @@ void	redir_put(t_all *all, t_cmd *current_cmd, t_card **current_card, int *i)
 	else if (((*current_card)->type == WORD || (*current_card)->type == -1)
 		&& (*current_card)->value)
 	{
-		ft_help(all, current_cmd, current_card, i);
+		ft_help(current_cmd, current_card, i);
 	}
 	else
 		(*current_card) = (*current_card)->next;

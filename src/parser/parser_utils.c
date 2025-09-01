@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 13:16:34 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 17:55:38 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 10:35:42 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,6 @@ void	put_redir(t_redirect *redir, t_cmd *current_cmd, t_redirect *tmp)
 			tmp = tmp->next;
 		tmp->next = redir;
 	}
-}
-
-int	redir_case( t_card **current_card, int redir_type)
-{
-	if ((*current_card)->value[0] == '2'
-		&& (*current_card)->value[1] == '\0'
-		&& (*current_card)->next && (*current_card)->next->type == redir_type)
-	{
-		return (1);
-	}
-	return (0);
 }
 
 int	is_redir(int type)
