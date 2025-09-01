@@ -144,7 +144,6 @@ void	signal_switch(int status);
 char	*path_find(char *cmd, t_all *all);
 char	**list_to_envp(t_all *all);
 char	*here_expand(char *str, t_all *all);
-int		check_here_flag(t_card *card, char *eof);
 void	handle_redirections(t_cmd *cmd, t_all *all);
 int		handle_redir_append(t_redirect *redir);
 int		handle_redir_in(t_redirect *redir);
@@ -192,11 +191,13 @@ int		redir_case( t_card **current_card, int redir_type);
 
 int		preprocess_heredocs(t_all *all);
 int		handle_heredoc_eof(char *eof);
-int		process_heredoc_line(char *line, int write_fd, char *eof, t_all *all, int quoted);
-int		read_heredoc_input(int write_fd, char *delimiter, t_all *all, int quoted);
+int		process_heredoc_line(char *line, char *eof,
+			t_all *all, int *quoted_and_pipe);
+int		read_heredoc_input(int *quoted_and_pipe, char *delimiter, t_all *all);
 void	cleanup_heredoc_fds(t_cmd *cmd);
 void	cleanup_all_heredoc_fds(t_all *all);
 void	wait_forks(t_all *all);
+void	set_pid(pid_t pid, t_all *all);
 
 void	sig_exc(int sig);
 void	sig_prompt(int sig);

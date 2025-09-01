@@ -60,42 +60,6 @@ void	exec_parent_process(t_cmd *cmd, t_all *all, int *prev_fd, pid_t pid)
 	}
 }
 
-void	set_pid(pid_t pid, t_all *all)
-{
-	t_clean_pid	*new_node;
-
-	new_node = NULL;
-	if (pid > 0)
-	{
-		new_node = safe_malloc(all, sizeof(t_clean_pid));
-		if (!new_node)
-			return ;
-		new_node->pid = pid;
-		new_node->next = all->clean_pids;
-		all->clean_pids = new_node;
-	}
-}
-
-void	wait_forks(t_all *all)
-{
-	t_clean_pid	*current;
-	int			status;
-
-	status = 0;
-	current = all->clean_pids;
-	while (current)
-	{
-		waitpid(current->pid, &status, 0);
-		if (WIFEXITED(status))
-			all->exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			all->exit_status = 128 + WTERMSIG(status);
-		current = current->next;
-	}
-	all->clean_pids = NULL;
-	reset_all(all, 1);
-}
-
 void	fork_fail(t_all *all, int *prev_fd, int pipefd[2])
 {
 	if (*prev_fd != -1)

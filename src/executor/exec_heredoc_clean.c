@@ -1,43 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_utils.c                                     :+:      :+:    :+:   */
+/*   exec_heredoc_clean.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/31 13:46:01 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/09/01 08:43:16 by mayilmaz         ###   ########.fr       */
+/*   Created: 2025/09/01 09:54:46 by mayilmaz          #+#    #+#             */
+/*   Updated: 2025/09/01 09:56:05 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <readline/readline.h>
 #include <unistd.h>
 
-void	sig_cat_quit(int sig)
+void	cleanup_heredoc_fds(t_cmd *cmd)
 {
-	g_signal = sig;
-	printf("Quit (the core has been removed)\n");
+	t_redirect	*redir;
+
+	if (!cmd)
+		return ;
+	redir = cmd->redirects;
+	while (redir)
+	{
+		if (redir->type == HEREDOC && redir->fd > 0)
+		{
+			close(redir->fd);
+			redir->fd = -1;
+		}
+		redir = redir->next;
+	}
 }
 
-void	sig_prompt(int sig)
+void	cleanup_all_heredoc_fds(t_all *all)
 {
-	g_signal = sig;
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+	t_cmd	*cmd;
 
-void	sig_exc(int sig)
-{
-	rl_event_hook = NULL;
-	g_signal = sig;
-	printf("\n");
-}
-
-void	sig_heredoc(int sig)
-{
-	g_signal = sig;
-	rl_done = 1;
+	if (!all || !all->cmd)
+		return ;
+	cmd = all->cmd;
+	while (cmd)
+	{
+		cleanup_heredoc_fds(cmd);
+		cmd = cmd->next;
+	}
 }

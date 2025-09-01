@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:03:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:17:50 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 10:23:13 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,13 @@ int	handle_heredoc_eof(char *eof)
 static char	*expand_heredoc_line(char *line, t_all *all, int quoted)
 {
 	char	*expanded;
+	char	*line_copy;
 
 	if (quoted)
-	{
-		// If delimiter was quoted, no variable expansion
 		expanded = ft_strdup(line, all);
-	}
 	else
 	{
-		// If delimiter was not quoted, do variable expansion
-		// here_expand frees its input, so we need to make a copy first
-		char *line_copy = ft_strdup(line, all);
+		line_copy = ft_strdup(line, all);
 		expanded = here_expand(line_copy, all);
 	}
 	return (expanded);
@@ -56,7 +52,8 @@ static int	write_line_to_pipe(char *line, int write_fd)
 	return (0);
 }
 
-int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all, int quoted)
+int	process_heredoc_line(char *line, char *eof,
+			t_all *all, int *quoted_and_pipe)
 {
 	char	*expanded_line;
 	int		ret;
@@ -64,25 +61,20 @@ int	process_heredoc_line(char *line, int write_fd, char *eof, t_all *all, int qu
 	if (ft_strcmp(line, eof) == 0)
 	{
 		free(line);
-		return (1); // End of heredoc
+		return (1);
 	}
-
-	expanded_line = expand_heredoc_line(line, all, quoted);
+	expanded_line = expand_heredoc_line(line, all, quoted_and_pipe[0]);
 	free(line);
-	
 	if (!expanded_line)
-		return (-1); // Error
-	
-	ret = write_line_to_pipe(expanded_line, write_fd);
+		return (-1);
+	ret = write_line_to_pipe(expanded_line, quoted_and_pipe[1]);
 	free(expanded_line);
-	
 	if (ret == -1)
-		return (-1); // Write error
-	
-	return (0); // Continue reading
+		return (-1);
+	return (0);
 }
 
-int	read_heredoc_input(int write_fd, char *delimiter, t_all *all, int quoted)
+int	read_heredoc_input(int *quoted_and_pipe, char *delimiter, t_all *all)
 {
 	char	*line;
 	int		ret;
@@ -90,34 +82,22 @@ int	read_heredoc_input(int write_fd, char *delimiter, t_all *all, int quoted)
 	while (1)
 	{
 		line = readline("> ");
-		
-		// Handle EOF (Ctrl+D)
 		if (line == NULL)
 		{
 			handle_heredoc_eof(delimiter);
-			break;
+			break ;
 		}
-
-		// Handle SIGINT (Ctrl+C)
 		if (g_signal == SIGINT)
 		{
 			g_signal = 0;
 			free(line);
 			return (130);
 		}
-
-		// Process the line
-		ret = process_heredoc_line(line, write_fd, delimiter, all, quoted);
-		
+		ret = process_heredoc_line(line, delimiter, all, quoted_and_pipe);
 		if (ret == 1)
-			break; // End of heredoc reached
+			break ;
 		else if (ret == -1)
-		{
-			// Error occurred
 			return (1);
-		}
-		// ret == 0: continue reading
-	}
-	
+	}	
 	return (0);
 }

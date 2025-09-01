@@ -42,6 +42,7 @@ SRCS = src/utils/card_list.c \
 	src/utils/clean.c \
 	src/expansion/expand_check.c \
 	src/executor/exec_heredoc_utils.c \
+	src/executor/exec_heredoc_clean.c \
 
 OBJS = $(SRCS:.c=.o)
 

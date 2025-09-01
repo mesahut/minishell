@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:42:31 by asezgin           #+#    #+#             */
-/*   Updated: 2025/08/31 21:18:07 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 09:48:01 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,6 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <fcntl.h>
-
-void	handle_output_redirects(t_redirect *redir)
-{
-	if (redir->type == R_OUT)
-	{
-		if (handle_redir_out(redir))
-			exit(EXIT_FAILURE);
-	}
-	else if (redir->type == R_APPEND)
-	{
-		if (handle_redir_append(redir))
-			exit(EXIT_FAILURE);
-	}
-}
 
 void	set_out(t_all *all, int pipefd[2])
 {

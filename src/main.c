@@ -6,7 +6,7 @@
 /*   By: mayilmaz <mayilmaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 10:23:54 by mayilmaz          #+#    #+#             */
-/*   Updated: 2025/08/31 20:34:20 by mayilmaz         ###   ########.fr       */
+/*   Updated: 2025/09/01 09:44:02 by mayilmaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 #include <readline/readline.h>
 #include <unistd.h>
 #include <signal.h>
+
+int	error_free(t_all *all)
+{
+	cleanup_all_heredoc_fds(all);
+	clean_malloc(all);
+	return (1);
+}
 
 int	cycle(t_all *all, char *line, char *input)
 {
@@ -35,22 +42,12 @@ int	cycle(t_all *all, char *line, char *input)
 	if (lexer(input, all) == 1)
 		return (clean_malloc(all));
 	if (expander(all) == 1)
-	{
-		cleanup_all_heredoc_fds(all);
 		return (clean_malloc(all));
-	}
 	if (parser(all) == 1)
-	{
-		cleanup_all_heredoc_fds(all);
-		return (clean_malloc(all));
-	}
+		return (error_free(all));
 	if (exec(all) == 1)
-	{
-		cleanup_all_heredoc_fds(all);
-		return (clean_malloc(all));
-	}
-	cleanup_all_heredoc_fds(all);
-	clean_malloc(all);
+		return (error_free(all));
+	error_free(all);
 	all->exit_status = 0;
 	return (0);
 }
